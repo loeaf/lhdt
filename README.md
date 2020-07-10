@@ -1,2 +1,2 @@
 # lhdt
-LH Digital Twin Platform
+LH Digital Twin
