@@ -8,7 +8,7 @@ import java.util.Base64;
 @Slf4j
 public class KeyManager {
 
-	private static final String randomKeyword = "dGRobEAgc2kgZW1hbiB5bSAudGRobCByb2YgYWVkaSBkYWIgYSBla2FtIHRvbiBvZCBlc2FlbHAgLHllayB0ZXJjcyMgZG51b2YgZXZhaCB1b3kgZkk=";
+	private static final String randomKeyword = "dGRobCNAISBzaSBlbWFuIHltIC50ZGhsQCEgcm9mIGFlZGkgZGFiIGEgZWthbSB0b24gb2QgZXNhZWxwICx5ZWsgdGVyY3MjIGRudW9mIGV2YWggdW95IGZJ";
 
 	public static String getInitKey() {
 		String result = null;
@@ -29,6 +29,6 @@ public class KeyManager {
 	}
 	
 	private static String parse(String value) {
-		return value.substring(81, 86) + value.substring(18, 24) + value.substring(25, 28);
+		return value.substring(83, 90) + value.substring(18, 24) + value.substring(25, 28);
 	}
 }
