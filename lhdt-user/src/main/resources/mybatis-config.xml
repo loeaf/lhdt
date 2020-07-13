@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="lazyLoadingEnabled" value="false" />
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+	<typeAliases>
+		<typeAlias type="lhdt.domain.AccessLog" alias="accessLog" />
+    	<typeAlias type="lhdt.domain.ConverterJob" alias="converterJob" />
+    	<typeAlias type="lhdt.domain.ConverterJobFile" alias="converterJobFile" />
+		<typeAlias type="lhdt.domain.DataGroup" alias="dataGroup" />
+		<typeAlias type="lhdt.domain.DataInfo" alias="dataInfo" />
+		<typeAlias type="lhdt.domain.DataInfoSimple" alias="dataInfoSimple" />
+		<typeAlias type="lhdt.domain.DataAdjustLog" alias="dataAdjustLog" />
+		<typeAlias type="lhdt.domain.DataInfoLog" alias="dataInfoLog" />
+		<typeAlias type="lhdt.domain.DataAttribute" alias="dataAttribute" />
+		<typeAlias type="lhdt.domain.DataAttributeFileInfo" alias="dataAttributeFileInfo" />
+		<typeAlias type="lhdt.domain.DataObjectAttribute" alias="dataObjectAttribute" />
+		<typeAlias type="lhdt.domain.DataObjectAttributeFileInfo" alias="dataObjectAttributeFileInfo" />
+		<typeAlias type="lhdt.domain.GeoPolicy" alias="geoPolicy" />
+    	<typeAlias type="lhdt.domain.Issue" alias="issue" />
+    	<typeAlias type="lhdt.domain.IssueDetail" alias="issueDetail" />
+    	<typeAlias type="lhdt.domain.Layer" alias="layer" />
+    	<typeAlias type="lhdt.domain.LayerGroup" alias="layerGroup" />
+    	<typeAlias type="lhdt.domain.LayerFileInfo" alias="layerFileInfo" />
+    	<typeAlias type="lhdt.domain.Menu" alias="menu" />
+    	<typeAlias type="lhdt.domain.Policy" alias="policy" />
+    	<typeAlias type="lhdt.domain.Role" alias="role" />
+    	
+		<typeAlias type="lhdt.domain.UploadData" alias="uploadData" />
+		<typeAlias type="lhdt.domain.UploadDataFile" alias="uploadDataFile" />
+    	<typeAlias type="lhdt.domain.UserGroup" alias="userGroup" />
+    	<typeAlias type="lhdt.domain.UserGroupMenu" alias="userGroupMenu" />
+    	<typeAlias type="lhdt.domain.UserGroupRole" alias="userGroupRole" />
+		<typeAlias type="lhdt.domain.UserInfo" alias="userInfo" />
+		<typeAlias type="lhdt.domain.UserPolicy" alias="userPolicy"/>
+    	<typeAlias type="lhdt.domain.UserSession" alias="userSession" />
+    	
+ 		<typeAlias type="lhdt.domain.District" alias="district"/>
+ 		<typeAlias type="lhdt.domain.SkSdo" alias="skSdo"/>
+ 		<typeAlias type="lhdt.domain.SkSgg" alias="skSgg"/>
+ 		<typeAlias type="lhdt.domain.SkEmd" alias="skEmd"/>
+ 		
+ 		<typeAlias type="lhdt.domain.AttributeRepository" alias="attributeRepository"/>
+    </typeAliases>
+
+	<typeHandlers>
+		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="java.math.RoundingMode"/>
+		<!--<typeHandler handler="org.apache.ibatis.type.LocalDateTimeTypeHandler" javaType="java.time.LocalDateTime"/>-->
+		<typeHandler handler="lhdt.typehandler.LocalDateTimeTypeHandler" javaType="java.time.LocalDateTime" />
+	</typeHandlers>
+
+</configuration>
