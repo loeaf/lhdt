@@ -1,5 +1,5 @@
 # lhdt
-<strong>lhdt 는 Digital Twin Platform 입니다.</strong>
+<strong>lhdt 는 LH Digital Twin Platform 입니다.</strong>
 
 ## Features
 - 2차원 공간정보 관리 기능
