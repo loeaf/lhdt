@@ -1,5 +1,23 @@
-# lhdt
-<strong>lhdt 는 LH Digital Twin Platform 입니다.</strong>
+# LH Digital Twin Platform
+
+<strong>LH 도시개발 업무 의사결정을 지원할 수 있는 디지털트윈 플랫폼입니다.</strong>
+
+
+## 사업 개요   
+### 1. 사업 일반
+   - 사업명 : LH 디지털트윈 플랫폼 1단계 구축
+   - 사업기간 : ~ 2021.02.27
+ 
+### 2. 사업 범위
+   - 디지털트윈 기반플랫폼 구축
+    - 지구계획 수립지원을 위한 시뮬레이션 서비스 구축
+        - 도시계획 / 경관 / 가로시설물 분석, 시뮬레이션 서비스 설계 및 구현
+        - 미세먼지, 실내점유자 모니터링, 소음지도 서비스 설계 및 구현
+    - 디지털트윈 활용서비스 컨설팅
+
+### 3. 목표
+#### 스마트시티의 활용 기반이 되는 도시 공간 3차원 데이터의 가시화 기능을  포함하는 디지털트윈 플랫폼을 개발하고, 이를 기반으로 대상 구역의 파일럿 서비스를 개발
+   - 플랫폼 및 파일럿 서비스를 통한 개발 타당성 검증 및 사용자 참여 기반 마련 
 
 ## Features
 - 2차원 공간정보 관리 기능
@@ -66,20 +84,21 @@
   
 ### 2. DB 생성 및 초기 데이터 등록
 - Database & Extensions
-	- lhdt 데이터베이스를 생성합니다.
-	    한글 정렬을 위해 데이터베이스를 다음과 같이 설정합니다.
-	  <pre><code>Name:lhdt, Encoding:UTF-8, Template:template0, Collation:C, Character type:C, Connection Limit:-1</code></pre>
-	- psql(SQL Shell) 혹은 pgAdmin에서 Extensions를 실행합니다.
-	  <pre><code>CREATE EXTENSION postgis</code></pre>
-	  PosGIS Extensions이 성공적으로 끝나면 데이터베이스 생성 및 초기 데이더 등록 후 spatial_ref_sys라는 테이블이 자동 생성됩니다.
+   - ndtp 데이터베이스를 생성합니다.
+       한글 정렬을 위해 데이터베이스를 다음과 같이 설정합니다.
+     <pre><code>Name:ndtp, Encoding:UTF-8, Template:template0, Collation:C, Character type:C, Connection Limit:-1</code></pre>
+   - psql(SQL Shell) 혹은 pgAdmin에서 Extensions를 실행합니다.
+     <pre><code>CREATE EXTENSION postgis</code></pre>
+     PosGIS Extensions이 성공적으로 끝나면 데이터베이스 생성 및 초기 데이더 등록 후 spatial_ref_sys라는 테이블이 자동 생성됩니다.
 
 - 데이터 등록
-	   
+      
 ### 3. Execution
-- lhdt-admin project spring boot 실행 <br>
+- ndtp-admin project spring boot 실행 <br>
   url : http://localhost(:port)/
-<pre><code>/lhdt-admin/src/main/java/lhdt/LhdtAdminApplication.java</code></pre>
+<pre><code>/ndtp-admin/src/main/java/ndtp/NdtpAdminApplication.java</code></pre>
 
 ## License
 
 <br><br>
+
