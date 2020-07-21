@@ -86,7 +86,7 @@
 - Database & Extensions
    - ndtp 데이터베이스를 생성합니다.
        한글 정렬을 위해 데이터베이스를 다음과 같이 설정합니다.
-     <pre><code>Name:ndtp, Encoding:UTF-8, Template:template0, Collation:C, Character type:C, Connection Limit:-1</code></pre>
+     <pre><code>Name:lhdt, Encoding:UTF-8, Template:template0, Collation:C, Character type:C, Connection Limit:-1</code></pre>
    - psql(SQL Shell) 혹은 pgAdmin에서 Extensions를 실행합니다.
      <pre><code>CREATE EXTENSION postgis</code></pre>
      PosGIS Extensions이 성공적으로 끝나면 데이터베이스 생성 및 초기 데이더 등록 후 spatial_ref_sys라는 테이블이 자동 생성됩니다.
@@ -94,9 +94,9 @@
 - 데이터 등록
       
 ### 3. Execution
-- ndtp-admin project spring boot 실행 <br>
+- lhdt-admin project spring boot 실행 <br>
   url : http://localhost(:port)/
-<pre><code>/ndtp-admin/src/main/java/ndtp/NdtpAdminApplication.java</code></pre>
+<pre><code>/lhdt-admin/src/main/java/ndtp/LhdtAdminApplication.java</code></pre>
 
 ## License
 
