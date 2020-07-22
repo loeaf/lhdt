@@ -170,6 +170,7 @@ public class SearchMapRestController {
 			SkSdo skSdo = new SkSdo();
 			skSdo.setName(skEmd.getName());
 			skSdo.setBjcd(skEmd.getBjcd());
+			System.out.println(skSdo.getBjcd());
 			bboxWkt = searchMapService.getEnvelopSdo(skSdo);
 			log.info("@@@@ sdo bbox {}", bboxWkt);
 		} else if (skEmd.getLayerType() == 2) {
@@ -181,6 +182,7 @@ public class SearchMapRestController {
 			log.info("@@@@ sgg bbox {}", bboxWkt);
 		} else if (skEmd.getLayerType() == 3) {
 			// 읍면동
+			System.out.println(skEmd.getBjcd());
 			bboxWkt = searchMapService.getEnvelopEmd(skEmd);
 			log.info("@@@@ emd bbox {}", bboxWkt);
 		}
@@ -250,7 +252,7 @@ public class SearchMapRestController {
 		}
 
 		int statusCode = HttpStatus.OK.value();
-		
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+"district");
 		result.put("pagination", pagination);
 		result.put("totalCount", totalCount);
 		result.put("districtList", districtList);

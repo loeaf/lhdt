@@ -7,17 +7,23 @@ function DistrictControll(magoInstance) {
 }
 
 function District(magoInstance, viewer) {
-    this.drawDistrict = function (name, sdoCode, sggCode, emdCode) {
+    this.drawDistrict = function (name, sdoCode, sggCode, emdCode, bjcdLen) {
         this.deleteDistrict();
         var now = new Date();
         var rand = (now - now % 5000) / 5000;
         var policy = NDTP.policy;
         // 시도(2) + 시군구(3) + 읍면동(3) + 리(2)
-        var queryString = "bjcd = " + sdoCode.toString().padStart(2, '0') + sggCode.toString().padStart(3, '0') + emdCode.toString().padStart(3, '0') + '00';
+        var queryString;
+        if (bjcdLen==10){
+        	queryString = "bjcd = " + sdoCode.toString().padStart(2, '0') + sggCode.toString().padStart(3, '0') + emdCode.toString().padStart(3, '0') + '00';
+        }else{
+        	queryString = "bjcd = " + sdoCode.toString() + sggCode.toString() + emdCode.toString();
+        }
+        console.log(sdoCode.toString().length);
         // TODO 개발 서버 포팅후 geoserver url 변경하기 
         var provider = new Cesium.WebMapServiceImageryProvider({
             url: policy.geoserverDataUrl + "/wms",
-            layers: 'mago3d:district',
+            layers: 'lhdt:district',
             minimumLevel: 2,
             maximumLevel: 20,
             parameters: {
@@ -54,6 +60,7 @@ var emdName = "";
 var sdoCode = "";
 var sggCode = "";
 var emdCode = "";
+var bjcdLen;
 var districtMapType = 1;
 
 var defaultDistrictObject = '<li class="on">전체</li>';
@@ -101,10 +108,11 @@ function loadDistrict() {
             if (msg.statusCode <= 200) {
                 var sdoList = msg.sdoList;
                 var content = "";
+                bjcdLen = sdoList[0].bjcd.length;
 
                 content += defaultDistrictObject;
                 for (var i = 0, len = sdoList.length; i < len; i++) {
-                    var sdo = sdoList[i];
+                	var sdo = sdoList[i];
                     content += '<li onclick="changeSdo(this, ' + sdo.sdoCode + ')">' + sdo.name + '</li>';
                 }
                 $('#sdoList').html(content);
@@ -222,9 +230,9 @@ function changeEmd(_this, _sdoCode, _sggCode, _emdCode) {
 
 $("#districtFlyButton").click(function () {
     var name = [sdoName, sggName, emdName].join(" ").trim();
-    district.drawDistrict(name, sdoCode, sggCode, emdCode);
+    district.drawDistrict(name, sdoCode, sggCode, emdCode, bjcdLen);
     //getCentroid(name, sdoCode, sggCode, emdCode);
-    getEnvelope(name, sdoCode, sggCode, emdCode);
+    getEnvelope(name, sdoCode, sggCode, emdCode, bjcdLen);
 });
 
 $("#districtCancelButton").click(function () {
@@ -232,9 +240,13 @@ $("#districtCancelButton").click(function () {
 });
 
 
-function getCentroid(name, sdoCode, sggCode, emdCode) {
+function getCentroid(name, sdoCode, sggCode, emdCode, bjcdLen) {
     var layerType = districtMapType;
-    var bjcd = sdoCode.toString().padStart(2, '0') + sggCode.toString().padStart(3, '0') + emdCode.toString().padStart(3, '0') + '00';
+    if(bjcdLen==10){
+    	var bjcd = sdoCode.toString().padStart(2, '0') + sggCode.toString().padStart(3, '0') + emdCode.toString().padStart(3, '0') + '00';
+    }else{
+    	bjcd = sdoCode.toString() + sggCode.toString() + emdCode.toString();
+    }
     var time = 3;
 
     var info = "layerType=" + layerType + "&name=" + name + "&bjcd=" + bjcd;
@@ -264,9 +276,15 @@ function getCentroid(name, sdoCode, sggCode, emdCode) {
     });
 }
 
-function getEnvelope(name, sdoCode, sggCode, emdCode) {
+function getEnvelope(name, sdoCode, sggCode, emdCode, bjcdLen) {
     var layerType = districtMapType;
-    var bjcd = sdoCode.toString().padStart(2, '0') + sggCode.toString().padStart(3, '0') + emdCode.toString().padStart(3, '0') + '00';
+    var bjcd;
+    if(bjcdLen==10){
+    	var bjcd = sdoCode.toString().padStart(2, '0') + sggCode.toString().padStart(3, '0') + emdCode.toString().padStart(3, '0') + '00';
+    }else{
+    	bjcd = sdoCode.toString() + sggCode.toString() + emdCode.toString();
+    }
+    
     var time = 3;
 
     var info = "layerType=" + layerType + "&name=" + name + "&bjcd=" + bjcd;
