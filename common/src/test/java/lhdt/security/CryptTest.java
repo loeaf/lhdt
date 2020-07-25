@@ -13,6 +13,6 @@ public class CryptTest {
 		System.out.println("user : " + Crypt.encrypt("postgres"));
 		System.out.println("password : " + Crypt.encrypt("postgres"));
 		
-//		System.out.println(Crypt.decrypt("GvEa084OoJKPfNVpNHbfs/KHGXnmV1yqVqZU7yr5tl8KYzgd7JnC4jBQstOh1a5b"));
+		System.out.println(Crypt.decrypt("t//vxAeu6orCXA7GKXoOjQ=="));
 	}
 }

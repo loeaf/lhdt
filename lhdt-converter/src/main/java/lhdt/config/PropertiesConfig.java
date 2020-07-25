@@ -34,7 +34,8 @@ public class PropertiesConfig {
 	private String queuePassword;
 	private String queueName;
 	private String exchange;
-	
+	private String routingKey;
+
 	// User excel batch registration
 	private String dataUploadDir;
 	
