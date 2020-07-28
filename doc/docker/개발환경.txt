@@ -2,7 +2,8 @@ docker image 다운로드
     - docker image pull gaia3d/lhdt
 docker container 실행(geoserver host 경로는 각자 경로에 맞게 수정)
     - docker container run --privileged  -d -p 15432:5432 -p 18080:8080 -v "D:\data\geoserver":"/data/geoserver_data" --name "lhdt" gaia3d/lhdt /sbin/init
-
+geoserver, pg, erlang, rabbitmq, 행정구역 데이터 포함 docker image
+    - docker container run --privileged  -d -p 15432:5432 -p 18080:8080 -p 15672:15672 -p 5672:5672  -v "D:\data\geoserver":"/data/geoserver_data" --name "lhdt" gaia3d/lhdt /sbin/init
 
 docker container run --privileged -d -p 15432:5432 --name "lhdt-postgresql" gaia3d/lhdt-postgresql /sbin/init
 
