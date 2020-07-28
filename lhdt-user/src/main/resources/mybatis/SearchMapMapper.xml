@@ -142,17 +142,17 @@
 			SELECT ${name}
 			FROM sk_sdo
 			WHERE enable_yn = 'Y'
-				AND #{name} like '%' || #{searchValue} || '%'
+				AND ${name} ilike '%' || #{district.searchValue} || '%'
 			UNION ALL
 			SELECT ${name}
 			FROM sk_sgg 
 			WHERE enable_yn = 'Y'
-				AND #{name} like '%' || #{searchValue} || '%'
+				AND ${name} ilike '%' || #{district.searchValue} || '%'
 			UNION ALL
 			SELECT ${name}
 			FROM sk_emd 
 			WHERE enable_yn = 'Y'
-				AND #{name} like '%' || #{searchValue} || '%'
+				AND ${name} ilike '%' || #{district.searchValue} || '%'
 		) A 		
 	</select>
 	
@@ -162,22 +162,22 @@
 		SELECT bjcd AS id, ${name} as name, ST_X(ST_Centroid(wkb_geometry)) AS longitude, ST_Y(ST_Centroid(wkb_geometry)) AS latitude
 		FROM sk_sdo
 		WHERE enable_yn = 'Y'
-			AND #{name} LIKE '%' || #{searchValue} || '%'
+			AND ${name} ILIKE '%' || #{district.searchValue} || '%'
 		UNION ALL
-		SELECT B.bjcd AS id, A.${name}||' ' || B.${name} as name, ST_X(ST_Centroid(B.wkb_geometry)) AS longitude, ST_Y(ST_Centroid(B.wkb_geometry)) AS latitude
+		SELECT B.bjcd AS id, A.${name}||' ' || B.${name}, ST_X(ST_Centroid(B.wkb_geometry)) AS longitude, ST_Y(ST_Centroid(B.wkb_geometry)) AS latitude
 		FROM sk_sgg B
 		LEFT JOIN sk_sdo A on SUBSTR(A.bjcd,1,2) = SUBSTR(B.bjcd,1,2)
 		WHERE B.enable_yn = 'Y'
-			AND B.${name} LIKE '%' || #{searchValue} || '%'
+			AND B.${name} ILIKE '%' || #{district.searchValue} || '%'
 		UNION ALL
-		SELECT C.bjcd AS id, A.${name}||' ' || B.${name} ||' '|| C.${name} as name, ST_X(ST_Centroid(C.wkb_geometry)) AS longitude, ST_Y(ST_Centroid(C.wkb_geometry)) AS latitude
+		SELECT C.bjcd AS id, A.${name}||' ' || B.${name} ||' '|| C.${name}, ST_X(ST_Centroid(C.wkb_geometry)) AS longitude, ST_Y(ST_Centroid(C.wkb_geometry)) AS latitude
 		FROM sk_emd C
 		LEFT JOIN sk_sdo A on SUBSTR(A.bjcd,1,2) = SUBSTR(C.bjcd,1,2)
 		LEFT JOIN sk_sgg B on SUBSTR(B.bjcd,1,5) = SUBSTR(C.bjcd,1,5)
 		WHERE C.enable_yn = 'Y'
-			AND C.${name} like '%' || #{searchValue} || '%'
+			AND C.${name} Ilike '%' || #{district.searchValue} || '%'
 		ORDER BY name
-		OFFSET #{offset} LIMIT #{limit}
+		OFFSET #{district.offset} LIMIT #{district.limit}
 	</select>
 	
 </mapper>
