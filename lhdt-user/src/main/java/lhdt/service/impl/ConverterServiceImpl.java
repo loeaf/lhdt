@@ -130,40 +130,36 @@ public class ConverterServiceImpl implements ConverterService {
 		String[] uploadDataIds = converterJob.getConverterCheckIds().split(",");
 		for(String uploadDataId : uploadDataIds) {
 			// 1. 변환해야 할 파일 목록을 취득
-			UploadData uploadData = UploadData.builder()
-											.userId(userId)
-											.uploadDataId(Long.valueOf(uploadDataId))
-											.converterTarget(true)
-											.build();
-			//
+			UploadData uploadData = new UploadData();
+			uploadData.setUserId(userId);
+			uploadData.setUploadDataId(Long.valueOf(uploadDataId));
+			uploadData.setConverterTarget(true);
 			List<UploadDataFile> uploadDataFileList = uploadDataService.getListUploadDataFile(uploadData);
 
 			// 2. converter job 을 등록
-			ConverterJob inConverterJob = ConverterJob.builder()
-													.uploadDataId(Long.valueOf(uploadDataId))
-													.dataGroupTarget(ServerTarget.USER.name().toLowerCase())
-													.userId(userId)
-													.title(title)
-													.usf(usf)
-													.converterTemplate(converterTemplate)
-													.fileCount(uploadDataFileList.size())
-													.yAxisUp(converterJob.getYAxisUp())
-													.build();
-			//
+			ConverterJob inConverterJob = new ConverterJob();
+			inConverterJob.setUploadDataId(Long.valueOf(uploadDataId));
+			inConverterJob.setDataGroupTarget(ServerTarget.USER.name().toLowerCase());
+			inConverterJob.setUserId(userId);
+			inConverterJob.setTitle(title);
+			inConverterJob.setUsf(usf);
+			inConverterJob.setConverterTemplate(converterTemplate);
+			inConverterJob.setFileCount(uploadDataFileList.size());
+			inConverterJob.setYAxisUp(converterJob.getYAxisUp());
 			converterMapper.insertConverterJob(inConverterJob);
 
 			Long converterJobId = inConverterJob.getConverterJobId();
 			int converterTargetCount = uploadDataFileList.size();
 			for(int i=0; i< converterTargetCount; i++) {
 				UploadDataFile uploadDataFile = uploadDataFileList.get(i);
-				ConverterJobFile converterJobFile =  ConverterJobFile.builder()
-						.userId(userId)
-						.converterJobId(converterJobId)
-						.uploadDataId(Long.valueOf(uploadDataId))
-						.uploadDataFileId(uploadDataFile.getUploadDataFileId())
-						.dataGroupId(uploadDataFile.getDataGroupId())
-						.usf(usf)
-						.build();
+				ConverterJobFile converterJobFile = new ConverterJobFile();
+				converterJobFile.setUserId(userId);
+				converterJobFile.setConverterJobId(converterJobId);
+				converterJobFile.setUploadDataId(Long.valueOf(uploadDataId));
+				converterJobFile.setUploadDataFileId(uploadDataFile.getUploadDataFileId());
+				converterJobFile.setDataGroupId(uploadDataFile.getDataGroupId());
+				converterJobFile.setUserId(userId);
+				converterJobFile.setUsf(usf);
 
 				// 3. job file을 하나씩 등록
 				converterMapper.insertConverterJobFile(converterJobFile);
@@ -181,7 +177,6 @@ public class ConverterServiceImpl implements ConverterService {
 			}
 
 			uploadData.setConverterCount(1);
-			//
 			uploadDataService.updateUploadData(uploadData);
 		}
 
@@ -189,8 +184,6 @@ public class ConverterServiceImpl implements ConverterService {
 	}
 
 	/**
-	 * mq에 publish하기
-	 * subscriber는 db에 접근하지 않음. message에 F4DConverter가 처리하기 위한 모든 내용이 존재함
 	 * @param userId
 	 * @param dataGroupRootPath
 	 * @param inConverterJob
@@ -200,7 +193,6 @@ public class ConverterServiceImpl implements ConverterService {
 		DataGroup dataGroup = new DataGroup();
 		dataGroup.setUserId(userId);
 		dataGroup.setDataGroupId(uploadDataFile.getDataGroupId());
-		//
 		dataGroup = dataGroupService.getDataGroup(dataGroup);
 
 		// path 와 File.seperator 의 차이점 때문에 변환
@@ -216,37 +208,23 @@ public class ConverterServiceImpl implements ConverterService {
 
 		log.info("-------------------------------------------------------");
 
-//		QueueMessage queueMessage = new QueueMessage();
-//		queueMessage.setServerTarget(ServerTarget.USER.name());
-//		queueMessage.setConverterJobId(inConverterJob.getConverterJobId());
-////		queueMessage.setConverterJobFileId(inConverterJob.getConverterJobFileId());
-//		queueMessage.setInputFolder(uploadDataFile.getFilePath());
-//		queueMessage.setOutputFolder(dataGroupRootPath + dataGroupFilePath);
-////		queueMessage.setMeshType("0");
-//		queueMessage.setLogPath(dataGroupRootPath + dataGroupFilePath + "logTest.txt");
-//		queueMessage.setIndexing("y");
-//		queueMessage.setUsf(inConverterJob.getUsf());
-//		queueMessage.setIsYAxisUp(inConverterJob.getYAxisUp());
-//		queueMessage.setUserId(userId);
+		QueueMessage queueMessage = new QueueMessage();
+		queueMessage.setServerTarget(ServerTarget.USER.name());
+		queueMessage.setConverterJobId(inConverterJob.getConverterJobId());
+//		queueMessage.setConverterJobFileId(inConverterJob.getConverterJobFileId());
+		queueMessage.setInputFolder(uploadDataFile.getFilePath());
+		queueMessage.setOutputFolder(dataGroupRootPath + dataGroupFilePath);
+//		queueMessage.setMeshType("0");
+		queueMessage.setLogPath(dataGroupRootPath + dataGroupFilePath + "logTest.txt");
+		queueMessage.setIndexing("y");
+		queueMessage.setUsf(inConverterJob.getUsf());
+		queueMessage.setIsYAxisUp(inConverterJob.getYAxisUp());
+		queueMessage.setUserId(userId);
 		
 		// 템플릿 별 meshType과 skinLevel 설정
 		ConverterTemplate template = ConverterTemplate.findBy(inConverterJob.getConverterTemplate());
-//		queueMessage.setMeshType(template.getMeshType());
-//		queueMessage.setSkinLevel(template.getSkinLevel());
-		
-		QueueMessage queueMessage = QueueMessage.builder()
-			.meshType(template.getMeshType())
-			.skinLevel(template.getSkinLevel())
-			.serverTarget(ServerTarget.USER.name())
-			.converterJobId(inConverterJob.getConverterJobId())
-			.inputFolder(uploadDataFile.getFilePath())
-			.outputFolder(dataGroupRootPath + dataGroupFilePath)
-			.logPath(dataGroupRootPath + dataGroupFilePath + "logTest.txt")
-			.indexing("y")
-			.usf(inConverterJob.getUsf())
-			.isYAxisUp(inConverterJob.getYAxisUp())
-			.userId(userId)
-			.build();
+		queueMessage.setMeshType(template.getMeshType());
+		queueMessage.setSkinLevel(template.getSkinLevel());
 		
 		// TODO
 		// 조금 미묘하다. transaction 처리를 할지, 관리자 UI 재 실행을 위해서는 여기가 맞는거 같기도 하고....
@@ -290,11 +268,10 @@ public class ConverterServiceImpl implements ConverterService {
 		BigDecimal longitude = uploadDataFile.getLongitude();
 		BigDecimal altitude = uploadDataFile.getAltitude();
 		
-		//
 		DataInfo dataInfo = new DataInfo();
 		dataInfo.setDataGroupId(dataGroupId);
 		dataInfo.setDataKey(dataKey);
-		//
+
 		dataInfo = dataService.getDataByDataKey(dataInfo);
 
 		if(dataInfo == null) {
@@ -302,30 +279,24 @@ public class ConverterServiceImpl implements ConverterService {
 			// TODO nodeType 도 입력해야 함
 			String metainfo = "{\"isPhysical\": true}";
 
-			//
-			dataInfo = DataInfo.builder()
-				.methodType(MethodType.INSERT)
-				.dataGroupId(dataGroupId)
-				.converterJobId(converterJobId)
-				.sharing(sharing)
-				.mappingType(mappingType)
-				.dataType(dataType)
-				.dataKey(dataKey)
-				.dataName(dataName)
-				.userId(userId)
-				.latitude(latitude)
-				.longitude(longitude)
-				.altitude(altitude)
-				.metainfo(metainfo)
-				.status(DataStatus.PROCESSING.name().toLowerCase())
-				.build();
-			
-			//
+			dataInfo = new DataInfo();
+			dataInfo.setMethodType(MethodType.INSERT);
+			dataInfo.setDataGroupId(dataGroupId);
+			dataInfo.setConverterJobId(converterJobId);
+			dataInfo.setSharing(sharing);
+			dataInfo.setMappingType(mappingType);
+			dataInfo.setDataType(dataType);
+			dataInfo.setDataKey(dataKey);
+			dataInfo.setDataName(dataName);
+			dataInfo.setUserId(userId);
+			dataInfo.setLatitude(latitude);
+			dataInfo.setLongitude(longitude);
+			dataInfo.setAltitude(altitude);
 			if(longitude != null && longitude.longValue() >0l && latitude != null && latitude.longValue() > 0l) {
 				dataInfo.setLocation("POINT(" + longitude + " " + latitude + ")");
 			}
-			
-			//
+			dataInfo.setMetainfo(metainfo);
+			dataInfo.setStatus(DataStatus.PROCESSING.name().toLowerCase());
 			dataService.insertData(dataInfo);
 			
 		} else {
@@ -345,7 +316,6 @@ public class ConverterServiceImpl implements ConverterService {
 				dataInfo.setLocation(null);
 			}
 			dataInfo.setStatus(DataStatus.PROCESSING.name().toLowerCase());
-			//
 			dataService.updateData(dataInfo);
 		}
 		
@@ -391,11 +361,7 @@ public class ConverterServiceImpl implements ConverterService {
 		DataInfo dataInfo = new DataInfo();
 		dataInfo.setUserId(converterJob.getUserId());
 		dataInfo.setConverterJobId(converterJob.getConverterJobId());
-		
-		//
 		List<DataInfo> dataInfoList = dataService.getDataByConverterJob(dataInfo);
-		
-		//
 		if(ConverterJobStatus.SUCCESS == ConverterJobStatus.valueOf(converterJob.getStatus().toUpperCase())) {
 			String serviceDirectory = propertiesConfig.getUserDataServiceDir() + converterJob.getUserId() + File.separator;
 			// TODO 상태를 success 로 udpate 해야 함
@@ -411,11 +377,9 @@ public class ConverterServiceImpl implements ConverterService {
 							dataAttribute = new DataAttribute();
 							dataAttribute.setDataId(updateDataInfo.getDataId());
 							dataAttribute.setAttributes(attribute);
-							//
 							dataAttributeService.insertDataAttribute(dataAttribute);
 						} else {
 							dataAttribute.setAttributes(attribute);
-							//
 							dataAttributeService.updateDataAttribute(dataAttribute);
 						}
 						updateDataInfo.setAttributeExist(Boolean.TRUE);
@@ -424,8 +388,6 @@ public class ConverterServiceImpl implements ConverterService {
 					updateDataInfo.setStatus(DataStatus.USE.name().toLowerCase());
 				}
 				updateDataInfo.setUserId(converterJob.getUserId());
-				
-				//
 				dataService.updateDataStatus(updateDataInfo);
 			}
 		} else {
@@ -452,7 +414,6 @@ public class ConverterServiceImpl implements ConverterService {
 			}
 		}
 
-		//
 		return converterMapper.updateConverterJob(converterJob);
 	}
 	

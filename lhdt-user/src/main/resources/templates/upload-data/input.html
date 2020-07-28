@@ -350,19 +350,16 @@
 			if ($("#longitude").val() === "") {
 				alert(JS_MESSAGE["representative.longitude.empty"]);
 				$("#longitude").focus();
-				//$("#longitude").val('0');
 				return false;
 			}
 			if ($("#latitude").val() === "") {
 				alert(JS_MESSAGE["representative.latitude.empty"]);
 				$("#latitude").focus();
-				//$("#latitude").val('0');
 				return false;
 			}
 			if ($("#altitude").val() === "") {
 				alert(JS_MESSAGE["representative.altitude.empty"]);
 				$("#altitude").focus();
-				//$("#altitude").val('0');
 				return false;
 			}
 			if(!locationValidation($("#longitude").val(), $("#latitude").val(), $("#altitude").val())) {
