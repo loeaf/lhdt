@@ -35,7 +35,7 @@
 <div id="wrap" style="min-height: 560px;"> <!-- 왼쪽 메뉴 높이에 맞춰서 설정해 줘야함 -->
 	<!-- S: NAVWRAP -->
 	<div class="navWrap">
-		<div th:replace="~{/fragments/menu :: #navWrap}"></div>
+		<div th:replace="~{/fragments/menu :: #navWrap}"></div>		
 		<!-- E: NAVWRAP -->
 		<div id="contentsWrap" class="contentsWrap" style="display: none;">
 			<div id="searchContent" class="contents fullHeight" style="display:none;">
@@ -45,7 +45,7 @@
 				<div class="tabs">
 					<ul id="dataInfoTab" class="tab tab-divide">
 						<li id="dataGroupTab" th:text="#{data.group.list.tab.menu}" data-nav="dataGroupInfoContent"></li>
-						<li id="dataListTab" class="on" th:text="#{data.list.tab.menu}" data-nav="dataInfoContent"></li>
+						<li id="dataListTab" class="on" th:text="#{data.list.tab.menu}" data-nav="dataInfoContent"><button type="button" id="findStartPoint">x</button></li>
 					</ul>
 				</div>
 				<div th:replace="~{/data/map-data :: #dataInfoContent}"></div>
@@ -96,6 +96,8 @@
 	</div>
 	<canvas id="objectLabel"></canvas>
 	<!-- E: MAP -->
+	
+	
 </div>
 <!-- E: WRAP -->
 <div th:replace="~{/data/data-dialog-template :: #dataDialogWrap}"></div>
@@ -123,6 +125,7 @@
 <script type="text/javascript" th:src="@{/externlib/moment-2.22.2/moment-with-locales.min.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/externlib/tuidatepicker-4.0.3/tui-date-picker.min.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/mago3d.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/pp-0.9-es6.js(cacheVersion=${contentCacheVersion})}" defer></script>
 <script type="text/javascript" th:src="@{/js/mago3d_lx.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>

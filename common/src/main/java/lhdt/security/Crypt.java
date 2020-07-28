@@ -2,11 +2,14 @@ package lhdt.security;
 
 import org.apache.commons.codec.binary.Base64;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * PM 솔루션 내 DB 사용자 암/복호화, 사용자 패스워드 암/복호화등에 사용
  * @author jeongdae
  *
  */
+@Slf4j
 public class Crypt {
 	private static String INIT_KEY = KeyManager.getInitKey();
 	
@@ -95,6 +98,7 @@ public class Crypt {
             }
         }
 
+        log.debug("<< enc:{}	dec:{}", strEnc, new String(zeroOutData));
         return new String(zeroOutData);
     }
 }

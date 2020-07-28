@@ -16,6 +16,7 @@ import lhdt.domain.UploadData;
 import lhdt.domain.UploadDataFile;
 import lhdt.persistence.UploadDataMapper;
 import lhdt.service.UploadDataService;
+import lhdt.utils.LhdtUtils;
 
 /**
  * @author Cheon JeongDae
@@ -98,6 +99,12 @@ public class UploadDataServiceImpl implements UploadDataService {
 	public int insertUploadData(UploadData uploadData, List<UploadDataFile> uploadDataFileList) {
 		int result = uploadDataMapper.insertUploadData(uploadData);
 		
+		//
+		if(LhdtUtils.isEmpty(uploadDataFileList)) {
+			return result;
+		}
+		
+		//
 		Long uploadDataId = uploadData.getUploadDataId();
 //		Integer dataGroupId = uploadData.getDataGroupId();
 //		String sharing = uploadData.getSharing();
@@ -106,6 +113,7 @@ public class UploadDataServiceImpl implements UploadDataService {
 		for(UploadDataFile uploadDataFile : uploadDataFileList) {
 			uploadDataFile.setUploadDataId(uploadDataId);
 			uploadDataFile.setUserId(userId);
+			//
 			uploadDataMapper.insertUploadDataFile(uploadDataFile);
 			result++;
 		}
