@@ -7,16 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
+import lhdt.controller.LhdtAbstractController;
 import lhdt.domain.ConverterJob;
-import lhdt.domain.Key;
-import lhdt.domain.UserSession;
 import lhdt.service.ConverterService;
+import lhdt.utils.LhdtUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Data Converter
@@ -26,7 +25,7 @@ import lhdt.service.ConverterService;
 @Slf4j
 @RestController
 @RequestMapping("/converters")
-public class ConverterRestController {
+public class ConverterRestController extends LhdtAbstractController{
 	
 	@Autowired
 	private ConverterService converterService;
@@ -41,37 +40,28 @@ public class ConverterRestController {
 	public Map<String, Object> insert(HttpServletRequest request, ConverterJob converterJob) {
 		log.info("@@@ converterJob = {}", converterJob);
 		
-		Map<String, Object> result = new HashMap<>();
-		String errorCode = null;
-		String message = null;
 		
-		if(converterJob.getConverterCheckIds().length() <= 0) {
-			result.put("statusCode", HttpStatus.BAD_REQUEST.value());
-			result.put("errorCode", "check.value.required");
-			result.put("message", message);
-            return result;
+		//
+		if(LhdtUtils.isEmpty(converterJob.getConverterCheckIds())) {
+			return super.createResultMap(HttpStatus.BAD_REQUEST, "check.value.required", null);
 		}
-		if(StringUtils.isEmpty(converterJob.getTitle())) {
-			result.put("statusCode", HttpStatus.BAD_REQUEST.value());
-			result.put("errorCode", "converter.title.empty");
-			result.put("message", message);
-            return result;
-		}
-		if(converterJob.getUsf() == null) {
-			result.put("statusCode", HttpStatus.BAD_REQUEST.value());
-			result.put("errorCode", "converter.usf.empty");
-			result.put("message", message);
-            return result;
+
+		//
+		if(LhdtUtils.isEmpty(converterJob.getTitle())) {
+            return super.createResultMap(HttpStatus.BAD_REQUEST, "converter.title.empty", null);
 		}
 		
-		UserSession userSession = (UserSession)request.getSession().getAttribute(Key.USER_SESSION.name());
-		converterJob.setUserId(userSession.getUserId());
+		//
+		if(LhdtUtils.isEmpty(converterJob.getUsf())) {
+            return super.createResultMap(HttpStatus.BAD_REQUEST, "converter.usf.empty", null);
+		}
+
+		//
+		converterJob.setUserId(super.getUserId(request));
+		//
 		converterService.insertConverter(converterJob);
-		int statusCode = HttpStatus.OK.value();
-		
-		result.put("statusCode", statusCode);
-		result.put("errorCode", errorCode);
-		result.put("message", message);
-		return result;
+
+		//
+		return super.createResultMap(HttpStatus.OK, null, null);
 	}
 }

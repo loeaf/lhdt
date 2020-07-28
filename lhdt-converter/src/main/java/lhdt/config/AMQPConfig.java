@@ -1,5 +1,7 @@
 package lhdt.config;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -47,6 +49,8 @@ public class AMQPConfig {
 		connectionFactory.setUsername(Crypt.decrypt(propertiesConfig.getQueueUser()));
 		connectionFactory.setPassword(Crypt.decrypt(propertiesConfig.getQueuePassword()));
 		connectionFactory.setPort(Integer.parseInt(propertiesConfig.getQueueServerPort()));
+		
+		log.debug("<< {}", ToStringBuilder.reflectionToString(connectionFactory, ToStringStyle.MULTI_LINE_STYLE));
 		return connectionFactory;
 	}
 	
@@ -57,6 +61,9 @@ public class AMQPConfig {
 		container.setConnectionFactory(connectionFactory());
 		container.setQueueNames(propertiesConfig.getQueueName());
 		container.setMessageListener(new MessageListenerAdapter(aMQPSubscribe));
+		
+		//
+		log.debug("<< {}", ToStringBuilder.reflectionToString(container, ToStringStyle.MULTI_LINE_STYLE));
 		return container;
 	}
 

@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
 import lhdt.domain.ConverterJob;
 import lhdt.service.ConverterService;
+import lhdt.utils.LhdtUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Data Converter
@@ -46,41 +47,33 @@ public class ConverterAPIController {
 		String message = null;
 		try {
 			if(converterJob.getConverterJobId() == null) {
-				result.put("statusCode", HttpStatus.BAD_REQUEST.value());
-				result.put("errorCode", "converter.job.id.empty");
-				result.put("message", message);
-	            return result;
+				return LhdtUtils.createResultMap(HttpStatus.BAD_REQUEST.value(), "converter.job.id.empty", message);
 			}
 			if(StringUtils.isEmpty(converterJob.getUserId())) {
-				result.put("statusCode", HttpStatus.BAD_REQUEST.value());
-				result.put("errorCode", "converter.userId.empty");
-				result.put("message", message);
-	            return result;
+				return LhdtUtils.createResultMap(HttpStatus.BAD_REQUEST.value(), "converter.userId.empty", message);
 			}
-			
+
+			//
 			converterService.updateConverterJob(converterJob);
 		} catch(DataAccessException e) {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "db.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
-			e.printStackTrace();
+			log.error("{}",e);
 		} catch(RuntimeException e) {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "runtime.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
-			e.printStackTrace();
+			log.error("{}",e);
 		} catch(Exception e) {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "unknown.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
-			e.printStackTrace();
+			log.error("{}",e);
 		}
 		
-		result.put("statusCode", statusCode);
-		result.put("errorCode", errorCode);
-		result.put("message", message);
-		
-		return result;
+		//
+		return LhdtUtils.createResultMap(statusCode, errorCode, message);
 	}
 
 }

@@ -1,11 +1,17 @@
 package lhdt.config;
 
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Data
 @Configuration
 @PropertySource("classpath:lhdt.properties")
@@ -40,5 +46,10 @@ public class PropertiesConfig {
 	
 	// F4D Converter.exe 가 있는 경로
 	private String converterDir;	
+	
+	@PostConstruct
+	private void init() {
+		log.debug("{}", ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE));
+	}
 	
 }
