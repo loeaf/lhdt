@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow"/>
+	<title><th:block th:text="#{data.page.title}"></th:block></title>
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/cesium/Widgets/widgets.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/css/{lang}/user-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<style type="text/css">
+		.mapWrap {
+			float:right;
+			width: calc(100% - 60px);
+			height: 100%;
+			background-color: #eee;
+		}
+    </style>
+</head>
+<body>
+
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
+<div id="loadingWrap">
+	<div class="loading">
+		<span class="spinner"></span>
+	</div>
+</div>
+<div id="wrap" style="min-height: 560px;"> <!-- 왼쪽 메뉴 높이에 맞춰서 설정해 줘야함 -->
+	<!-- S: NAVWRAP -->
+	<div class="navWrap">
+		<ul id="navWrap" class="nav">
+			<li>test1</li>
+			<li>test2</li>
+		</ul>
+		<!-- E: NAVWRAP -->
+		<div id="contentsWrap" class="contentsWrap" style="display: none;">
+			<div id="searchContent" class="contents fullHeight" style="display:none;">
+				<div th:replace="~{/search/district :: #districtWrap}"></div>
+			</div>
+			<!-- E: CONTENTSBTN -->
+		</div>
+		<div class="contentsBtn">
+			<button type="button" id="closeLeftBtn" th:title="#{common.close}" style="display:none;">Close</button>
+		</div>
+		<!-- E: CONTENTSWRAP -->
+
+	</div>
+	<!-- E: NAVWRAP -->
+	<!-- CTRLWRAP -->
+	<div th:replace="~{/fragments/toolbar :: #toolbarWrap}"></div>
+	<!-- E: CTRLWRAP -->
+
+	<!-- MAP -->
+	<div id="magoContainer" class="mapWrap">
+	</div>
+	<canvas id="objectLabel"></canvas>
+	<!-- E: MAP -->
+</div>
+
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/cesium/Cesium.js}"></script>
+<script type="text/javascript" th:src="@{/externlib/decodeTextAlternative/encoding-indexes.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/decodeTextAlternative/encoding.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/mago3d.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/mago3d_lx.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/user-policy.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+var MAGO3D_INSTANCE;
+var LHDT = LHDT || {
+	policy : {}
+};
+
+initPolicy(function(policy, baseLayers){
+	LHDT.policy = policy;
+	magoStart();
+});
+
+function magoStart() {
+	var cesiumViewerOption = {};
+	cesiumViewerOption.infoBox = false;
+	cesiumViewerOption.navigationHelpButton = false;
+	cesiumViewerOption.selectionIndicator = false;
+	cesiumViewerOption.homeButton = false;
+	cesiumViewerOption.fullscreenButton = false;
+	cesiumViewerOption.geocoder = false;
+	cesiumViewerOption.baseLayerPicker = false;
+	cesiumViewerOption.sceneModePicker = false;
+
+	MAGO3D_INSTANCE = new Mago3D.Mago3d('magoContainer', LHDT.policy, undefined, cesiumViewerOption);
+	
+	var provider = new Cesium.WebMapServiceImageryProvider({
+	    url : 'http://localhost:18080/geoserver/lhdt/wms',
+	    parameters : {
+	    	transparent : true,
+	    	format: "image/png"
+	    },
+	    layers : 'lhdt:area'
+	});
+
+	MAGO3D_INSTANCE.getViewer().imageryLayers.addImageryProvider(provider);
+}
+http://localhost:18080/geoserver/lhdt/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS=lhdt%3Aarea&exceptions=application%2Fvnd.ogc.se_inimage&SRS=EPSG%3A4326&STYLES=&WIDTH=602&HEIGHT=768&BBOX=126.91912651062012%2C37.518911361694336%2C126.97079658508301%2C37.584829330444336
+function loadend(e) {
+	console.info(MAGO3D_INSTANCE);
+	var provider = new Cesium.WebMapServiceImageryProvider({
+	    url : 'http://localhost:18080/geoserver/lhdt/wms',
+	    parameters : {
+	    	transparent : true,
+	    	format: "image/png"
+	    },
+	    layers : 'lhdt:area'
+	});
+
+	e.getViewer().imageryLayers.addImageryProvider(provider);
+}
+</script>
+</body>
+</html>
