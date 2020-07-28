@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import lhdt.domain.District;
+import lhdt.domain.Key;
 import lhdt.domain.Pagination;
 import lhdt.domain.SkEmd;
 import lhdt.domain.SkSdo;
@@ -35,17 +36,26 @@ public class SearchMapRestController {
 	@Autowired
 	private SearchMapService searchMapService;
 
+	/*HttpServletRequest request;
+	String lang = (String)request.getSession().getAttribute(Key.LANG.name());*/
+
 	/**
 	 * 시도 목록
 	 * @return
 	 */
 	@GetMapping("/sdos")
-	public Map<String, Object> getListSdo() {
+	public Map<String, Object> getListSdo(HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		
-		List<SkSdo> sdoList = searchMapService.getListSdoExceptGeom();
+		String lang = (String)request.getSession().getAttribute(Key.LANG.name());
+		if(lang!=null) {
+			lang = "en";
+		}else {
+			lang = "ko";
+		}
+		String name = lang+"name";
+		List<SkSdo> sdoList = searchMapService.getListSdoExceptGeom(name);
 		int statusCode = HttpStatus.OK.value();
 		
 		result.put("sdoList", sdoList);
@@ -61,12 +71,20 @@ public class SearchMapRestController {
 	 * @return
 	 */
 	@GetMapping("/sdos/{sdoCode:[0-9]+}/sggs")
-	public Map<String, Object> getListSggBySdo(@PathVariable String sdoCode) {
+	public Map<String, Object> getListSggBySdo(HttpServletRequest request, @PathVariable String sdoCode) {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
 		
-		List<SkSgg> sggList = searchMapService.getListSggBySdoExceptGeom(sdoCode);
+		String lang = (String)request.getSession().getAttribute(Key.LANG.name());
+		if(lang!=null) {
+			lang = "en";
+		}else {
+			lang = "ko";
+		}
+		String name = lang+"name";
+		
+		List<SkSgg> sggList = searchMapService.getListSggBySdoExceptGeom(name, sdoCode);
 		int statusCode = HttpStatus.OK.value();
 		
 		result.put("sggList", sggList);
@@ -83,16 +101,24 @@ public class SearchMapRestController {
 	 * @return
 	 */
 	@GetMapping("/sdos/{sdoCode:[0-9]+}/sggs/{sggCode:[0-9]+}/emds")
-	public Map<String, Object> getListEmdBySdoAndSgg(@PathVariable String sdoCode, @PathVariable String sggCode) {
+	public Map<String, Object> getListEmdBySdoAndSgg(HttpServletRequest request, @PathVariable String sdoCode, @PathVariable String sggCode) {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
+		
+		String lang = (String)request.getSession().getAttribute(Key.LANG.name());
+		if(lang!=null) {
+			lang = "en";
+		}else {
+			lang = "ko";
+		}
+		String name = lang+"name";
 		
 		SkEmd mapEmd = new SkEmd();
 		mapEmd.setSdoCode(sdoCode);
 		mapEmd.setSggCode(sggCode);
 
-		List<SkEmd> emdList = searchMapService.getListEmdBySdoAndSggExceptGeom(mapEmd);
+		List<SkEmd> emdList = searchMapService.getListEmdBySdoAndSggExceptGeom(name, mapEmd);
 		int statusCode = HttpStatus.OK.value();
 		
 		result.put("emdList", emdList);
@@ -223,6 +249,14 @@ public class SearchMapRestController {
 		String errorCode = null;
 		String message = null;
 		
+		String lang = (String)request.getSession().getAttribute(Key.LANG.name());
+		if(lang!=null) {
+			lang = "en";
+		}else {
+			lang = "ko";
+		}
+		String name = lang+"name";
+		
 		log.info("@@ district = {}", district);
 		district.setSearchValue(district.getFullTextSearch());
 		district.setSearchWord(district.getFullTextSearch());
@@ -239,7 +273,7 @@ public class SearchMapRestController {
             return result;
 		}
 
-		long totalCount = searchMapService.getDistrictTotalCount(district);
+		long totalCount = searchMapService.getDistrictTotalCount(name, district);
 		Pagination pagination = new Pagination(request.getRequestURI(),
 				getSearchParameters(district.getFullTextSearch()), totalCount, Long.parseLong(pageNo));
 		log.info("@@ pagination = {}", pagination);
@@ -248,7 +282,7 @@ public class SearchMapRestController {
 		district.setLimit(pagination.getPageRows());
 		List<District> districtList = new ArrayList<>();
 		if (totalCount > 0l) {
-			districtList = searchMapService.getListDistrict(district);
+			districtList = searchMapService.getListDistrict(name, district);
 		}
 
 		int statusCode = HttpStatus.OK.value();

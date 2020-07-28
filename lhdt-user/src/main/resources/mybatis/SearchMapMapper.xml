@@ -6,25 +6,25 @@
 	<!-- Sdo 목록(wkb_geometry 은 제외) -->
 	<select id="getListSdoExceptGeom" resultType="skSdo">
 		/* getListSdoExceptGeom */
-		SELECT A.bjcd, SUBSTR(A.bjcd, 1, 2) AS sdo_code, A.name
+		SELECT A.bjcd, SUBSTR(A.bjcd, 1, 2) AS sdo_code, A.${name} as name
 		FROM sk_sdo A, ( 
-			SELECT MIN(ogc_fid) AS ogc_fid, name 
+			SELECT MIN(ogc_fid) AS ogc_fid, ${name} as name
 			FROM sk_sdo 
 			WHERE enable_yn ='Y'
-			GROUP BY name
+			GROUP BY ${name}
 		) B
 		WHERE A.ogc_fid = B.ogc_fid
-		ORDER BY A.name
+		ORDER BY A.${name}
 	</select>
 	
 	<!-- Sgg 목록(wkb_geometry 은 제외) -->
-	<select id="getListSggBySdoExceptGeom" parameterType="string" resultType="skSgg">
+	<select id="getListSggBySdoExceptGeom" parameterType="map" resultType="skSgg">
 		/* getListSggBySdoExceptGeom */
-		SELECT B.bjcd, SUBSTR(B.bjcd, 1, 2) AS sdo_code, SUBSTR(B.bjcd, 3, 3) AS sgg_code, B.name	
+		SELECT B.bjcd, SUBSTR(B.bjcd, 1, 2) AS sdo_code, SUBSTR(B.bjcd, 3, 3) AS sgg_code, B.${name} as name	
 		FROM sk_sgg B, (
-			SELECT MIN(A.ogc_fid) AS ogc_fid, A.code AS bjcd, A.name 
+			SELECT MIN(A.ogc_fid) AS ogc_fid, A.code AS bjcd, A.name
 			FROM (
-				SELECT ogc_fid, SUBSTR(bjcd, 1, 5) as code, name 
+				SELECT ogc_fid, SUBSTR(bjcd, 1, 5) as code, ${name} as name
 				FROM sk_sgg 
 				WHERE enable_yn = 'Y'
 					AND bjcd LIKE #{sdoCode} || '%'
@@ -36,19 +36,19 @@
 	</select>
 	
 	<!-- emd 목록(wkb_geometry 은 제외) -->
-	<select id="getListEmdBySdoAndSggExceptGeom" parameterType="skEmd" resultType="skEmd">
+	<select id="getListEmdBySdoAndSggExceptGeom" parameterType="map" resultType="skEmd">
 		/* getListEmdBySdoAndSggExceptGeom */
 		SELECT B.bjcd, SUBSTR(B.bjcd, 1, 2) AS sdo_code, 
 			SUBSTR(B.bjcd, 3, 3) AS sgg_code,
 			SUBSTR(B.bjcd, 6, 3) AS emd_code,
-			B.name	
+			B.${name} as name	
 		FROM sk_emd B, (
-			SELECT MIN(A.ogc_fid) AS ogc_fid, A.code AS bjcd, A.name 
+			SELECT MIN(A.ogc_fid) AS ogc_fid, A.code AS bjcd, A.name
 			FROM (
-				SELECT ogc_fid, SUBSTR(bjcd, 6, 3) as code, name 
+				SELECT ogc_fid, SUBSTR(bjcd, 6, 3) as code, ${name} as name
 				FROM sk_emd 
 				WHERE enable_yn = 'Y'
-					AND bjcd LIKE #{sdoCode} || #{sggCode} ||'%'
+					AND bjcd LIKE #{skEmd.sdoCode} || #{skEmd.sggCode} ||'%'
 			) A
 			GROUP BY A.code, A.name
 		) C
@@ -135,47 +135,47 @@
 	</select>
 	
 	<!-- 행정구역 검색 총 건수 -->
-	<select id="getDistrictTotalCount" parameterType="district" resultType="long">
+	<select id="getDistrictTotalCount" parameterType="map" resultType="long">
 		/* getDistrictTotalCount */
 		SELECT count(*)
 		FROM (
-			SELECT name
+			SELECT ${name}
 			FROM sk_sdo
 			WHERE enable_yn = 'Y'
-				AND name like '%' || #{searchValue} || '%'
+				AND #{name} like '%' || #{searchValue} || '%'
 			UNION ALL
-			SELECT name
+			SELECT ${name}
 			FROM sk_sgg 
 			WHERE enable_yn = 'Y'
-				AND name like '%' || #{searchValue} || '%'
+				AND #{name} like '%' || #{searchValue} || '%'
 			UNION ALL
-			SELECT name
+			SELECT ${name}
 			FROM sk_emd 
 			WHERE enable_yn = 'Y'
-				AND name like '%' || #{searchValue} || '%'
+				AND #{name} like '%' || #{searchValue} || '%'
 		) A 		
 	</select>
 	
 	<!-- 행정 구역 목록 -->
-	<select id="getListDistrict" parameterType="district" resultType="district">
+	<select id="getListDistrict" parameterType="map" resultType="district">
 		/* getListDistrict */
-		SELECT bjcd AS id, name, ST_X(ST_Centroid(wkb_geometry)) AS longitude, ST_Y(ST_Centroid(wkb_geometry)) AS latitude
+		SELECT bjcd AS id, ${name} as name, ST_X(ST_Centroid(wkb_geometry)) AS longitude, ST_Y(ST_Centroid(wkb_geometry)) AS latitude
 		FROM sk_sdo
 		WHERE enable_yn = 'Y'
-			AND name LIKE '%' || #{searchValue} || '%'
+			AND #{name} LIKE '%' || #{searchValue} || '%'
 		UNION ALL
-		SELECT B.bjcd AS id, A.name||' ' || B.name, ST_X(ST_Centroid(B.wkb_geometry)) AS longitude, ST_Y(ST_Centroid(B.wkb_geometry)) AS latitude
+		SELECT B.bjcd AS id, A.${name}||' ' || B.${name} as name, ST_X(ST_Centroid(B.wkb_geometry)) AS longitude, ST_Y(ST_Centroid(B.wkb_geometry)) AS latitude
 		FROM sk_sgg B
 		LEFT JOIN sk_sdo A on SUBSTR(A.bjcd,1,2) = SUBSTR(B.bjcd,1,2)
 		WHERE B.enable_yn = 'Y'
-			AND B.name LIKE '%' || #{searchValue} || '%'
+			AND B.${name} LIKE '%' || #{searchValue} || '%'
 		UNION ALL
-		SELECT C.bjcd AS id, A.name||' ' || B.name ||' '|| C.name as name, ST_X(ST_Centroid(C.wkb_geometry)) AS longitude, ST_Y(ST_Centroid(C.wkb_geometry)) AS latitude
+		SELECT C.bjcd AS id, A.${name}||' ' || B.${name} ||' '|| C.${name} as name, ST_X(ST_Centroid(C.wkb_geometry)) AS longitude, ST_Y(ST_Centroid(C.wkb_geometry)) AS latitude
 		FROM sk_emd C
 		LEFT JOIN sk_sdo A on SUBSTR(A.bjcd,1,2) = SUBSTR(C.bjcd,1,2)
 		LEFT JOIN sk_sgg B on SUBSTR(B.bjcd,1,5) = SUBSTR(C.bjcd,1,5)
 		WHERE C.enable_yn = 'Y'
-			AND C.name like '%' || #{searchValue} || '%'
+			AND C.${name} like '%' || #{searchValue} || '%'
 		ORDER BY name
 		OFFSET #{offset} LIMIT #{limit}
 	</select>
