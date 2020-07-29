@@ -15,6 +15,7 @@ include ':lhdt-user'
 include ':lhdt-converter'
 include ':html'
 include ':doc'
+include ':lhdt-anals'
 
 //project(':common').projectDir = "$rootDir/common" as File
 //project(':mago3d-admin').projectDir = "$rootDir/mago3d-admin" as File
