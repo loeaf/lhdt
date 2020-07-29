@@ -111,6 +111,7 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	
 	//
+	compile group: 'commons-lang',  name:'commons-lang', version:'2.6'
 	compile(files('libs/pp-core-1.8.2004.jar'))
 }
 
