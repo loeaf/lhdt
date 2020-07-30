@@ -1,6 +1,7 @@
 drop table if exists extrusion_model_group cascade;
 drop table if exists extrusion_model cascade;
-drop table if exists extrusion_model_detail cascade;
+drop table if exists extrusion_model_file_info cascade;
+drop table if exists extrusion_model_attribute cascade;
 
 -- extrusion model 그룹
 create table extrusion_model_group (
