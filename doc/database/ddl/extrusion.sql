@@ -2,6 +2,8 @@ drop table if exists extrusion_model_group cascade;
 drop table if exists extrusion_model cascade;
 drop table if exists extrusion_model_file_info cascade;
 drop table if exists extrusion_model_attribute cascade;
+drop table if exists extrusion_library_group cascade;
+drop table if exists extrusion_library cascade;
 
 -- extrusion model 그룹
 create table extrusion_model_group (
@@ -59,7 +61,7 @@ create table extrusion_model (
 	description					        varchar(256),
 	update_date					        timestamp with time zone		default now(),
 	insert_date					        timestamp with time zone 		default now(),
-	constraint extrusion_pk 		    primary key (extrusion_id)
+	constraint extrusion_model_pk 		primary key (extrusion_model_id)
 );
 
 comment on table extrusion_model is '레이어';
@@ -83,6 +85,24 @@ comment on column extrusion_model.coordinate is '좌표계 정보';
 comment on column extrusion_model.description is '설명';
 comment on column extrusion_model.update_date is '수정일';
 comment on column extrusion_model.insert_date is '등록일';
+
+
+-- extrusion model 속성
+create table extrusion_model_attribute (
+	extrusion_model_attribute_id			        bigint,
+	extrusion_model_id						        bigint,
+	attributes					                    json,
+	update_date					                    timestamp with time zone,
+	insert_date					                    timestamp with time zone			default now(),
+	constraint extrusion_model_attribute_pk 	    primary key(extrusion_model_attribute_id)
+);
+
+comment on table extrusion_model_attribute is 'extrusion model 필수 외 속성 정보';
+comment on column extrusion_model_attribute.extrusion_model_attribute_id is '고유번호';
+comment on column extrusion_model_attribute.extrusion_model_id is 'extrusion model 고유번호';
+comment on column extrusion_model_attribute.attributes is '속성';
+comment on column extrusion_model_attribute.update_date is '수정일';
+comment on column extrusion_model_attribute.insert_date is '등록일';
 
 
 -- extrusion model shape 파일 정보
@@ -121,20 +141,67 @@ comment on column extrusion_model_file_info.update_date is '갱신일';
 comment on column extrusion_model_file_info.insert_date is '등록일';
 
 
--- extrusion model 속성
-create table extrusion_model_attribute (
-	extrusion_model_attribute_id			bigint,
-	extrusion_model_id						bigint,
-	attributes					            json,
-	update_date					            timestamp with time zone,
-	insert_date					            timestamp with time zone			default now(),
-	constraint extrusion_model_attribute_pk 	        primary key(extrusion_model_attribute_id)
+-- extrusion library 그룹
+create table extrusion_library_group (
+	extrusion_library_group_id		            integer,
+	extrusion_library_group_name      		    varchar(256)					not null,
+	user_id						                varchar(32),
+	ancestor					                integer							default 0,
+	parent                		                integer							default 0,
+	depth                	  	                integer							default 1,
+	view_order					                integer							default 1,
+	children					                integer							default 0,
+	available					                boolean							default true,
+	description					                varchar(256),
+	update_date             	                timestamp with time zone,
+	insert_date					                timestamp with time zone		default now(),
+	constraint extrusion_library_group_pk       primary key (extrusion_library_group_id)
 );
 
-comment on table extrusion_model_attribute is 'extrusion model 필수 외 속성 정보';
-comment on column extrusion_model_attribute.extrusion_model_attribute_id is '고유번호';
-comment on column extrusion_model_attribute.extrusion_model_id is 'extrusion model 고유번호';
-comment on column extrusion_model_attribute.attributes is '속성';
-comment on column extrusion_model_attribute.update_date is '수정일';
-comment on column extrusion_model_attribute.insert_date is '등록일';
+comment on table extrusion_library_group is 'extrusion library 그룹';
+comment on column extrusion_library_group.extrusion_library_group_id is 'extrusion library 그룹 고유번호';
+comment on column extrusion_library_group.extrusion_library_group_name is 'extrusion library 그룹 그룹명';
+comment on column extrusion_library_group.user_id is '사용자 아이디';
+comment on column extrusion_library_group.ancestor is '조상';
+comment on column extrusion_library_group.parent is '부모';
+comment on column extrusion_library_group.depth is '깊이';
+comment on column extrusion_library_group.view_order is '나열 순서';
+comment on column extrusion_library_group.children is '자식 존재 개수';
+comment on column extrusion_library_group.available is '사용 여부';
+comment on column extrusion_library_group.description is '설명';
+comment on column extrusion_library_group.update_date is '수정일';
+comment on column extrusion_library_group.insert_date is '등록일';
 
+-- extrusion library
+create table extrusion_library (
+	extrusion_library_id					bigint,
+	extrusion_library_group_id			    integer,
+	extrusion_library_key					varchar(100)					not null,
+	extrusion_library_name				    varchar(256)					not null,
+	data_id						            bigint,
+	user_id						            varchar(32),
+
+	service_type				            varchar(30),
+    view_order					            integer							default 1,
+	available					            boolean							default true,
+
+	description					            varchar(256),
+	update_date					            timestamp with time zone		default now(),
+	insert_date					            timestamp with time zone 		default now(),
+	constraint extrusion_library_pk 		primary key (extrusion_library_id)
+);
+
+
+comment on table extrusion_library is 'extrusion library';
+comment on column extrusion_library.extrusion_library_id is 'extrusion library 고유번호';
+comment on column extrusion_library.extrusion_library_group_id is 'extrusion library 그룹 고유번호';
+comment on column extrusion_library.extrusion_library_key is 'extrusion library 고유키(API용)';
+comment on column extrusion_library.extrusion_library_name is 'extrusion library명';
+comment on column extrusion_library.data_id is '데이터 고유키';
+comment on column extrusion_library.user_id is '사용자명';
+comment on column extrusion_library.service_type is '서비스 타입 (정적, 동적)';
+comment on column extrusion_library.view_order is '나열 순서';
+comment on column extrusion_library.available is '사용유무.';
+comment on column extrusion_library.description is '설명';
+comment on column extrusion_library.update_date is '수정일';
+comment on column extrusion_model.insert_date is '등록일';

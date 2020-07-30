@@ -13,6 +13,14 @@ drop sequence if exists data_smart_tiling_file_info_seq;
 drop sequence if exists data_smart_tiling_file_parse_log_seq;
 drop sequence if exists data_attribute_file_info_seq;
 drop sequence if exists data_object_attribute_file_info_seq;
+
+drop sequence if exists extrusion_model_group_seq;
+drop sequence if exists extrusion_model_seq;
+drop sequence if exists extrusion_model_attribute_seq;
+drop sequence if exists extrusion_model_file_info_seq;
+drop sequence if exists extrusion_library_group_seq;
+drop sequence if exists extrusion_library_seq;
+
 drop sequence if exists geopolicy_seq;
 drop sequence if exists issue_seq;
 drop sequence if exists issue_detail_seq;
@@ -49,6 +57,14 @@ create sequence data_file_parse_log_seq increment 1 minvalue 1 maxvalue 99999999
 create sequence data_smart_tiling_file_info_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 1 cache 1;
 create sequence data_smart_tiling_file_parse_log_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 1 cache 1;
 create sequence data_object_attribute_file_info_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 1 cache 1;
+
+create sequence extrusion_model_group_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
+create sequence extrusion_model_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 1 cache 1;
+create sequence extrusion_model_attribute_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 1 cache 1;
+create sequence extrusion_model_file_info_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 1 cache 1;
+create sequence extrusion_library_group_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
+create sequence extrusion_library_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 1 cache 1;
+
 create sequence geopolicy_seq increment 1 minvalue 1 maxvalue 999999999999 start 2 cache 1;
 create sequence issue_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 1 cache 1;
 create sequence issue_detail_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 1 cache 1;
