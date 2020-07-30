@@ -1,17 +1,16 @@
 package lhdt.persistence;
 
-import java.util.List;
-
+import lhdt.domain.Layer;
 import org.springframework.stereotype.Repository;
 
-import lhdt.domain.Layer;
+import java.util.List;
 
 @Repository
 public interface LayerMapper {
 	
 	/**
 	 * Layer 총 건수
-	 * @param accessLog
+	 * @param layer
 	 * @return
 	 */
 	Long getLayerTotalCount(Layer layer);
@@ -102,7 +101,7 @@ public interface LayerMapper {
     
     /**
      * 공간정보 테이블 삭제
-     * @param layerId
+     * @param layerKey
      * @return
      */
     int deleteLayerTable(String layerKey);

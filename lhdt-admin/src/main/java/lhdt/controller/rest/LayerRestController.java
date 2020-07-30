@@ -1,54 +1,8 @@
 package lhdt.controller.rest;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import lombok.extern.slf4j.Slf4j;
 import lhdt.config.PropertiesConfig;
 import lhdt.controller.AuthorizationController;
-import lhdt.domain.GeoPolicy;
-import lhdt.domain.Key;
-import lhdt.domain.Layer;
-import lhdt.domain.LayerFileInfo;
-import lhdt.domain.LayerType;
-import lhdt.domain.Policy;
-import lhdt.domain.ShapeFileExt;
-import lhdt.domain.UserSession;
+import lhdt.domain.*;
 import lhdt.geospatial.ShapeFileParser;
 import lhdt.service.GeoPolicyService;
 import lhdt.service.LayerFileInfoService;
@@ -57,6 +11,27 @@ import lhdt.service.PolicyService;
 import lhdt.support.LogMessageSupport;
 import lhdt.support.ZipSupport;
 import lhdt.utils.WebUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 @Slf4j
 @RestController
@@ -135,7 +110,7 @@ public class LayerRestController implements AuthorizationController {
 	 * shape 파일 변환 TODO dropzone 이 파일 갯수만큼 form data를 전송해 버려서 command 패턴을(Layer
 	 * layer) 사용할 수 없음 dropzone 이 예외 처리가 이상해서 BAD_REQUEST 를 던지지 않고 OK 를 넣짐
 	 *
-	 * @param model
+	 * @param request
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -324,9 +299,9 @@ public class LayerRestController implements AuthorizationController {
 		} catch(DataAccessException e) {
 			// ogr2ogr2 실행하다가 에러날경우 이미 들어간 레이어, 레이러 파일정보 삭제 
 			Integer layerId = (Integer) updateLayerMap.get("layerId");
-			Integer layerFileInfoGroupId = (Integer) updateLayerMap.get("layerFileInfoGroupId");
+			Integer layerFileInfoTeamId = (Integer) updateLayerMap.get("layerFileInfoTeamId");
 			layerService.deleteLayer(layerId);
-			layerFileInfoService.deleteLayerFileInfoByGroupId(layerFileInfoGroupId);
+			layerFileInfoService.deleteLayerFileInfoByTeamId(layerFileInfoTeamId);
 			
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "db.exception";
@@ -335,9 +310,9 @@ public class LayerRestController implements AuthorizationController {
 		} catch(RuntimeException e) {
 			// ogr2ogr2 실행하다가 에러날경우 이미 들어간 레이어, 레이러 파일정보 삭제 
 			Integer layerId = (Integer) updateLayerMap.get("layerId");
-			Integer layerFileInfoGroupId = (Integer) updateLayerMap.get("layerFileInfoGroupId");
+			Integer layerFileInfoTeamId = (Integer) updateLayerMap.get("layerFileInfoTeamId");
 			layerService.deleteLayer(layerId);
-			layerFileInfoService.deleteLayerFileInfoByGroupId(layerFileInfoGroupId);
+			layerFileInfoService.deleteLayerFileInfoByTeamId(layerFileInfoTeamId);
 			
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "runtime.exception";
@@ -347,9 +322,9 @@ public class LayerRestController implements AuthorizationController {
 		} catch(Exception e) {
 			// ogr2ogr2 실행하다가 에러날경우 이미 들어간 레이어, 레이러 파일정보 삭제 
 			Integer layerId = (Integer) updateLayerMap.get("layerId");
-			Integer layerFileInfoGroupId = (Integer) updateLayerMap.get("layerFileInfoGroupId");
+			Integer layerFileInfoTeamId = (Integer) updateLayerMap.get("layerFileInfoTeamId");
 			layerService.deleteLayer(layerId);
-			layerFileInfoService.deleteLayerFileInfoByGroupId(layerFileInfoGroupId);
+			layerFileInfoService.deleteLayerFileInfoByTeamId(layerFileInfoTeamId);
 			
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "unknown.exception";
@@ -389,13 +364,14 @@ public class LayerRestController implements AuthorizationController {
 		return result;
 	}
 	
-    /**
-    * shape 파일 변환
-    * TODO dropzone 이 파일 갯수만큼 form data를 전송해 버려서 command 패턴을(Layer layer) 사용할 수 없음
-    * dropzone 이 예외 처리가 이상해서 BAD_REQUEST 를 던지지 않고 OK 를 넣짐
-    * @param model
-    * @return
-    */
+	/**
+	 * shape 파일 변환
+	 * TODO dropzone 이 파일 갯수만큼 form data를 전송해 버려서 command 패턴을(Layer layer) 사용할 수 없음
+	 * dropzone 이 예외 처리가 이상해서 BAD_REQUEST 를 던지지 않고 OK 를 넣짐
+	 * @param request
+	 * @param layerId
+	 * @return
+	 */
     @SuppressWarnings("unchecked")
 	@PostMapping(value = "/update/{layerId:[0-9]+}")
     public Map<String, Object> update(MultipartHttpServletRequest request, @PathVariable("layerId") Integer layerId) {
@@ -409,7 +385,7 @@ public class LayerRestController implements AuthorizationController {
         Layer rollbackLayer = new Layer();
         boolean isLayerFileInfoExist = false;
         LayerFileInfo rollbackLayerFileInfo = null;
-        Integer deleteLayerFileInfoGroupId = null;
+        Integer deleteLayerFileInfoTeamId = null;
 
         try {
             errorCode = layerValidate(request);
@@ -570,7 +546,7 @@ public class LayerRestController implements AuthorizationController {
             if(!layerFileInfoList.isEmpty()) {
                 isRollback = true;
 
-                deleteLayerFileInfoGroupId = (Integer)updateLayerMap.get("layerFileInfoGroupId");
+                deleteLayerFileInfoTeamId = (Integer)updateLayerMap.get("layerFileInfoTeamId");
                 // 4. org2ogr 실행
                 layerService.insertOgr2Ogr(layer, isLayerFileInfoExist, (String)updateLayerMap.get("shapeFileName"), (String)updateLayerMap.get("shapeEncoding"));
 
@@ -594,7 +570,7 @@ public class LayerRestController implements AuthorizationController {
         } catch(DataAccessException e) {
         	if(isRollback) {
                 // rollback 처리
-                layerService.rollbackLayer(rollbackLayer, isLayerFileInfoExist, rollbackLayerFileInfo, deleteLayerFileInfoGroupId);
+                layerService.rollbackLayer(rollbackLayer, isLayerFileInfoExist, rollbackLayerFileInfo, deleteLayerFileInfoTeamId);
             }
         	
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
@@ -604,7 +580,7 @@ public class LayerRestController implements AuthorizationController {
 		} catch(RuntimeException e) {
 			if(isRollback) {
                 // rollback 처리
-                layerService.rollbackLayer(rollbackLayer, isLayerFileInfoExist, rollbackLayerFileInfo, deleteLayerFileInfoGroupId);
+                layerService.rollbackLayer(rollbackLayer, isLayerFileInfoExist, rollbackLayerFileInfo, deleteLayerFileInfoTeamId);
             }
 			
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
@@ -614,7 +590,7 @@ public class LayerRestController implements AuthorizationController {
 		} catch(Exception e) {
 			if(isRollback) {
                 // rollback 처리
-                layerService.rollbackLayer(rollbackLayer, isLayerFileInfoExist, rollbackLayerFileInfo, deleteLayerFileInfoGroupId);
+                layerService.rollbackLayer(rollbackLayer, isLayerFileInfoExist, rollbackLayerFileInfo, deleteLayerFileInfoTeamId);
             }
 			
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
@@ -631,7 +607,7 @@ public class LayerRestController implements AuthorizationController {
 
 	/**
 	 * 레이어 삭제 삭제
-	 * @param roleId
+	 * @param layerId
 	 * @return
 	 */
 	@DeleteMapping(value = "/delete/{layerId:[0-9]+}")
@@ -649,11 +625,12 @@ public class LayerRestController implements AuthorizationController {
 		return result;
 	}
 
-    /**
-    * shape 파일 목록
-    * @param model
-    * @return
-    */
+	/**
+	 * shape 파일 목록
+	 * @param request
+	 * @param layerId
+	 * @return
+	 */
     @GetMapping(value = "/{layerId:[0-9]+}/layer-fileinfos")
     public Map<String, Object> listLayerFileInfo(HttpServletRequest request, @PathVariable Integer layerId) {
 
@@ -661,9 +638,7 @@ public class LayerRestController implements AuthorizationController {
 		String errorCode = null;
 		String message = null;
 
-		List<LayerFileInfo> layerFileInfoList = new ArrayList<>();
-        
-        layerFileInfoList = layerFileInfoService.getListLayerFileInfo(layerId);
+		List<LayerFileInfo> layerFileInfoList = layerFileInfoService.getListLayerFileInfo(layerId);
         log.info("layerFileInfoList =============================== {} " , layerFileInfoList);
         int statusCode = HttpStatus.OK.value();
         
@@ -674,14 +649,16 @@ public class LayerRestController implements AuthorizationController {
 		return result;
     }
 
-    /**
-    * shape 파일 다운 로드
-    * @param model
-    * @return
-    */
-    @GetMapping(value = "/{layerId:[0-9]+}/layer-file-info/{layerFileInfoGroupId:[0-9]+}/download")
-    public void download(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer layerId, @PathVariable Integer layerFileInfoGroupId) {
-        log.info("@@@@@@@@@@@@ layerId = {}, layerFileInfoGroupId = {}", layerId, layerFileInfoGroupId);
+	/**
+	 * shape 파일 다운 로드
+	 * @param request
+	 * @param response
+	 * @param layerId
+	 * @param layerFileInfoTeamId
+	 */
+    @GetMapping(value = "/{layerId:[0-9]+}/layer-file-info/{layerFileInfoTeamId:[0-9]+}/download")
+    public void download(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer layerId, @PathVariable Integer layerFileInfoTeamId) {
+        log.info("@@@@@@@@@@@@ layerId = {}, layerFileInfoTeamId = {}", layerId, layerFileInfoTeamId);
         try {
 
             Layer layer = layerService.getLayer(layerId);
@@ -697,7 +674,7 @@ public class LayerRestController implements AuthorizationController {
             createDirectory(filePath);
             log.info("@@@@@@@ zip directory = {}", filePath);
 
-            List<LayerFileInfo> layerFileInfoList = layerFileInfoService.getLayerFileInfoGroup(layerFileInfoGroupId);
+            List<LayerFileInfo> layerFileInfoList = layerFileInfoService.getLayerFileInfoTeam(layerFileInfoTeamId);
             LayerFileInfo layerFileInfo = layerFileInfoList.get(0);
             layerFileInfo.setFilePath(filePath);
             layerFileInfo.setFileRealName(fileRealName);
@@ -740,22 +717,25 @@ public class LayerRestController implements AuthorizationController {
 		}
     }
 
-    /**
-    * 비활성화 상태의 layer를 활성화
-    * @param model
-    * @return
-    */
+	/**
+	 * 비활성화 상태의 layer를 활성화
+	 * @param request
+	 * @param layerId
+	 * @param layerFileInfoId
+	 * @param layerFileInfoTeamId
+	 * @return
+	 */
     @PostMapping(value = "/{layerId:[0-9]+}/layer-file-infos/{layerFileInfoId:[0-9]+}")
     public Map<String, Object> updateByLayerFileInfoId(HttpServletRequest request,
                                                             @PathVariable Integer layerId,
                                                             @PathVariable Integer layerFileInfoId,
-                                                            Integer layerFileInfoGroupId) {
+                                                            Integer layerFileInfoTeamId) {
         log.info("@@@@@@@@@@@@ layerId = {}, layerFileInfoId = {}", layerId, layerFileInfoId);
 
         Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-        layerService.updateLayerByLayerFileInfoId(layerId, layerFileInfoGroupId, layerFileInfoId);
+        layerService.updateLayerByLayerFileInfoId(layerId, layerFileInfoTeamId, layerFileInfoId);
 
         int statusCode = HttpStatus.OK.value();
 
@@ -788,17 +768,17 @@ public class LayerRestController implements AuthorizationController {
         return value;
     }
 
-    /**
-    * 업로딩 파일을 압축 해제
-    * TODO 여기 Exception을 던지면 안될거 같음. 수정 필요
-    * @param policy
-    * @param groupFileName layer 의 경우 한 세트가 같은 이름에 확장자만 달라야 함
-    * @param userId
-    * @param multipartFile
-    * @param targetDirectory
-    * @return
-    * @throws Exception
-    */
+	/**
+	 * 업로딩 파일을 압축 해제
+	 * TODO 여기 Exception을 던지면 안될거 같음. 수정 필요
+	 * @param policy
+	 * @param groupFileName layer 의 경우 한 세트가 같은 이름에 확장자만 달라야 함
+	 * @param multipartFile
+	 * @param shapeEncoding
+	 * @param targetDirectory
+	 * @return
+	 * @throws Exception
+	 */
     private Map<String, Object> unzip(Policy policy, String groupFileName, MultipartFile multipartFile, String shapeEncoding, String targetDirectory) throws Exception {
         Map<String, Object> result = new HashMap<>();
         String errorCode = fileValidate(policy, multipartFile);
@@ -953,13 +933,11 @@ public class LayerRestController implements AuthorizationController {
     	return null;
     }
 
-    /**
-    * @param userId
-    * @param today
-    * @param targetDirectory
-    * @return
-    */
-    private void createDirectory(String targetDirectory) {
+	/**
+	 *
+	 * @param targetDirectory
+	 */
+	private void createDirectory(String targetDirectory) {
         File directory = new File(targetDirectory);
         if(!directory.exists()) {
             directory.mkdir();

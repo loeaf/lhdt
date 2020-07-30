@@ -1,15 +1,14 @@
 package lhdt.service.impl;
 
-import java.util.List;
-import java.util.Map;
-
+import lhdt.domain.LayerFileInfo;
+import lhdt.persistence.LayerFileInfoMapper;
+import lhdt.service.LayerFileInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lhdt.domain.LayerFileInfo;
-import lhdt.persistence.LayerFileInfoMapper;
-import lhdt.service.LayerFileInfoService;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class LayerFileInfoServiceImpl implements LayerFileInfoService {
@@ -48,12 +47,12 @@ public class LayerFileInfoServiceImpl implements LayerFileInfoService {
 
 	/**
 	 * layer shape 파일 그룹 정보 취득
-	 * @param layerFileInfoGroupId
+	 * @param layerFileInfoTeamId
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<LayerFileInfo> getLayerFileInfoGroup(Integer layerFileInfoGroupId) {
-		return layerFileInfoMapper.getLayerFileInfoGroup(layerFileInfoGroupId);
+	public List<LayerFileInfo> getLayerFileInfoTeam(Integer layerFileInfoTeamId) {
+		return layerFileInfoMapper.getLayerFileInfoTeam(layerFileInfoTeamId);
 	}
 	
 	/**
@@ -107,12 +106,12 @@ public class LayerFileInfoServiceImpl implements LayerFileInfoService {
 	}
 	
 	/**
-	 * group id 로 레이어 파일 이력을 삭제
-	 * @param layerFileInfoGroupId
+	 * team id 로 레이어 파일 이력을 삭제
+	 * @param layerFileInfoTeamId
 	 * @return
 	 */
 	@Transactional
-	public int deleteLayerFileInfoByGroupId(Integer layerFileInfoGroupId) {
-		return layerFileInfoMapper.deleteLayerFileInfoByGroupId(layerFileInfoGroupId);
+	public int deleteLayerFileInfoByTeamId(Integer layerFileInfoTeamId) {
+		return layerFileInfoMapper.deleteLayerFileInfoByTeamId(layerFileInfoTeamId);
 	}
 }

@@ -1,9 +1,9 @@
 package lhdt.service;
 
+import lhdt.domain.LayerFileInfo;
+
 import java.util.List;
 import java.util.Map;
-
-import lhdt.domain.LayerFileInfo;
 
 public interface LayerFileInfoService {
 
@@ -22,17 +22,17 @@ public interface LayerFileInfoService {
 	
 	/**
 	 * 파일 정보 취득
-	 * @param layerId
+	 * @param layerFileInfoId
 	 * @return
 	 */
 	LayerFileInfo getLayerFileInfo(Integer layerFileInfoId);
 	
 	/**
 	 * layer shape 파일 그룹 정보 취득
-	 * @param layerFileInfoGroupId
+	 * @param layerFileInfoTeamId
 	 * @return
 	 */
-	List<LayerFileInfo> getLayerFileInfoGroup(Integer layerFileInfoGroupId);
+	List<LayerFileInfo> getLayerFileInfoTeam(Integer layerFileInfoTeamId);
 	
 	/**
 	 * layer shape 파일 version
@@ -71,10 +71,10 @@ public interface LayerFileInfoService {
 	int updateOgr2OgrDataFileVersion(Map<String, String> map);
 	
 	/**
-	 * group id 로 레이어 파일 이력을 삭제
-	 * @param deleteLayerFileInfoGroupId
+	 * team id 로 레이어 파일 이력을 삭제
+	 * @param deleteLayerFileInfoTeamId
 	 * @return
 	 */
-	int deleteLayerFileInfoByGroupId(Integer deleteLayerFileInfoGroupId);
+	int deleteLayerFileInfoByTeamId(Integer deleteLayerFileInfoTeamId);
 	
 }

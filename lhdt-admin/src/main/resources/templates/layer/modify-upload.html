@@ -357,11 +357,11 @@
 												<p style="font-size:14px;">적용중</p>
 											</th:block>
 											<th:block th:unless="${#strings.equals(layerFileInfo.enableYn, 'Y')}">
-												<button type="button" class="textBtn" th:onclick="changeStatus([[${layerFileInfo.layerId }]], [[${layerFileInfo.layerFileInfoGroupId}]], [[${layerFileInfo.layerFileInfoId}]]);"
+												<button type="button" class="textBtn" th:onclick="changeStatus([[${layerFileInfo.layerId }]], [[${layerFileInfo.layerFileInfoTeamId}]], [[${layerFileInfo.layerFileInfoId}]]);"
 														title="적용하기">적용하기</button>
 											</th:block>
 										</td>
-										<td class="col-type"><a th:href="@{/layer/{layerId}/layer-file-info/{layerFileInfoGroupId}/download(layerId=${layer.layerId},layerFileInfoGroupId=${layerFileInfo.layerFileInfoGroupId})}" class="linkButton">다운로드</a></td>
+										<td class="col-type"><a th:href="@{/layer/{layerId}/layer-file-info/{layerFileInfoTeamId}/download(layerId=${layer.layerId},layerFileInfoTeamId=${layerFileInfo.layerFileInfoTeamId})}" class="linkButton">다운로드</a></td>
 										<td th:text="${layerFileInfo.userId}"></td>
 										<td>
 											<th:block th:text="${#temporals.format(layerFileInfo.viewUpdateDate, 'yyyy-MM-dd HH:mm:ss')}"></th:block>
@@ -403,10 +403,10 @@
     {{#if enableYn}}
                	<p style="font-size:14px;">적용중</p>
     {{else}}
-                <button type="button" onclick="changeStatus('{{layerId}}', '{{layerFileInfoGroupId}}', '{{layerFileInfoId}}'); return false;" title="적용하기" class="textBtn">적용하기</button>
+                <button type="button" onclick="changeStatus('{{layerId}}', '{{layerFileInfoTeamId}}', '{{layerFileInfoId}}'); return false;" title="적용하기" class="textBtn">적용하기</button>
     {{/if}}
             </td>
-            <td class="col-type"><a href="/layer/{{layerId }}/layer-file-info/{{layerFileInfoGroupId}}/download" download class="linkButton">다운로드</button></td>
+            <td class="col-type"><a href="/layer/{{layerId }}/layer-file-info/{{layerFileInfoTeamId}}/download" download class="linkButton">다운로드</button></td>
             <td class="col-key">{{userId}}</td>
             <td class="col-key">{{viewUpdateDate}}</td>
 			<td class="col-key">{{viewInsertDate}}</td>
@@ -808,8 +808,8 @@
     }
 
 	// 비활성화 상태의 layer를 활성화 함
-	function changeStatus(layerId, layerFileInfoGroupId, layerFileInfoId) {
-		var info = "layerFileInfoGroupId=" + layerFileInfoGroupId;
+	function changeStatus(layerId, layerFileInfoTeamId, layerFileInfoId) {
+		var info = "layerFileInfoTeamId=" + layerFileInfoTeamId;
 		if(confirm("이 파일을 layer Shape 파일로 사용하시겠습니까?")) {
             $.ajax({
                 url: "/layer/[[${layer.layerId}]]/layer-file-infos/" + layerFileInfoId,

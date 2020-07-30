@@ -153,7 +153,7 @@ public class LayerServiceImpl implements LayerService {
     */
     @Transactional
     public Map<String, Object> insertLayer(Layer layer, List<LayerFileInfo> layerFileInfoList) {
-    	Map<String, Object> layerFileInfoGroupMap = new HashMap<>();
+    	Map<String, Object> layerFileInfoTeamMap = new HashMap<>();
 
         // layer 정보 수정
         layerMapper.insertLayer(layer);
@@ -165,18 +165,18 @@ public class LayerServiceImpl implements LayerService {
             Integer layerId = layer.getLayerId();
             String userId = layer.getUserId();
 
-            Integer layerFileInfoGroupId = 0;
-            List<Integer> layerFileInfoGroupIdList = new ArrayList<>();
+            Integer layerFileInfoTeamId = 0;
+            List<Integer> layerFileInfoTeamIdList = new ArrayList<>();
             for(LayerFileInfo layerFileInfo : layerFileInfoList) {
                 layerFileInfo.setLayerId(layerId);
                 layerFileInfo.setUserId(userId);
                 layerFileInfo.setEnableYn("Y");
 
                 layerFileInfoMapper.insertLayerFileInfoMapper(layerFileInfo);
-                layerFileInfoGroupIdList.add(layerFileInfo.getLayerFileInfoId());
+                layerFileInfoTeamIdList.add(layerFileInfo.getLayerFileInfoId());
 
                 if(LayerFileInfo.SHAPE_EXTENSION.equals(layerFileInfo.getFileExt().toLowerCase())) {
-                    layerFileInfoGroupId = layerFileInfo.getLayerFileInfoId();
+                    layerFileInfoTeamId = layerFileInfo.getLayerFileInfoId();
                     shapeFileName = layerFileInfo.getFilePath() + layerFileInfo.getFileRealName();
                     shapeEncoding = layerFileInfo.getShapeEncoding();
                 }
@@ -186,17 +186,17 @@ public class LayerServiceImpl implements LayerService {
             Integer fileVersion = layerFileInfoMapper.getMaxFileVersion(layerId);
             if(fileVersion == null) fileVersion = 0;
             fileVersion = fileVersion + 1;
-            layerFileInfoGroupMap.put("fileVersion", fileVersion);
-            layerFileInfoGroupMap.put("shapeFileName", shapeFileName);
-            layerFileInfoGroupMap.put("shapeEncoding", shapeEncoding);
-            layerFileInfoGroupMap.put("layerFileInfoGroupId", layerFileInfoGroupId);
-            layerFileInfoGroupMap.put("layerFileInfoGroupIdList", layerFileInfoGroupIdList);
-            layerFileInfoGroupMap.put("layerId", layerId);
-            log.info("+++ layerFileInfoGroupMap = {}", layerFileInfoGroupMap);
-            layerFileInfoMapper.updateLayerFileInfoGroup(layerFileInfoGroupMap);
+            layerFileInfoTeamMap.put("fileVersion", fileVersion);
+            layerFileInfoTeamMap.put("shapeFileName", shapeFileName);
+            layerFileInfoTeamMap.put("shapeEncoding", shapeEncoding);
+            layerFileInfoTeamMap.put("layerFileInfoTeamId", layerFileInfoTeamId);
+            layerFileInfoTeamMap.put("layerFileInfoTeamIdList", layerFileInfoTeamIdList);
+            layerFileInfoTeamMap.put("layerId", layerId);
+            log.info("+++ layerFileInfoTeamMap = {}", layerFileInfoTeamMap);
+            layerFileInfoMapper.updateLayerFileInfoTeam(layerFileInfoTeamMap);
         }
 
-        return layerFileInfoGroupMap;
+        return layerFileInfoTeamMap;
     }
 
     /**
@@ -210,7 +210,7 @@ public class LayerServiceImpl implements LayerService {
     @Transactional
     public Map<String, Object> updateLayer(Layer layer, boolean isLayerFileInfoExist, List<LayerFileInfo> layerFileInfoList) {
 
-        Map<String, Object> layerFileInfoGroupMap = new HashMap<>();
+        Map<String, Object> layerFileInfoTeamMap = new HashMap<>();
 
         // layer 정보 수정
         layerMapper.updateLayer(layer);
@@ -230,18 +230,18 @@ public class LayerServiceImpl implements LayerService {
                 layerFileInfoMapper.updateShapePreDataDisable(tableName);
             }
 
-            Integer layerFileInfoGroupId = 0;
-            List<Integer> layerFileInfoGroupIdList = new ArrayList<>();
+            Integer layerFileInfoTeamId = 0;
+            List<Integer> layerFileInfoTeamIdList = new ArrayList<>();
             for(LayerFileInfo layerFileInfo : layerFileInfoList) {
                 layerFileInfo.setLayerId(layerId);
                 layerFileInfo.setUserId(userId);
                 layerFileInfo.setEnableYn("Y");
 
                 layerFileInfoMapper.insertLayerFileInfoMapper(layerFileInfo);
-                layerFileInfoGroupIdList.add(layerFileInfo.getLayerFileInfoId());
+                layerFileInfoTeamIdList.add(layerFileInfo.getLayerFileInfoId());
 
                 if(LayerFileInfo.SHAPE_EXTENSION.equals(layerFileInfo.getFileExt().toLowerCase())) {
-                    layerFileInfoGroupId = layerFileInfo.getLayerFileInfoId();
+                    layerFileInfoTeamId = layerFileInfo.getLayerFileInfoId();
                     shapeFileName = layerFileInfo.getFilePath() + layerFileInfo.getFileRealName();
                     shapeEncoding = layerFileInfo.getShapeEncoding();
                 }
@@ -251,16 +251,16 @@ public class LayerServiceImpl implements LayerService {
             Integer fileVersion = layerFileInfoMapper.getMaxFileVersion(layerId);
             if(fileVersion == null) fileVersion = 0;
             fileVersion = fileVersion + 1;
-            layerFileInfoGroupMap.put("fileVersion", fileVersion);
-            layerFileInfoGroupMap.put("shapeFileName", shapeFileName);
-            layerFileInfoGroupMap.put("shapeEncoding", shapeEncoding);
-            layerFileInfoGroupMap.put("layerFileInfoGroupId", layerFileInfoGroupId);
-            layerFileInfoGroupMap.put("layerFileInfoGroupIdList", layerFileInfoGroupIdList);
-            log.info("+++ layerFileInfoGroupMap = {}", layerFileInfoGroupMap);
-            layerFileInfoMapper.updateLayerFileInfoGroup(layerFileInfoGroupMap);
+            layerFileInfoTeamMap.put("fileVersion", fileVersion);
+            layerFileInfoTeamMap.put("shapeFileName", shapeFileName);
+            layerFileInfoTeamMap.put("shapeEncoding", shapeEncoding);
+            layerFileInfoTeamMap.put("layerFileInfoTeamId", layerFileInfoTeamId);
+            layerFileInfoTeamMap.put("layerFileInfoTeamIdList", layerFileInfoTeamIdList);
+            log.info("+++ layerFileInfoTeamMap = {}", layerFileInfoTeamMap);
+            layerFileInfoMapper.updateLayerFileInfoTeam(layerFileInfoTeamMap);
         }
 
-        return layerFileInfoGroupMap;
+        return layerFileInfoTeamMap;
     }
 
     /**
@@ -329,11 +329,11 @@ public class LayerServiceImpl implements LayerService {
     /**
     * layer 를 이 shape 파일로 활성화
     * @param layerId
-    * @param layerFileInfoGroupId
+    * @param layerFileInfoTeamId
     * @return
     */
     @Transactional
-    public int updateLayerByLayerFileInfoId(Integer layerId, Integer layerFileInfoGroupId, Integer layerFileInfoId) {
+    public int updateLayerByLayerFileInfoId(Integer layerId, Integer layerFileInfoTeamId, Integer layerFileInfoId) {
         int result = 0;
         // layer 정보 수정
         Layer layer = layerMapper.getLayer(layerId);
@@ -346,9 +346,9 @@ public class LayerServiceImpl implements LayerService {
 
         LayerFileInfo layerFileInfo = new LayerFileInfo();
         layerFileInfo.setLayerId(layerId);
-        layerFileInfo.setLayerFileInfoGroupId(layerFileInfoGroupId);
+        layerFileInfo.setLayerFileInfoTeamId(layerFileInfoTeamId);
         layerFileInfo.setEnableYn("Y");
-        layerFileInfoMapper.updateLayerFileInfoByGroupId(layerFileInfo);
+        layerFileInfoMapper.updateLayerFileInfoByTeamId(layerFileInfo);
 
         Integer fileVersion = layerFileInfoMapper.getLayerShapeFileVersion(layerFileInfoId);
         Map<String, String> orgMap = new HashMap<>();
@@ -366,14 +366,14 @@ public class LayerServiceImpl implements LayerService {
 	 * @param layer
 	 * @param isLayerFileInfoExist
 	 * @param layerFileInfo
-	 * @param deleteLayerFileInfoGroupId
+	 * @param deleteLayerFileInTeamupId
 	 */
 	@Transactional
 	public void rollbackLayer(Layer layer, boolean isLayerFileInfoExist, LayerFileInfo layerFileInfo,
-			Integer deleteLayerFileInfoGroupId) {
+			Integer deleteLayerFileInfoTeamId) {
 		layerMapper.updateLayer(layer);
 		if (isLayerFileInfoExist) {
-			layerFileInfoMapper.deleteLayerFileInfoByGroupId(deleteLayerFileInfoGroupId);
+			layerFileInfoMapper.deleteLayerFileInfoByTeamId(deleteLayerFileInfoTeamId);
 
 			// 모든 layer_file_info 의 shape 상태를 비활성화로 update 함
 			layerFileInfoMapper.updateLayerFileInfoAllDisabledByLayerId(layer.getLayerId());
@@ -381,7 +381,7 @@ public class LayerServiceImpl implements LayerService {
 			layerFileInfoMapper.updateShapePreDataDisable(layer.getLayerKey());
 
 			// 이전 레이어 이력을 활성화
-			layerFileInfoMapper.updateLayerFileInfoByGroupId(layerFileInfo);
+			layerFileInfoMapper.updateLayerFileInfoByTeamId(layerFileInfo);
 			// 이전 shape 데이터를 활성화
 			Map<String, String> orgMap = new HashMap<>();
 			orgMap.put("fileVersion", layerFileInfo.getVersionId().toString());
