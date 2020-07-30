@@ -28,7 +28,8 @@ public class SkSgg {
 	// 시군구 코드
 	private String sggCode;
 	// 명칭
-	private String name;
+	private String koname;
+	private String enname;
 	// 구분
 	private String divi;
 	// 통합코드

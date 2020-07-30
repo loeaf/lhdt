@@ -30,7 +30,8 @@ public class SkEmd {
 	// 읍면동 코드
 	private String emdCode;
 	// 명칭
-	private String name;
+	private String koname;
+	private String enname;
 	// 구분
 	private String divi;
 	// 통합코드

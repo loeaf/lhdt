@@ -26,7 +26,8 @@ public class SkSdo {
 	// 시도 코드
 	private String sdoCode;
 	// 명칭
-	private String name;
+	private String koname;
+	private String enname;
 	// 구분
 	private String divi;
 	// 통합코드

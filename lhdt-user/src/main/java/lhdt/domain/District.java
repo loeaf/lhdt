@@ -22,7 +22,7 @@ public class District extends Search {
 	// 행정구역 코드
 	private String id;
 	// 행정구역명(화면 표시)
-	private String name;
+	private String koname;
 	// 경도
 	private BigDecimal longitude;
 	// 위도

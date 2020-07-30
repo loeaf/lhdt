@@ -113,7 +113,7 @@ function loadDistrict() {
                 content += defaultDistrictObject;
                 for (var i = 0, len = sdoList.length; i < len; i++) {
                 	var sdo = sdoList[i];
-                    content += '<li onclick="changeSdo(this, ' + sdo.sdoCode + ')">' + sdo.name + '</li>';
+                    content += '<li onclick="changeSdo(this, ' + sdo.sdoCode + ')">' + sdo.koname + '</li>';
                 }
                 $('#sdoList').html(content);
             } else {
@@ -147,7 +147,7 @@ function changeSdo(_this, _sdoCode) {
                 content += defaultDistrictObject;
                 for (var i = 0, len = sggList.length; i < len; i++) {
                     var sgg = sggList[i];
-                    content += '<li onclick="changeSgg(this, ' + sdoCode + ', ' + sgg.sggCode + ')">' + sgg.name + '</li>';
+                    content += '<li onclick="changeSgg(this, ' + sdoCode + ', ' + sgg.sggCode + ')">' + sgg.koname + '</li>';
                 }
                 sdoName = $(_this).text();
                 sggName = "";
@@ -191,7 +191,7 @@ function changeSgg(_this, _sdoCode, _sggCode) {
                 content += defaultDistrictObject;
                 for (var i = 0, len = emdList.length; i < len; i++) {
                     var emd = emdList[i];
-                    content += '<li onclick="changeEmd(this, ' + sdoCode + ', ' + sggCode + ', ' + emd.emdCode + ')">' + emd.name + '</li>';
+                    content += '<li onclick="changeEmd(this, ' + sdoCode + ', ' + sggCode + ', ' + emd.emdCode + ')">' + emd.koname + '</li>';
                 }
                 sggName = $(_this).text();
                 emdName = "";

@@ -29,7 +29,6 @@ import lhdt.service.SearchMapService;
 
 @Slf4j
 @RequestMapping("/searchmap")
-@CrossOrigin(origins = "*")
 @RestController
 public class SearchMapRestController {
 
@@ -48,14 +47,14 @@ public class SearchMapRestController {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
+		District district = new District();
 		String lang = (String)request.getSession().getAttribute(Key.LANG.name());
 		if(lang!=null) {
-			lang = "en";
+			district.setKoname("enname");
 		}else {
-			lang = "ko";
+			district.setKoname("koname");
 		}
-		String name = lang+"name";
-		List<SkSdo> sdoList = searchMapService.getListSdoExceptGeom(name);
+		List<SkSdo> sdoList = searchMapService.getListSdoExceptGeom(district);
 		int statusCode = HttpStatus.OK.value();
 		
 		result.put("sdoList", sdoList);
@@ -75,16 +74,16 @@ public class SearchMapRestController {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		
-		String lang = (String)request.getSession().getAttribute(Key.LANG.name());
+		District district = new District();
+		district.setSidoCd(sdoCode);
+	/*	String lang = (String)request.getSession().getAttribute(Key.LANG.name());
 		if(lang!=null) {
-			lang = "en";
+			district.setName("enname");
 		}else {
-			lang = "ko";
-		}
-		String name = lang+"name";
+			district.setName("koname");
+		}*/
 		
-		List<SkSgg> sggList = searchMapService.getListSggBySdoExceptGeom(name, sdoCode);
+		List<SkSgg> sggList = searchMapService.getListSggBySdoExceptGeom(district);
 		int statusCode = HttpStatus.OK.value();
 		
 		result.put("sggList", sggList);
@@ -107,18 +106,12 @@ public class SearchMapRestController {
 		String message = null;
 		
 		String lang = (String)request.getSession().getAttribute(Key.LANG.name());
-		if(lang!=null) {
-			lang = "en";
-		}else {
-			lang = "ko";
-		}
-		String name = lang+"name";
 		
 		SkEmd mapEmd = new SkEmd();
 		mapEmd.setSdoCode(sdoCode);
 		mapEmd.setSggCode(sggCode);
-
-		List<SkEmd> emdList = searchMapService.getListEmdBySdoAndSggExceptGeom(name, mapEmd);
+				
+		List<SkEmd> emdList = searchMapService.getListEmdBySdoAndSggExceptGeom(mapEmd);
 		int statusCode = HttpStatus.OK.value();
 		
 		result.put("emdList", emdList);
@@ -147,14 +140,14 @@ public class SearchMapRestController {
 		if (skEmd.getLayerType() == 1) {
 			// 시도
 			SkSdo skSdo = new SkSdo();
-			skSdo.setName(skEmd.getName());
+			skSdo.setKoname(skEmd.getKoname());
 			skSdo.setBjcd(skEmd.getBjcd());
 			centerPoint = searchMapService.getCentroidSdo(skSdo);
 			log.info("@@@@ sdo center point {}", centerPoint);
 		} else if (skEmd.getLayerType() == 2) {
 			// 시군구
 			SkSgg skSgg = new SkSgg();
-			skSgg.setName(skEmd.getName());
+			skSgg.setKoname(skEmd.getKoname());
 			skSgg.setBjcd(skEmd.getBjcd());
 			centerPoint = searchMapService.getCentroidSgg(skSgg);
 			log.info("@@@@ sgg center point {}", centerPoint);
@@ -194,7 +187,7 @@ public class SearchMapRestController {
 		if (skEmd.getLayerType() == 1) {
 			// 시도
 			SkSdo skSdo = new SkSdo();
-			skSdo.setName(skEmd.getName());
+			skSdo.setKoname(skEmd.getKoname());
 			skSdo.setBjcd(skEmd.getBjcd());
 			System.out.println(skSdo.getBjcd());
 			bboxWkt = searchMapService.getEnvelopSdo(skSdo);
@@ -202,7 +195,7 @@ public class SearchMapRestController {
 		} else if (skEmd.getLayerType() == 2) {
 			// 시군구
 			SkSgg skSgg = new SkSgg();
-			skSgg.setName(skEmd.getName());
+			skSgg.setKoname(skEmd.getKoname());
 			skSgg.setBjcd(skEmd.getBjcd());
 			bboxWkt = searchMapService.getEnvelopSgg(skSgg);
 			log.info("@@@@ sgg bbox {}", bboxWkt);
@@ -251,11 +244,10 @@ public class SearchMapRestController {
 		
 		String lang = (String)request.getSession().getAttribute(Key.LANG.name());
 		if(lang!=null) {
-			lang = "en";
+			district.setKoname("enname");
 		}else {
-			lang = "ko";
+			district.setKoname("koname");
 		}
-		String name = lang+"name";
 		
 		log.info("@@ district = {}", district);
 		district.setSearchValue(district.getFullTextSearch());
@@ -273,7 +265,7 @@ public class SearchMapRestController {
             return result;
 		}
 
-		long totalCount = searchMapService.getDistrictTotalCount(name, district);
+		long totalCount = searchMapService.getDistrictTotalCount(district);
 		Pagination pagination = new Pagination(request.getRequestURI(),
 				getSearchParameters(district.getFullTextSearch()), totalCount, Long.parseLong(pageNo));
 		log.info("@@ pagination = {}", pagination);
@@ -282,11 +274,10 @@ public class SearchMapRestController {
 		district.setLimit(pagination.getPageRows());
 		List<District> districtList = new ArrayList<>();
 		if (totalCount > 0l) {
-			districtList = searchMapService.getListDistrict(name, district);
+			districtList = searchMapService.getListDistrict(district);
 		}
 
 		int statusCode = HttpStatus.OK.value();
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+"district");
 		result.put("pagination", pagination);
 		result.put("totalCount", totalCount);
 		result.put("districtList", districtList);

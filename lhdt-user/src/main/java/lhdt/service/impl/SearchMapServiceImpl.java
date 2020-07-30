@@ -25,8 +25,8 @@ public class SearchMapServiceImpl implements SearchMapService {
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<SkSdo> getListSdoExceptGeom(String name) {
-		return searchMapMapper.getListSdoExceptGeom(name);
+	public List<SkSdo> getListSdoExceptGeom(District district) {
+		return searchMapMapper.getListSdoExceptGeom(district);
 	}
 	
 	/**
@@ -35,8 +35,8 @@ public class SearchMapServiceImpl implements SearchMapService {
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<SkSgg> getListSggBySdoExceptGeom(String name,String sdoCode) {
-		return searchMapMapper.getListSggBySdoExceptGeom(name, sdoCode);
+	public List<SkSgg> getListSggBySdoExceptGeom(District district) {
+		return searchMapMapper.getListSggBySdoExceptGeom(district);
 	}
 	
 	/**
@@ -45,8 +45,8 @@ public class SearchMapServiceImpl implements SearchMapService {
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<SkEmd> getListEmdBySdoAndSggExceptGeom(String name, SkEmd skEmd) {
-		return searchMapMapper.getListEmdBySdoAndSggExceptGeom(name, skEmd);
+	public List<SkEmd> getListEmdBySdoAndSggExceptGeom(SkEmd skEmd) {
+		return searchMapMapper.getListEmdBySdoAndSggExceptGeom(skEmd);
 	}
 	
 	/**
@@ -115,8 +115,8 @@ public class SearchMapServiceImpl implements SearchMapService {
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public Long getDistrictTotalCount(String name, District district) {
-		return searchMapMapper.getDistrictTotalCount(name, district);
+	public Long getDistrictTotalCount(District district) {
+		return searchMapMapper.getDistrictTotalCount(district);
 	}
 	
 	/**
@@ -125,8 +125,8 @@ public class SearchMapServiceImpl implements SearchMapService {
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<District> getListDistrict(String name, District district) {
-		return searchMapMapper.getListDistrict(name, district);
+	public List<District> getListDistrict(District district) {
+		return searchMapMapper.getListDistrict(district);
 	}
 
 }

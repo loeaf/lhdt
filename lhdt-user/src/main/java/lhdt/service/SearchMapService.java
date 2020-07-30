@@ -13,21 +13,21 @@ public interface SearchMapService {
 	 * Sdo 목록(geom 은 제외)
 	 * @return
 	 */
-	public List<SkSdo> getListSdoExceptGeom(String name);
+	public List<SkSdo> getListSdoExceptGeom(District district);
 	
 	/**
 	 * Sgg 목록(geom 은 제외)
 	 * @param sdo_code
 	 * @return
 	 */
-	public List<SkSgg> getListSggBySdoExceptGeom(String name, String sdoCode);
+	public List<SkSgg> getListSggBySdoExceptGeom(District district);
 	
 	/**
 	 * emd 목록(geom 은 제외)
 	 * @param skEmd
 	 * @return
 	 */
-	public List<SkEmd> getListEmdBySdoAndSggExceptGeom(String name, SkEmd skEmd);
+	public List<SkEmd> getListEmdBySdoAndSggExceptGeom(SkEmd skEmd);
 	
 	/**
 	 * 선택한 시도의 center point를 구함
@@ -76,12 +76,12 @@ public interface SearchMapService {
 	 * @param district
 	 * @return
 	 */
-	Long getDistrictTotalCount(String name, District district);
+	Long getDistrictTotalCount(District district);
 	
 	/**
 	 * 행정 구역 검색
 	 * @param district
 	 * @return
 	 */
-	List<District> getListDistrict(String name, District district);
+	List<District> getListDistrict(District district);
 }

@@ -3,14 +3,14 @@
 <li id="districtList" class="on">
 	<p>
 		<th:block th:text="#{search.administrative.district}"></th:block>
-		<span th:text="|#{common.all} {{totalCount}} #{common.count.unit}|"></span>
+		<span th:text="|#{common.all} {{totalCount}} #{common.count.unit}|">	</span>
 	</p>
 		<ul id="districtSearchList" class="yScroll">
 		{{#if districtList}}
 			{{#each districtList}}
 				<li>
-					<span>{{name}}</span>
-					<button type="button" onclick="gotoFly('{{longitude}}', '{{latitude}}', '300', '2')" title="위치이동" class="goto">위치이동</button>
+					<span>{{koname}}</span>
+					<button type="button" onclick="gotoFly('{{longitude}}', '{{latitude}}', '300', '2')" title="�쐞移섏씠�룞" class="goto">�쐞移섏씠�룞</button>
 				</li>
 			{{/each}}
 		{{else}}
