@@ -41,5 +41,5 @@ public interface AccessLogMapper {
 	 * @param accessLog
 	 * @return
 	 */
-	public int insertAccessLog(AccessLog accessLog);
+	int insertAccessLog(AccessLog accessLog);
 }

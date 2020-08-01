@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class CacheManager {
 
-    private volatile static CacheManager cacheManager = new CacheManager();;
+    private volatile static CacheManager cacheManager = new CacheManager();
 
     private CacheManager() {
     }
@@ -43,10 +43,9 @@ public class CacheManager {
 	public static void setPolicy(Policy policy) {
 		cacheManager.policy = policy;
 	}
- 	
+
 	/**
 	 * 대메뉴(1 Depth) Map, 화면 왼쪽 메뉴 표시용
-	 * @param userGroupId
 	 * @return
 	 */
 	public static Map<Integer, Menu> getMenuMap() {
@@ -59,10 +58,9 @@ public class CacheManager {
 	public static void setMenuMap(Map<Integer, Menu> menuMap) {
 		cacheManager.menuMap = menuMap;
 	}
-	
+
 	/**
 	 * url과  menuId를 매핑
-	 * @param url
 	 * @return
 	 */
 	public static Map<String, Integer> getMenuUrlMap() {

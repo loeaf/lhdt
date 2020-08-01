@@ -37,7 +37,8 @@ public class UserRestController implements AuthorizationController {
 
 	/**
 	 * 사용자 ID 중복 체크
-	 * @param model
+	 * @param request
+	 * @param userInfo
 	 * @return
 	 */
 	@GetMapping(value = "/duplication")
@@ -45,7 +46,6 @@ public class UserRestController implements AuthorizationController {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		Boolean duplication = Boolean.TRUE;
 
 		// TODO @Valid 로 구현해야 함
 		if(StringUtils.isEmpty(userInfo.getUserId())) {
@@ -55,7 +55,7 @@ public class UserRestController implements AuthorizationController {
 			return result;
 		}
 
-		duplication = userService.isUserIdDuplication(userInfo);
+		Boolean duplication = userService.isUserIdDuplication(userInfo);
 		log.info("@@ duplication = {}", duplication);
 		int statusCode = HttpStatus.OK.value();
 

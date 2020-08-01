@@ -30,11 +30,11 @@ public class ConverterRestController {
 	
 	@Autowired
 	private ConverterService converterService;
-	
+
 	/**
 	 * TODO 우선은 여기서 적당히 구현해 두고... 나중에 좀 깊이 생각해 보자. converter에 어디까지 넘겨야 할지
-	 * converter job insert
-	 * @param model
+	 * @param request
+	 * @param converterJob
 	 * @return
 	 */
 	@PostMapping

@@ -49,6 +49,6 @@ public enum UserStatus {
 	 * @return
 	 */
 	public static Map<String, Long> getStatisticsMap() {
-		return Stream.of(values()).collect(Collectors.toMap(UserStatus::getValue, t -> 0l));
+		return Stream.of(values()).collect(Collectors.toMap(UserStatus::getValue, t -> 0L));
 	}
 }

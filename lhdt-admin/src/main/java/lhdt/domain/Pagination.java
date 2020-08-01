@@ -29,9 +29,9 @@ public class Pagination {
         this.searchParameters = searchParameters;
         this.totalCount = totalCount;
         this.pageNo = pageNo;
-        if(this.pageNo == 0l) this.pageNo = 1l;
-        this.pageRows = 10l;
-        this.pageListCount = 5l;
+        if(this.pageNo == 0L) this.pageNo = 1L;
+        this.pageRows = 10L;
+        this.pageListCount = 5L;
         init();
     }
 
@@ -48,7 +48,7 @@ public class Pagination {
         this.totalCount = totalCount;
         this.pageNo = pageNo;
         this.pageRows = pageRows;
-        this.pageListCount = 10l;
+        this.pageListCount = 10L;
         init();
     }
 
@@ -69,52 +69,52 @@ public class Pagination {
     }
 
     private void init() {
-    	this.rowNumber = this.totalCount - (this.pageNo - 1l) * this.pageRows;
+    	this.rowNumber = this.totalCount - (this.pageNo - 1L) * this.pageRows;
 
-        this.offset = (this.pageNo - 1l) * this.pageRows;
+        this.offset = (this.pageNo - 1L) * this.pageRows;
 
-        this.lastPage = 0l;
-        if(this.totalCount != 0l) {
+        this.lastPage = 0L;
+        if(this.totalCount != 0L) {
             if(this.totalCount % this.pageRows == 0) {
                 this.lastPage = (this.totalCount / this.pageRows);
             } else {
-                this.lastPage = (this.totalCount / this.pageRows) + 1l;
+                this.lastPage = (this.totalCount / this.pageRows) + 1L;
             }
         }
 
-        this.startPage = ((this.pageNo - 1l) / this.pageListCount) * this.pageListCount + 1l;
-        this.endPage = ((this.pageNo - 1l) / this.pageListCount) * this.pageListCount + pageListCount;
+        this.startPage = ((this.pageNo - 1L) / this.pageListCount) * this.pageListCount + 1L;
+        this.endPage = ((this.pageNo - 1L) / this.pageListCount) * this.pageListCount + pageListCount;
         if(this.endPage > this.lastPage) {
             this.endPage = this.lastPage;
         }
 
-        long remainder = 0l;
-        this.prePageNo = 0l;
+        long remainder;
+        this.prePageNo = 0L;
         if(this.pageNo > pageListCount) {
             // TODO 이전을 눌렀을때 현재 페이지 - 10 이 아닌 항상 1, 11, 21... 형태로 표시하고 싶을때
             remainder = this.pageNo % this.pageListCount;
-            this.prePageNo = this.pageNo - this.pageListCount - remainder + 1l;
+            this.prePageNo = this.pageNo - this.pageListCount - remainder + 1L;
             // TODO 이전을 눌렀을때 현재 페이지 - 10 형태로 표시하고 싶을경우 3, 13, 23 ...
 //			this.prePageNo = this.pageNo - this.pageListCount;
             existPrePage = true;
         }
 
-        this.nextPageNo = 0l;
+        this.nextPageNo = 0L;
         if(this.lastPage > pageListCount && this.pageNo <= ((this.lastPage / this.pageListCount) * this.pageListCount)) {
             if(this.lastPage >= (this.startPage + this.pageListCount)) {
-                if(this.pageNo % this.pageListCount == 0l) {
+                if(this.pageNo % this.pageListCount == 0L) {
                     // TODO 다음을 눌렀을때 현재 페이지 + 10 이 아닌 항상 11, 21, 31... 형태로 표시하고 싶을때
-                    this.nextPageNo = this.pageNo + 1l;
+                    this.nextPageNo = this.pageNo + 1L;
                 } else {
                     // TODO 다음을 눌렀을때 현재 페이지 + 10 이 아닌 항상 11, 21, 31... 형태로 표시하고 싶을때
                     if(this.lastPage >= this.pageNo + this.pageListCount) {
                         remainder = this.pageNo % this.pageListCount;
-                        this.nextPageNo = this.pageNo + this.pageListCount - remainder + 1l;
+                        this.nextPageNo = this.pageNo + this.pageListCount - remainder + 1L;
                         // TODO 다음을 눌렀을때 현재 페이지 + 10 형태로 표시하고 싶을경우 13, 23, 33 ...
     //					this.nextPageNo = this.pageNo + this.pageListCount;
                     } else {
                         remainder = this.lastPage % this.pageListCount;
-                        this.nextPageNo = this.lastPage - remainder + 1l;
+                        this.nextPageNo = this.lastPage - remainder + 1L;
                         // TODO 다음을 눌렀을때 현재 페이지 + 10 형태로 표시하고 싶을경우 13, 23, 33 ...
     //					this.nextPageNo = this.lastPage;
                     }
@@ -123,8 +123,8 @@ public class Pagination {
             }
         }
 
-        if(this.totalCount == 0l) {
-            this.pageNo = 0l;
+        if(this.totalCount == 0L) {
+            this.pageNo = 0L;
         }
     }
 
@@ -133,9 +133,9 @@ public class Pagination {
     // 게시물 번호
     private Long rowNumber;
     // 페이지 번호
-    private long pageNo = 1l;
+    private long pageNo = 1L;
     // 처음
-    private long firstPage = 1l;
+    private long firstPage = 1L;
     // 끝
     private long lastPage;
     // 페이지 시작

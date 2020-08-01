@@ -9,11 +9,11 @@ import lhdt.domain.DataAttributeFileInfo;
  *
  */
 public interface DataAttributeFileParser {
-	
+
 	/**
-	 * parse
+	 *
 	 * @param dataId
-	 * @param fileInfo
+	 * @param dataAttributeFileInfo
 	 * @return
 	 */
 	Map<String, Object> parse(Long dataId, DataAttributeFileInfo dataAttributeFileInfo);

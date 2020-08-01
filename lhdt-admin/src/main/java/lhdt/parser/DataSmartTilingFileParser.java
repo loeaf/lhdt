@@ -9,10 +9,11 @@ import lhdt.domain.DataSmartTilingFileInfo;
  *
  */
 public interface DataSmartTilingFileParser {
-	
+
 	/**
+	 *
 	 * @param dataGroupId
-	 * @param dataSmartTilingFileInfo
+	 * @param fileInfo
 	 * @return
 	 */
 	Map<String, Object> parse(Integer dataGroupId, DataSmartTilingFileInfo fileInfo);

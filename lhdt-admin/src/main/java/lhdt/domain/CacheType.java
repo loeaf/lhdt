@@ -8,5 +8,5 @@ package lhdt.domain;
 public enum CacheType {
 	SELF,
 	USER,
-	BROADCAST;
+	BROADCAST
 }

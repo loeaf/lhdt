@@ -41,7 +41,8 @@ public class UserGroupRestController implements AuthorizationController {
 
 	/**
 	 * 그룹Key 중복 체크
-	 * @param model
+	 * @param request
+	 * @param userGroup
 	 * @return
 	 */
 	@GetMapping(value = "/duplication")
@@ -49,8 +50,7 @@ public class UserGroupRestController implements AuthorizationController {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		Boolean duplication = Boolean.TRUE;
-		
+
 		// TODO @Valid 로 구현해야 함
 		if(StringUtils.isEmpty(userGroup.getUserGroupKey())) {
 			result.put("statusCode", HttpStatus.BAD_REQUEST.value());
@@ -60,7 +60,7 @@ public class UserGroupRestController implements AuthorizationController {
 			return result;
 		}
 
-		duplication = userGroupService.isUserGroupKeyDuplication(userGroup);
+		Boolean duplication = userGroupService.isUserGroupKeyDuplication(userGroup);
 		log.info("@@ duplication = {}", duplication);
 		int statusCode = HttpStatus.OK.value();
 		
@@ -183,7 +183,6 @@ public class UserGroupRestController implements AuthorizationController {
 	/**
 	 * 사용자 그룹 메뉴 수정
 	 * @param request
-	 * @param userGroupId
 	 * @param userGroupMenu
 	 * @return
 	 */
@@ -212,7 +211,6 @@ public class UserGroupRestController implements AuthorizationController {
 	/**
 	 * 사용자 그룹 Role 수정
 	 * @param request
-	 * @param userGroupId
 	 * @param userGroupRole
 	 * @return
 	 */

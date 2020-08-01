@@ -78,12 +78,12 @@ public class DataRestController {
 		result.put("message", message);
 		return result;
 	}
-	
+
 	/**
 	 * 사용자 데이터 수정
 	 * @param request
-	 * @param dataGroup
-	 * @param bindingResult
+	 * @param dataId
+	 * @param dataInfo
 	 * @return
 	 */
 	@PostMapping("/{dataId:[0-9]+}")
@@ -152,10 +152,10 @@ public class DataRestController {
 		result.put("message", message);
 		return result;
 	}
-	
+
 	/**
 	 * 데이터 파일 업로딩
-	 * @param model
+	 * @param request
 	 * @return
 	 */
 	@PostMapping(value = "/bulk-upload")

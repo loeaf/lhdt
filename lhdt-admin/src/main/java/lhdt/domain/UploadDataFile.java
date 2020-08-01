@@ -92,10 +92,10 @@ public class UploadDataFile extends Search implements Serializable {
 	
 	public Long getViewFileSizeUnitKB() {
 		if(this.fileSize == null || "".equals(this.fileSize)) {
-			return 0l;
+			return 0L;
 		} else {
 			Long size = Long.valueOf(this.fileSize);
-			return size / 1000l;
+			return size / 1000L;
 		}
 	}
 }

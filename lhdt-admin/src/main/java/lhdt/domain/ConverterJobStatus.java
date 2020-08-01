@@ -29,7 +29,7 @@ public enum ConverterJobStatus {
 	public static Map<String, Object> toEnumHashMap() {
 		Map<String, Object> eMap = new HashMap<>();
 		Stream.of(ConverterJobStatus.values())
-			  .forEach(e ->  eMap.put(e.toString(), 0l));
+			  .forEach(e ->  eMap.put(e.toString(), 0L));
 		return eMap;
 	}
 

@@ -29,7 +29,7 @@ import lhdt.domain.YOrN;
 public class ConfigInterceptor extends HandlerInterceptorAdapter {
 	
 	@Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
     	
     	String uri = request.getRequestURI();
     	HttpSession session = request.getSession();
@@ -44,9 +44,7 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 	    	Integer clickParentId = null;
 			Integer clickMenuId = null;
 			Integer clickDepth = null;
-			Menu menu = null;
-			Menu parentMenu = null;
-			
+
 			for(UserGroupMenu userGroupMenu : userGroupMenuList) {
 				if(uri.equals(userGroupMenu.getUrl())) {
 					clickMenuId = userGroupMenu.getMenuId();
@@ -67,8 +65,8 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 				}
 			}
 			
-			menu = CacheManager.getMenuMap().get(clickMenuId);
-			parentMenu = CacheManager.getMenuMap().get(clickParentId);
+			Menu menu = CacheManager.getMenuMap().get(clickMenuId);
+			Menu parentMenu = CacheManager.getMenuMap().get(clickParentId);
 			if(menu != null) {
 				if(YOrN.Y == YOrN.valueOf(menu.getDisplayYn())) {
 					menu.setAliasName(null);

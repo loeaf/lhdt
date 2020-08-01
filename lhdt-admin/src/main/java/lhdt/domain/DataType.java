@@ -47,6 +47,6 @@ public enum DataType {
 	 * @return
 	 */
 	public static Map<String, Long> getStatisticsMap() {
-		return Stream.of(values()).collect(Collectors.toMap(DataType::getValue, t -> 0l));
+		return Stream.of(values()).collect(Collectors.toMap(DataType::getValue, t -> 0L));
 	}
 }

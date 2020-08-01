@@ -50,7 +50,8 @@ public class DataGroupRestController {
 
 	/**
 	 * 그룹Key 중복 체크
-	 * @param model
+	 * @param request
+	 * @param dataGroup
 	 * @return
 	 */
 	@GetMapping(value = "/duplication")
@@ -58,8 +59,7 @@ public class DataGroupRestController {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		Boolean duplication = Boolean.TRUE;
-		
+
 		// TODO @Valid 로 구현해야 함
 		if(StringUtils.isEmpty(dataGroup.getDataGroupKey())) {
 			result.put("statusCode", HttpStatus.BAD_REQUEST.value());
@@ -67,8 +67,8 @@ public class DataGroupRestController {
 			result.put("message", message);
 			return result;
 		}
-		
-		duplication = dataGroupService.isDataGroupKeyDuplication(dataGroup);
+
+		Boolean duplication = dataGroupService.isDataGroupKeyDuplication(dataGroup);
 		log.info("@@ duplication = {}", duplication);
 		int statusCode = HttpStatus.OK.value();
 		
@@ -200,10 +200,12 @@ public class DataGroupRestController {
 		result.put("message", message);
 		return result;
 	}
-	
+
 	/**
 	 * Smart Tiling 데이터 다운로드
-	 * @param model
+	 * @param request
+	 * @param response
+	 * @param dataGroupId
 	 * @return
 	 */
 	@GetMapping(value = "/download/{dataGroupId:[0-9]+}")
@@ -237,10 +239,12 @@ public class DataGroupRestController {
 			
 		return null;
 	}
-	
+
 	/**
 	 * Smart Tiling Converter용 JSON 다운로드
-	 * @param model
+	 * @param request
+	 * @param response
+	 * @param dataGroupId
 	 * @return
 	 */
 	@GetMapping(value = "/download/converter/{dataGroupId:[0-9]+}")

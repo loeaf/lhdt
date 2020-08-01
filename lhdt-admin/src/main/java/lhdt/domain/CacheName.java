@@ -11,6 +11,6 @@ public enum CacheName {
 	POLICY,
 	ROLE,
 	SMART_TILING_DATA,
-	USER_GROUP;
+	USER_GROUP
 }
 

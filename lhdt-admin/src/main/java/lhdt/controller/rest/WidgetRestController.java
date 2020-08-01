@@ -30,7 +30,7 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/widgets")
 public class WidgetRestController {
 
-	private static final long WIDGET_LIST_VIEW_COUNT = 6l;
+	private static final long WIDGET_LIST_VIEW_COUNT = 6L;
 
 	private final MessageSource messageSource;
 	private final PropertiesConfig propertiesConfig;
@@ -61,6 +61,7 @@ public class WidgetRestController {
 
 		// 사용자 현황
 		List<UserInfo> userInfoStatusList = userService.getUserStatusCount();
+		// TODO 다른 걸로 바꿔야 함
 		userInfoStatusList.stream()
 			.filter(u -> {
 				if(statusMap.containsKey(u.getStatus())) {
@@ -124,6 +125,7 @@ public class WidgetRestController {
 		// 데이터 타입
 		Map<String, Long> dataTypeMap = DataType.getStatisticsMap();
 		List<DataInfo> dataInfoStatusList = dataService.getDataTypeCount();
+		// TODO 다른 걸로 바꿔야 함
 		dataInfoStatusList.stream()
 				.filter(d -> {
 					if(dataTypeMap.containsKey(d.getDataType())) {
@@ -172,7 +174,7 @@ public class WidgetRestController {
 		List<String> converterJobFileKeys = new ArrayList<>();
 		List<Long> converterJobFileValues = new ArrayList<>();
 		String hyphen = "-";
-		converterJobFileList.stream().forEach(x -> {
+		converterJobFileList.forEach(x -> {
 			converterJobFileKeys.add(x.getYear() + hyphen + x.getMonth() + hyphen + x.getDay());
 			converterJobFileValues.add(x.getCount());
 		});
@@ -248,10 +250,10 @@ public class WidgetRestController {
 
 		String serverHost = propertiesConfig.getRestServer();
 
-		Long diskSpaceTotal = 0l;
-		Long diskSpaceFree = 0l;
-		Long diskSpaceUsed = 0l;
-		Long diskSpacePercent = 0l;
+		Long diskSpaceTotal = 0L;
+		Long diskSpaceFree = 0L;
+		Long diskSpaceUsed = 0L;
+		Long diskSpacePercent = 0L;
 
 		String jvmMemoryMax = "";
 		String jvmMemoryUsed = "";
@@ -266,7 +268,7 @@ public class WidgetRestController {
 			diskSpaceTotal = diskSpace.get("total");
 			diskSpaceFree = diskSpace.get("free");
 			diskSpaceUsed = diskSpaceTotal - diskSpaceFree;
-			diskSpacePercent = diskSpaceUsed / diskSpaceTotal * 100l;
+			diskSpacePercent = diskSpaceUsed / diskSpaceTotal * 100L;
 
 //			response = restTemplate.getForEntity(new URI(serverHost + "/actuator/metrics/jvm.memory.max"), Map.class);
 //			@SuppressWarnings("unchecked")
@@ -375,7 +377,7 @@ public class WidgetRestController {
 			Widget tempWidget = new Widget();
 			tempWidget.setUserId(userId);
 			tempWidget.setWidgetId(Long.valueOf(orders[i]));
-			tempWidget.setViewOrder(Integer.valueOf(i));
+			tempWidget.setViewOrder(i);
 			widgetList.add(tempWidget);
 		}
 

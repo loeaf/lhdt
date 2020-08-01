@@ -116,15 +116,15 @@ public class DataSmartTilingFileJsonParser implements DataSmartTilingFileParser 
 			DataInfo dataInfo = new DataInfo();
 			dataInfo.setDataName(dataName);
 			dataInfo.setDataKey(dataKey);
-			if(longitude != null && !"".equals(longitude)) dataInfo.setLongitude(new BigDecimal(longitude));
-			if(latitude != null && !"".equals(latitude)) dataInfo.setLatitude(new BigDecimal(latitude));
-			if(altitude != null && !"".equals(altitude)) dataInfo.setAltitude(new BigDecimal(altitude));
+			if(!"".equals(longitude)) dataInfo.setLongitude(new BigDecimal(longitude));
+			if(!"".equals(latitude)) dataInfo.setLatitude(new BigDecimal(latitude));
+			if(!"".equals(altitude)) dataInfo.setAltitude(new BigDecimal(altitude));
 			if(dataInfo.getLongitude() != null && dataInfo.getLatitude() != null) {
 				dataInfo.setLocation("POINT(" + dataInfo.getLongitude() + " " + dataInfo.getLatitude() + ")");
 			}
-			if(heading != null && !"".equals(heading)) dataInfo.setHeading(new BigDecimal(heading));
-			if(pitch != null && !"".equals(pitch)) dataInfo.setPitch(new BigDecimal(pitch));
-			if(roll != null && !"".equals(roll)) dataInfo.setRoll(new BigDecimal(roll));
+			if(!"".equals(heading)) dataInfo.setHeading(new BigDecimal(heading));
+			if(!"".equals(pitch)) dataInfo.setPitch(new BigDecimal(pitch));
+			if(!"".equals(roll)) dataInfo.setRoll(new BigDecimal(roll));
 			
 			dataInfo.setMappingType(mappingType);
 			dataInfo.setMetainfo(metainfo.toString());

@@ -78,7 +78,7 @@ public class GeoPolicyRestController {
 		GeoPolicy geoPolicy = geoPolicyService.getGeoPolicy();
 		UserPolicy userPolicy = userPolicyService.getUserPolicy(userSession.getUserId());
 		
-		if(dataId != null && dataId.trim() != "") {
+		if(dataId != null && !"".equals(dataId.trim())) {
 			// dataId가 있을경우 data 위치로 가기 위해 위치값을 변경해줌 
 			DataInfo data = DataInfo.builder().dataId(Long.parseLong(dataId)).build();
 			DataInfo dataInfo = dataService.getData(data);

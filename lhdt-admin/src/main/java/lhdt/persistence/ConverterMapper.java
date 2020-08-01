@@ -20,52 +20,52 @@ public interface ConverterMapper {
 	 * @param converterJob
 	 * @return
 	 */
-	public Long getConverterJobTotalCount(ConverterJob converterJob);
+	Long getConverterJobTotalCount(ConverterJob converterJob);
 	
 	/**
 	 * converter job file 총 건수
 	 * @param converterJobFile
 	 * @return
 	 */
-	public Long getConverterJobFileTotalCount(ConverterJobFile converterJobFile);
+	Long getConverterJobFileTotalCount(ConverterJobFile converterJobFile);
 	
 	/**
 	 * f4d converter job 목록
 	 * @param converterJob
 	 * @return
 	 */
-	public List<ConverterJob> getListConverterJob(ConverterJob converterJob);
+	List<ConverterJob> getListConverterJob(ConverterJob converterJob);
 
 	/**
 	 * f4d converter job 목록
 	 * @param converterJobFile
 	 * @return
 	 */
-	public List<ConverterJobFile> getListConverterJobFile(ConverterJobFile converterJobFile);
+	List<ConverterJobFile> getListConverterJobFile(ConverterJobFile converterJobFile);
 
 	/**
 	 * 데이터 변환 현황
 	 * @return
 	 */
-	public List<ConverterJobFile> getConverterJobFileStatistics();
+	List<ConverterJobFile> getConverterJobFileStatistics();
 	
 	/**
 	 * insert converter job
 	 * @param converterJob
 	 * @return
 	 */
-	public Long insertConverterJob(ConverterJob converterJob);
+	Long insertConverterJob(ConverterJob converterJob);
 	
 	/**
 	 * insert converter job file
 	 * @param converterJobFile
 	 * @return
 	 */
-	public Long insertConverterJobFile(ConverterJobFile converterJobFile);
+	Long insertConverterJobFile(ConverterJobFile converterJobFile);
 	
 	/**
 	 * update
 	 * @param converterJob
 	 */
-	public int updateConverterJob(ConverterJob converterJob);
+	int updateConverterJob(ConverterJob converterJob);
 }

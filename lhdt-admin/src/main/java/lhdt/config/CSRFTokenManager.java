@@ -15,7 +15,7 @@ import java.util.UUID;
 public class CSRFTokenManager {
 
 	private CSRFTokenManager() {
-	};
+	}
 	
 	/**
 	 * The token parameter name
