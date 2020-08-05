@@ -1,8 +1,9 @@
 plugins {
-	id 'org.springframework.boot' version '2.3.0.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-	id 'java'
-	id 'war'
+    id 'org.springframework.boot' version '2.3.0.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id "org.asciidoctor.convert" version "1.5.9.2"
+    id 'java'
+    id 'war'
 }
 
 apply plugin: 'project-report'
@@ -16,17 +17,17 @@ sourceCompatibility = '11'
 final String DEFAULT_PROFILE = 'local'
 
 configurations {
-	developmentOnly
-	runtimeClasspath {
-		extendsFrom developmentOnly
-	}
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 sourceSets {
@@ -74,46 +75,69 @@ sourceSets {
 }
 
 dependencies {
-	implementation project(':common')
+    implementation project(':common')
 
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.2'
-	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.2'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	implementation 'org.springframework.security:spring-security-core:5.2.1.RELEASE'
+    implementation 'org.springframework.security:spring-security-core:5.2.1.RELEASE'
 
-	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.4.1'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.4.1'
 
     implementation 'org.apache.commons:commons-compress:1.18'
 
-	implementation 'org.modelmapper:modelmapper:2.3.6'
+    implementation 'org.modelmapper:modelmapper:2.3.6'
 
-	runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'org.postgresql:postgresql'
     implementation 'org.postgresql:postgresql:42.2.14'
-	
-	//providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-	
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    
-	compileOnly 'org.projectlombok:lombok:1.18.12'
+
+    //providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+    compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-	testCompileOnly 'org.projectlombok:lombok:1.18.12'
-	
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+}
+
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
 }
 
 test {
-	useJUnitPlatform()
-	ignoreFailures = true
-	exclude '**/*'
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+    ignoreFailures = true
+    //exclude '**/*'
+}
+
+asciidoctor {
+    attributes 'snippets': snippetsDir
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+task copyDocument(type: Copy) {
+    println " @@@@@ copyDocument 실행 @@@@@ "
+    dependsOn asciidoctor
+    from file("build/asciidoc/html5/")
+    into file("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyDocument
 }
 
 task wrapper(type: Wrapper) {
