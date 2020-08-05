@@ -6,7 +6,6 @@ import lhdt.domain.QueueMessage;
 import lhdt.domain.ServerTarget;
 import lhdt.support.ProcessBuilderSupport;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -70,7 +69,7 @@ public class CustomMessageListener {
 
 			log.info(" >>>>>> command = {}", command.toString());
 
-			String result = ConverterJobStatus.SUCCESS.name();
+			String result;
 			try {
 				int exitCode = ProcessBuilderSupport.execute(command);
 
@@ -119,7 +118,7 @@ public class CustomMessageListener {
 		converterJob.setErrorCode(errorCode);
 
 		try {
-			URI uri = null;
+			URI uri;
 			if(ServerTarget.USER == ServerTarget.valueOf(serverTarget)) {
 				uri = new URI(propertiesConfig.getCmsUserRestServer() + "/api/converters/status");
 			} else {
