@@ -1,12 +1,13 @@
 package lhdt.controller;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import lhdt.common.BaseControllerTest;
+import lhdt.domain.Issue;
+import lhdt.domain.Key;
+import lhdt.domain.UserSession;
+import lhdt.persistence.IssueMapper;
+import lhdt.service.IssueService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -16,15 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import java.util.List;
+import java.util.Map;
 
-import lombok.extern.slf4j.Slf4j;
-import lhdt.common.BaseControllerTest;
-import lhdt.domain.Issue;
-import lhdt.domain.Key;
-import lhdt.domain.UserSession;
-import lhdt.persistence.IssueMapper;
-import lhdt.service.IssueService;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @Slf4j
 @TestMethodOrder(OrderAnnotation.class)
@@ -79,8 +77,6 @@ public class IssueTests extends BaseControllerTest {
 		assertTrue(Integer.parseInt(map.get("totalCount").toString())  == issueList.size());
 	}
 	
-	@Test
-	@Order(3)
 	public void 이슈_디테일() throws Exception {
 		// 이슈상세정보 읽어오기
 		Long testIssueId = 5l;

@@ -1,32 +1,23 @@
 package lhdt.controller;
 
-import lhdt.LhdtUserApplication;
+import lhdt.common.BaseControllerTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
-@AutoConfigureMockMvc
-@SpringBootTest(classes = LhdtUserApplication.class)
-class SigninControllerTest {
-
-    @Autowired
-    protected MockMvc mockMvc;
+class SigninControllerTest extends BaseControllerTest {
 
     @Test
     void signin() throws Exception {
         mockMvc.perform(get("/sign/signin")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(model().hasNoErrors())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is2xxSuccessful())
+                .andDo(document("index"));
 
         System.out.println(mockMvc);
     }
