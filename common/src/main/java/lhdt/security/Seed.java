@@ -173,12 +173,12 @@ public class Seed {
     //private int  SeedBlockLen    = 128; // in bits
 
     /****************************** Common functions ******************************/
-    private static int GetB0(int A){	return (0x000000ff&(A)    ); };
-    private static int GetB1(int A){	return (0x000000ff&((A)>>>8)); };
-    private static int GetB2(int A){	return (0x000000ff&((A)>>>16)); };
-    private static int GetB3(int A){	return (0x000000ff&((A)>>>24)); };
-    private static void EndianChange(int dws[]) { dws[0] = (dws[0]>>>24) | (dws[0]<<24) | ((dws[0]<<8)&0x00ff0000)|((dws[0]>>>8)&0x0000ff00); };
-    private static int EndianChange(int dws)   	{ return (dws>>>24) | (dws<<24) | ((dws<<8)&0x00ff0000)|((dws>>>8)&0x0000ff00); };
+    private static int GetB0(int A){	return (0x000000ff&(A)    ); }
+    private static int GetB1(int A){	return (0x000000ff&((A)>>>8)); }
+    private static int GetB2(int A){	return (0x000000ff&((A)>>>16)); }
+    private static int GetB3(int A){	return (0x000000ff&((A)>>>24)); }
+    private static void EndianChange(int dws[]) { dws[0] = (dws[0]>>>24) | (dws[0]<<24) | ((dws[0]<<8)&0x00ff0000)|((dws[0]>>>8)&0x0000ff00); }
+    private static int EndianChange(int dws)   	{ return (dws>>>24) | (dws<<24) | ((dws<<8)&0x00ff0000)|((dws>>>8)&0x0000ff00); }
 
     /***************************** SEED round function ****************************/
     private static void SeedRound(int L0[], int L1[], int R0[], int R1[], int K[]) {
@@ -199,7 +199,7 @@ public class Seed {
             T11 = (T1<0) ? (long)(T1 & 0x7fffffff)|(long)(0x80000000) : (long)(T1);
         T00 += T11;
         L0[0] ^= (int)T00; L1[0] ^= (int)T11;			// return L0, L1
-    };
+    }
 
     /************************** SEED encrtyption function *************************/
     public static void SeedEncrypt(byte pbData[], int pdwRoundKey[], byte outData[]) {
@@ -230,7 +230,7 @@ public class Seed {
         R1[0] = ((R1[0])<<8)^((int)pbData[15]&0x000000ff);
 
 
-        if (!ENDIAN)  {EndianChange(L0);  EndianChange(L1);  EndianChange(R0);  EndianChange(R1);};
+        if (!ENDIAN)  {EndianChange(L0);  EndianChange(L1);  EndianChange(R0);  EndianChange(R1);}
 
         K[0] = pdwRoundKey[nCount++];		K[1] = pdwRoundKey[nCount++];
         SeedRound(L0, L1, R0, R1, K); /*   1 */
@@ -269,7 +269,7 @@ public class Seed {
             SeedRound(R0, R1, L0, L1, K); /*  16 */
         }
 
-        if (!ENDIAN)  {EndianChange(L0);  EndianChange(L1);  EndianChange(R0);  EndianChange(R1);};
+        if (!ENDIAN)  {EndianChange(L0);  EndianChange(L1);  EndianChange(R0);  EndianChange(R1);}
 
         for (int i=0; i<4; i++) {
             outData[i   ] = (byte)(((R0[0])>>>(8*(3-i)))&0xff);
@@ -308,7 +308,7 @@ public class Seed {
         R1[0] = ((R1[0])<<8)^((int)pbData[15]&0x000000ff);
 
 
-        if (!ENDIAN)  {EndianChange(L0);  EndianChange(L1);  EndianChange(R0);  EndianChange(R1);};
+        if (!ENDIAN)  {EndianChange(L0);  EndianChange(L1);  EndianChange(R0);  EndianChange(R1);}
 
         if (NoRounds == 16) {
                 K[1] = pdwRoundKey[nCount--];		K[0] = pdwRoundKey[nCount--];
@@ -345,7 +345,7 @@ public class Seed {
         K[1] = pdwRoundKey[nCount--];		K[0] = pdwRoundKey[nCount];
         SeedRound(R0, R1, L0, L1, K); /*  16 */
 
-        if (!ENDIAN)  {EndianChange(L0);  EndianChange(L1);  EndianChange(R0);  EndianChange(R1);};
+        if (!ENDIAN)  {EndianChange(L0);  EndianChange(L1);  EndianChange(R0);  EndianChange(R1);}
 
         for (int i=0; i<4; i++)	{
             outData[i   ] = (byte)(((R0[0])>>>(8*(3-i)))&0xff);
@@ -412,7 +412,7 @@ public class Seed {
         D[0] = (D[0]<<8)^((int)pbUserKey[14]&0x000000ff);
         D[0] = (D[0]<<8)^((int)pbUserKey[15]&0x000000ff);
 
-        if (!ENDIAN)  {A[0]=EndianChange(A[0]);  B[0]=EndianChange(B[0]);  C[0]=EndianChange(C[0]);  D[0]=EndianChange(D[0]);};
+        if (!ENDIAN)  {A[0]=EndianChange(A[0]);  B[0]=EndianChange(B[0]);  C[0]=EndianChange(C[0]);  D[0]=EndianChange(D[0]);}
 
         T0 = A[0] + C[0] - KC[0];
         T1 = B[0] - D[0] + KC[0];
