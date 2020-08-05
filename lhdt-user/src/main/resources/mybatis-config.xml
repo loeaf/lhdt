@@ -46,7 +46,6 @@
  		<typeAlias type="lhdt.domain.SkSgg" alias="skSgg"/>
  		<typeAlias type="lhdt.domain.SkEmd" alias="skEmd"/>
  		
- 		<typeAlias type="lhdt.domain.AttributeRepository" alias="attributeRepository"/>
     </typeAliases>
 
 	<typeHandlers>

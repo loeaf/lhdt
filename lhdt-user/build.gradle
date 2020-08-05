@@ -130,7 +130,7 @@ asciidoctor {
 }
 
 task copyDocument(type: Copy) {
-    println " @@@@@ copyDocument 실행 @@@@@ "
+    println " @@@@@ copyDocument execute @@@@@ "
     dependsOn asciidoctor
     from file("build/asciidoc/html5/")
     into file("src/main/resources/static/docs")
