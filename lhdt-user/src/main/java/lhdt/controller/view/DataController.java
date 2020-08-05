@@ -36,8 +36,8 @@ import lhdt.utils.DateUtils;
 @RequestMapping("/data")
 public class DataController {
 
-	private static final long PAGE_ROWS = 5l;
-	private static final long PAGE_LIST_COUNT = 5l;
+	private static final long PAGE_ROWS = 5L;
+	private static final long PAGE_LIST_COUNT = 5L;
 
 	@Autowired
 	private DataGroupService dataGroupService;
@@ -85,7 +85,7 @@ public class DataController {
 		dataInfo.setOffset(pagination.getOffset());
 		dataInfo.setLimit(pagination.getPageRows());
 		List<DataInfo> dataInfoList = new ArrayList<>();
-		if(totalCount > 0l) {
+		if(totalCount > 0L) {
 			dataInfoList = dataService.getListData(dataInfo);
 		}
 
@@ -99,7 +99,7 @@ public class DataController {
 	/**
 	 * converter job 목록
 	 * @param request
-	 * @param membership_id
+	 * @param dataInfo
 	 * @param pageNo
 	 * @param model
 	 * @return
@@ -118,10 +118,10 @@ public class DataController {
 		if(roleCheckResult != null) return roleCheckResult;
 
 		UserPolicy userPolicy = userPolicyService.getUserPolicy(userSession.getUserId());
-		Long commonDataCount = 0l;
-		Long publicDataCount = 0l;
-		Long privateDataCount = 0l;
-		Long groupDataCount = 0l;
+		Long commonDataCount = 0L;
+		Long publicDataCount = 0L;
+		Long privateDataCount = 0L;
+		Long groupDataCount = 0L;
 		dataInfo.setUserId(userSession.getUserId());
 		dataInfo.setUserGroupId(userSession.getUserGroupId());
 		// 그룹별 통계
@@ -160,7 +160,7 @@ public class DataController {
 		dataInfo.setOffset(pagination.getOffset());
 		dataInfo.setLimit(pagination.getPageRows());
 		List<DataInfo> dataList = new ArrayList<>();
-		if(totalCount > 0l) {
+		if(totalCount > 0L) {
 			dataList = dataService.getListData(dataInfo);
 		}
 
@@ -216,34 +216,29 @@ public class DataController {
 
 	/**
 	 * 검색 조건
-	 * @param search
+	 * @param pageType
+	 * @param dataInfo
 	 * @return
 	 */
 	private String getSearchParameters(PageType pageType, DataInfo dataInfo) {
-		StringBuffer buffer = new StringBuffer(dataInfo.getParameters());
+		StringBuilder builder = new StringBuilder(dataInfo.getParameters());
 //		buffer.append("&");
 //		try {
-//			buffer.append("dataName=" + URLEncoder.encode(getDefaultValue(dataInfo.getDataName()), "UTF-8"));
+//			builder.append("dataName=" + URLEncoder.encode(getDefaultValue(dataInfo.getDataName()), "UTF-8"));
 //		} catch(Exception e) {
-//			buffer.append("dataName=");
+//			builder.append("dataName=");
 //		}
 		
 		if (dataInfo.getStatus() != null) {
-			buffer.append("&");
-			buffer.append("status=");
-			buffer.append(dataInfo.getStatus());
+			builder.append("&status=").append(dataInfo.getStatus());
 		}
 		if (dataInfo.getDataType() != null) {
-			buffer.append("&");
-			buffer.append("dataType=");
-			buffer.append(dataInfo.getDataType());
+			builder.append("&dataType=").append(dataInfo.getDataType());
 		}
 		if (dataInfo.getDataGroupId() != null) {
-			buffer.append("&");
-			buffer.append("dataGroupId=");
-			buffer.append(dataInfo.getDataGroupId());
+			builder.append("&dataGroupId=").append(dataInfo.getDataGroupId());
 		}
-		return buffer.toString();
+		return builder.toString();
 	}
 	
 	private String roleValidator(HttpServletRequest request, Integer userGroupId, String roleName) {

@@ -46,8 +46,7 @@ public class DataGroupController {
 	 * 사용자 데이터 그룹 관리
 	 */
 	@GetMapping(value = "/list")
-	public String list(	HttpServletRequest request, 
-						Model model) throws Exception {
+	public String list(	HttpServletRequest request, Model model) {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(Key.USER_SESSION.name());
 		

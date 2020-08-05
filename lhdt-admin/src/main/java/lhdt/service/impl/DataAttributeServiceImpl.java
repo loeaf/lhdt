@@ -54,7 +54,7 @@ public class DataAttributeServiceImpl implements DataAttributeService {
 		// 파일 이력을 저장
 		dataAttributeMapper.insertDataAttributeFileInfo(dataAttributeFileInfo);
 		
-		DataAttributeFileParser dataAttributeFileParser = null;
+		DataAttributeFileParser dataAttributeFileParser;
 		if(FileUtils.EXTENSION_JSON.equals(dataAttributeFileInfo.getFileExt())) {
 			dataAttributeFileParser = new DataAttributeFileJsonParser();
 		} else {

@@ -93,7 +93,7 @@ public class UserGroupServiceImpl implements UserGroupService {
     	//GeoPolicy geoPolicy = geoPolicyService.getGeoPolicy();
 
     	UserGroup parentUserGroup = new UserGroup();
-    	Integer depth = 0;
+    	int depth = 0;
     	if(userGroup.getParent() > 0) {
 	    	parentUserGroup.setUserGroupId(userGroup.getParent());
 	    	parentUserGroup = userGroupMapper.getUserGroup(parentUserGroup);

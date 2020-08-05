@@ -105,7 +105,7 @@ public class DataGroupServiceImpl implements DataGroupService {
     	
     	DataGroup parentDataGroup = new DataGroup();
     	//parentDataGroup.setUserId(userId);
-    	Integer depth = 0;
+    	int depth = 0;
     	if(dataGroup.getParent() > 0) {
     		parentDataGroupId = dataGroup.getParent();
     		parentDataGroup.setDataGroupId(parentDataGroupId);

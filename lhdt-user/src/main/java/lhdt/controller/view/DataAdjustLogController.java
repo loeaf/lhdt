@@ -108,7 +108,7 @@ public class DataAdjustLogController {
 		dataAdjustLog.setOffset(pagination.getOffset());
 		dataAdjustLog.setLimit(pagination.getPageRows());
 		List<DataAdjustLog> dataAdjustLogList = new ArrayList<>();
-		if(totalCount > 0l) {
+		if(totalCount > 0L) {
 			dataAdjustLogList = dataAdjustLogService.getListDataAdjustLog(dataAdjustLog);
 		}
 		

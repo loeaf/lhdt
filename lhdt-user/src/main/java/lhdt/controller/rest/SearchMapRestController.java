@@ -1,31 +1,20 @@
 package lhdt.controller.rest;
 
+import lhdt.domain.*;
+import lhdt.service.SearchMapService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import lombok.extern.slf4j.Slf4j;
-import lhdt.domain.District;
-import lhdt.domain.Key;
-import lhdt.domain.Pagination;
-import lhdt.domain.SkEmd;
-import lhdt.domain.SkSdo;
-import lhdt.domain.SkSgg;
-import lhdt.service.SearchMapService;
 
 @Slf4j
 @RequestMapping("/searchmap")
@@ -273,7 +262,7 @@ public class SearchMapRestController {
 		district.setOffset(pagination.getOffset());
 		district.setLimit(pagination.getPageRows());
 		List<District> districtList = new ArrayList<>();
-		if (totalCount > 0l) {
+		if (totalCount > 0L) {
 			districtList = searchMapService.getListDistrict(district);
 		}
 
@@ -288,14 +277,8 @@ public class SearchMapRestController {
 	}
 
 	private String getSearchParameters(String fullTextSearch) {
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("&");
-		try {
-			buffer.append("searchValue=" + URLEncoder.encode(fullTextSearch, "UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			log.info("@@ objectMapper exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
-			buffer.append("searchValue=");
-		}
-		return buffer.toString();
+		StringBuilder builder = new StringBuilder();
+		builder.append("&searchValue=" + URLEncoder.encode(fullTextSearch, StandardCharsets.UTF_8));
+		return builder.toString();
 	}
 }

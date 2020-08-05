@@ -106,7 +106,7 @@ public class UploadDataController {
 		uploadData.setOffset(pagination.getOffset());
 		uploadData.setLimit(pagination.getPageRows());
 		List<UploadData> uploadDataList = new ArrayList<>();
-		if(totalCount > 0l) {
+		if(totalCount > 0L) {
 			uploadDataList = uploadDataService.getListUploadData(uploadData);
 		}
 		
@@ -189,26 +189,27 @@ public class UploadDataController {
 		
 		return "/upload-data/modify";
 	}
-	
+
 	/**
 	 * 검색 조건
-	 * @param search
+	 * @param pageType
+	 * @param uploadData
 	 * @return
 	 */
 	private String getSearchParameters(PageType pageType, UploadData uploadData) {
-		StringBuffer buffer = new StringBuffer(uploadData.getParameters());
+		StringBuilder builder = new StringBuilder(uploadData.getParameters());
 		boolean isListPage = true;
 		if(pageType == PageType.MODIFY || pageType == PageType.DETAIL) {
 			isListPage = false;
 		}
 		
 //		if(!isListPage) {
-//			buffer.append("pageNo=" + request.getParameter("pageNo"));
-//			buffer.append("&");
-//			buffer.append("list_count=" + uploadData.getList_counter());
+//			builder.append("pageNo=" + request.getParameter("pageNo"));
+//			builder.append("&");
+//			builder.append("list_count=" + uploadData.getList_counter());
 //		}
 		
-		return buffer.toString();
+		return builder.toString();
 	}
 	
 	private String roleValidator(HttpServletRequest request, Integer userGroupId, String roleName) {
@@ -233,7 +234,6 @@ public class UploadDataController {
 			Locale myLocale = request.getLocale();
 			lang = myLocale.getLanguage();
 		}
-		Locale locale = new Locale(lang);
-		return locale;
+		return new Locale(lang);
 	}
 }

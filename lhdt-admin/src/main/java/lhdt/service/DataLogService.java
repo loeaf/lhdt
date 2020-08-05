@@ -10,10 +10,10 @@ import lhdt.domain.DataInfoLog;
  *
  */
 public interface DataLogService {
-	
+
 	/**
 	 * 데이터 변경 요청 총건 수
-	 * @param dataInfo
+	 * @param dataInfoLog
 	 * @return
 	 */
 	Long getDataInfoLogTotalCount(DataInfoLog dataInfoLog);

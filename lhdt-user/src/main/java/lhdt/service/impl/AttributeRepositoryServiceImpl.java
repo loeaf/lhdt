@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AllArgsConstructor;
-import lhdt.domain.AttributeRepository;
 import lhdt.persistence.AttributeRepositoryMapper;
 import lhdt.service.AttributeRepositoryService;
 

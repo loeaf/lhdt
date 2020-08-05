@@ -77,7 +77,7 @@ public class MenuServiceImpl implements MenuService {
 	 */
 	@Transactional
 	public int updateMenu(Menu menu) {
-		if(menu.getDepth().intValue() == 1 && "N".equals(menu.getUseYn())) {
+		if(menu.getDepth() == 1 && "N".equals(menu.getUseYn())) {
 			// 1 Depth 이고 미사용일 경우만 자식 메뉴를 전부 미사용으로 수정
 			updateChildMenu(menu.getMenuId());
 		}

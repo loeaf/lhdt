@@ -115,8 +115,8 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 사용자 상태 수정
-	 * @param status_value
-	 * @param check_ids
+	 * @param statusValue
+	 * @param checkIds
 	 * @return
 	 */
 	@Transactional

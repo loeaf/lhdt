@@ -94,7 +94,7 @@ public class UploadDataFile extends Search implements Serializable {
 		if(this.fileSize == null || "".equals(this.fileSize)) {
 			return 0L;
 		} else {
-			Long size = Long.valueOf(this.fileSize);
+			long size = Long.parseLong(this.fileSize);
 			return size / 1000L;
 		}
 	}

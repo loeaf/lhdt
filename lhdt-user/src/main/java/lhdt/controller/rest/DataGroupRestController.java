@@ -41,8 +41,8 @@ import lhdt.utils.DateUtils;
 @RequestMapping("/data-groups")
 public class DataGroupRestController {
 
-	private static final long PAGE_ROWS = 4l;
-	private static final long PAGE_LIST_COUNT = 5l;
+	private static final long PAGE_ROWS = 4L;
+	private static final long PAGE_LIST_COUNT = 5L;
 	
 	@Autowired
 	private DataGroupService dataGroupService;
@@ -52,13 +52,13 @@ public class DataGroupRestController {
 //	private ObjectMapper objectMapper;
 //	@Autowired
 //	private PolicyService policyService;
-	
+
 	/**
 	 * 데이터 그룹 전체 목록
-	 * @param projectId
+	 * @param request
+	 * @param dataGroup
 	 * @return
 	 */
-	@GetMapping(value = "/all")
 	public Map<String, Object> allList(HttpServletRequest request, DataGroup dataGroup) {
 		dataGroup.setSearchWord(SQLInjectSupport.replaceSqlInection(dataGroup.getSearchWord()));
 		dataGroup.setOrderWord(SQLInjectSupport.replaceSqlInection(dataGroup.getOrderWord()));
@@ -80,10 +80,12 @@ public class DataGroupRestController {
 		result.put("message", message);
 		return result;
 	}
-	
+
 	/**
 	 * 데이터 그룹 정보
-	 * @param projectId
+	 * @param request
+	 * @param dataGroup
+	 * @param pageNo
 	 * @return
 	 */
 	@GetMapping
@@ -117,7 +119,7 @@ public class DataGroupRestController {
 		dataGroup.setOffset(pagination.getOffset());
 		dataGroup.setLimit(pagination.getPageRows());
 		List<DataGroup> dataGroupList = new ArrayList<>();
-		if(totalCount > 0l) {
+		if(totalCount > 0L) {
 			dataGroupList = dataGroupService.getListDataGroup(dataGroup);
 		}
 		
@@ -144,8 +146,7 @@ public class DataGroupRestController {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		Boolean duplication = Boolean.TRUE;
-		
+
 		// TODO @Valid 로 구현해야 함
 		if(StringUtils.isEmpty(dataGroup.getDataGroupKey())) {
 			result.put("statusCode", HttpStatus.BAD_REQUEST.value());
@@ -156,7 +157,7 @@ public class DataGroupRestController {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(Key.USER_SESSION.name());
 		dataGroup.setUserId(userSession.getUserId());
-		duplication = dataGroupService.isDataGroupKeyDuplication(dataGroup);
+		Boolean duplication = dataGroupService.isDataGroupKeyDuplication(dataGroup);
 		log.info("@@ duplication = {}", duplication);
 		int statusCode = HttpStatus.OK.value();
 		
@@ -323,14 +324,14 @@ public class DataGroupRestController {
 	 * @return
 	 */
 	private String getSearchParameters(PageType pageType, DataGroup dataGroup) {
-		StringBuffer buffer = new StringBuffer(dataGroup.getParameters());
+		StringBuilder builder = new StringBuilder(dataGroup.getParameters());
 //		buffer.append("&");
 //		try {
-//			buffer.append("dataName=" + URLEncoder.encode(getDefaultValue(dataInfo.getDataName()), "UTF-8"));
+//			builder.append("dataName=" + URLEncoder.encode(getDefaultValue(dataInfo.getDataName()), "UTF-8"));
 //		} catch(Exception e) {
-//			buffer.append("dataName=");
+//			builder.append("dataName=");
 //		}
-		return buffer.toString();
+		return builder.toString();
 	}
 	
 	private String getDefaultValue(String value) {

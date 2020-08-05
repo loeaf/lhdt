@@ -1,19 +1,16 @@
 package lhdt.controller.view;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-
-import javax.servlet.http.HttpServletRequest;
-
+import lhdt.domain.CacheManager;
+import lhdt.domain.Key;
+import lhdt.domain.Policy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import lhdt.domain.CacheManager;
-import lhdt.domain.Key;
-import lhdt.domain.Policy;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author hansangkim
@@ -35,12 +32,10 @@ public class GuideController {
 		model.addAttribute("contentCacheVersion", policy.getContentCacheVersion());
 		String lang = "ko";
 		String k = (String)request.getSession().getAttribute(Key.LANG.name());
-		if(k!=null) {
+		if(k != null) {
 			lang = "en";
-			return "/guide/"+lang+"/layout";
 		}
-		return "/guide/"+lang+"/layout";
-		
+		return "/guide/" + lang + "/layout";
 	}
 	
 	/**
@@ -52,11 +47,9 @@ public class GuideController {
 	public String gotoApiToggleKo(HttpServletRequest request, @RequestParam(value="api") String api) {
 		String k = (String)request.getSession().getAttribute(Key.LANG.name());
 		String lang = "ko";
-		if(k!=null) {
+		if(k != null) {
 			lang = "en";
-			return "/guide/"+lang+"/"+api;
 		}
-		return "/guide/"+lang+"/"+api;
+		return "/guide/" + lang + "/" + api;
 	}
-	
 }

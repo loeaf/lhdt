@@ -33,7 +33,8 @@ public class DataLogRestController {
 	/**
 	 * Data Info Log 상태 수정
 	 * @param request
-	 * @param dataInfo
+	 * @param dataInfoLog
+	 * @param errors
 	 * @return
 	 */
 	@PostMapping

@@ -43,7 +43,7 @@ public class Search {
 	private String endDate;
 	private String orderWord;
 	private String orderValue;
-	private Long listCounter = 10l;
+	private Long listCounter = 10L;
 	
 	public Long getTotalCount() {
 		return totalCount;
@@ -111,41 +111,27 @@ public class Search {
 	public void setListCounter(Long listCounter) {
 		this.listCounter = listCounter;
 	}
-	
+
 	/**
 	 * 검색 조건
-	 * @param search
 	 * @return
 	 */
 	public String getParameters() {
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("&");
-		buffer.append("searchWord=" + getDefaultValue(this.searchWord));
-		buffer.append("&");
-		buffer.append("searchOption=" + getDefaultValue(this.searchOption));
-		buffer.append("&");
-//		try {
-			buffer.append("searchValue=" + getDefaultValue(this.searchValue));
-			//buffer.append("searchValue=" + URLEncoder.encode(getDefaultValue(this.searchValue), "UTF-8"));
-//		} catch(Exception e) {
-//			buffer.append("searchValue=");
-//		}
-		buffer.append("&");
-		buffer.append("startDate=" + getDefaultValue(this.startDate));
-		buffer.append("&");
-		buffer.append("endDate=" + getDefaultValue(this.endDate));
-		buffer.append("&");
-		buffer.append("orderWord=" + getDefaultValue(this.orderWord));
-		buffer.append("&");
-		buffer.append("orderValue=" + getDefaultValue(this.orderValue));
-		return buffer.toString();
+		// TODO append 사용해서 변경
+		return "&searchWord=" + getDefaultValue(this.searchWord)
+				+ "&searchOption=" + getDefaultValue(this.searchOption)
+				+ "&searchValue=" + getDefaultValue(this.searchValue)
+				+ "&startDate=" + getDefaultValue(this.startDate)
+				+ "&endDate=" + getDefaultValue(this.endDate)
+				+ "&orderWord=" + getDefaultValue(this.orderWord)
+				+ "&orderValue=" + getDefaultValue(this.orderValue);
 	}
 	
 	private String getDefaultValue(String value) {
 		if(value == null || "".equals(value.trim())) {
 			return "";
 		}
-		
+
 		return value;
 	}
 	

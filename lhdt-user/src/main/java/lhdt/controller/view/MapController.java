@@ -33,11 +33,11 @@ public class MapController {
     private DataService dataService;
 	@Autowired
 	private ObjectMapper objectMapper;
-	
-	/**
-	 * 위치(경도, 위도) 찾기
+
+    /**
+     * 위치(경도, 위도) 찾기
      * @param request
-     * @param dataId
+     * @param dataInfo
      * @param model
      * @return
      */

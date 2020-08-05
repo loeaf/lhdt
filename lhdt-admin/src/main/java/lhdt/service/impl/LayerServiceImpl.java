@@ -281,7 +281,7 @@ public class LayerServiceImpl implements LayerService {
         String driver = "PG:host="+ogr2ogrHost + " port=" + ogr2ogrPort+ " dbname=" + dbName + " user=" + Crypt.decrypt(username) + " password=" + Crypt.decrypt(password);
         //Layer dbLayer = layerMapper.getLayer(layer.getLayerId());
 
-        String updateOption = null;
+        String updateOption;
         if(isLayerFileInfoExist) {
             // update 실행
             updateOption = "update";
@@ -359,15 +359,14 @@ public class LayerServiceImpl implements LayerService {
 
         return result;
     }
-    
-	/**
-	 * 레이어 롤백 처리
-	 * 
-	 * @param layer
-	 * @param isLayerFileInfoExist
-	 * @param layerFileInfo
-	 * @param deleteLayerFileInTeamupId
-	 */
+
+    /**
+     * 레이어 롤백 처리
+     * @param layer
+     * @param isLayerFileInfoExist
+     * @param layerFileInfo
+     * @param deleteLayerFileInfoTeamId
+     */
 	@Transactional
 	public void rollbackLayer(Layer layer, boolean isLayerFileInfoExist, LayerFileInfo layerFileInfo,
 			Integer deleteLayerFileInfoTeamId) {
@@ -406,7 +405,8 @@ public class LayerServiceImpl implements LayerService {
 		GeoPolicy geopolicy = geoPolicyService.getGeoPolicy();
 		Layer layer = layerMapper.getLayer(layerId);
 		// 업로드 파일 삭제
-		List<String> layerFilePath = layerFileInfoMapper.getListLayerFilePath(layerId);
+		// TODO 그냥 foreach 도 될거 같음
+        List<String> layerFilePath = layerFileInfoMapper.getListLayerFilePath(layerId);
 		layerFilePath.stream()
 					.forEach( path -> {
 						File directory = new File(path);
@@ -429,10 +429,7 @@ public class LayerServiceImpl implements LayerService {
 		return layerMapper.deleteLayer(layerId);
 	}
 
-	
-/****************geoserver rest api 관련  서비스 *********************************************/	
-	
-    /**
+	/**
     * layer 가 등록 되어 있지 않은 경우 rest api 를 이용해서 layer를 등록
     * @throws Exception
     */

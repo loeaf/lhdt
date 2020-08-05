@@ -29,11 +29,12 @@ public class DataAdjustLogRestController {
 	
 	@Autowired
 	private DataAdjustLogService dataAdjustLogService;
-	
+
 	/**
 	 * 데이터 geometry 변경 이력 상태 수정
 	 * @param request
-	 * @param dataInfo
+	 * @param dataInfoAdjustLog
+	 * @param errors
 	 * @return
 	 */
 	@PostMapping

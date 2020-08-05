@@ -8,5 +8,5 @@ package lhdt.domain;
 public enum LayerType {
 	BUILDING, 
 	FACILITY, 
-	TERRAIN;
+	TERRAIN
 }

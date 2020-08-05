@@ -19,10 +19,10 @@ public interface DataMapper {
 	 * @return
 	 */
 	Long getDataTotalCount(DataInfo dataInfo);
-	
+
 	/**
 	 * 데이터 상태별 통계 정보
-	 * @param dataInfo
+	 * @param status
 	 * @return
 	 */
 	Long getDataTotalCountByStatus(String status);

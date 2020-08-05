@@ -9,5 +9,5 @@ public enum ConverterJobStatus {
 	// 승인 대기
 	WAITING,
 	// 실패
-	FAIL;
+	FAIL
 }

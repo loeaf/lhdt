@@ -193,10 +193,10 @@ public class CacheConfig {
 //    		callRemoteCache(cacheParams);
 //    	}
     }
-    
-    /**
+
+	/**
 	 * Remote Cache 갱신 요청
-	 * @param cacheName
+	 * @param cacheParams
 	 */
 	private void callRemoteCache(CacheParams cacheParams) {
 		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@ callRemoteCache start! ");

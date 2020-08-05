@@ -20,11 +20,11 @@ public interface MenuMapper {
 	 * @param menu
 	 * @return
 	 */
-	public List<Menu> getListMenu(Menu menu);
-	
+	List<Menu> getListMenu(Menu menu);
+
 	/**
 	 * 메뉴 조회
-	 * @param menu_id
+	 * @param menuId
 	 * @return
 	 */
 	Menu getMenu(Integer menuId);
@@ -35,10 +35,10 @@ public interface MenuMapper {
 	 * @return
 	 */
 	Menu getMenuByParentAndViewOrder(Menu menu);
-	
+
 	/**
 	 * 자식 메뉴 중에 순서가 최대인 메뉴를 검색
-	 * @param parent
+	 * @param menu
 	 * @return
 	 */
 	Menu getMaxViewOrderChildMenu(Menu menu);

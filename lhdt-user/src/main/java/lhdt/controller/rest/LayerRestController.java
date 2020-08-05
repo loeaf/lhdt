@@ -34,7 +34,6 @@ public class LayerRestController {
 	/**
 	 * 레이어 그룹 목록
 	 * @param request
-	 * @param layerGroup
 	 * @param model
 	 * @return
 	 */

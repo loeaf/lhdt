@@ -1,10 +1,13 @@
 package lhdt.controller.view;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
+import lhdt.domain.*;
+import lhdt.listener.LhdtHttpSessionBindingListener;
+import lhdt.service.SigninService;
+import lhdt.support.PasswordSupport;
+import lhdt.support.RoleSupport;
+import lhdt.support.SessionUserSupport;
+import lhdt.utils.WebUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,22 +17,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import lombok.extern.slf4j.Slf4j;
-import lhdt.domain.CacheManager;
-import lhdt.domain.Key;
-import lhdt.domain.Policy;
-import lhdt.domain.RoleKey;
-import lhdt.domain.UserInfo;
-import lhdt.domain.UserSession;
-import lhdt.domain.UserStatus;
-import lhdt.domain.YOrN;
-import lhdt.listener.LhdtHttpSessionBindingListener;
-import lhdt.service.RoleService;
-import lhdt.service.SigninService;
-import lhdt.support.PasswordSupport;
-import lhdt.support.RoleSupport;
-import lhdt.support.SessionUserSupport;
-import lhdt.utils.WebUtils;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Sign in 처리
@@ -41,8 +31,6 @@ import lhdt.utils.WebUtils;
 @RequestMapping("/sign")
 public class SigninController {
 	
-	@Autowired
-	private RoleService roleService;
 	@Autowired
 	private SigninService signinService;
 	
@@ -129,7 +117,7 @@ public class SigninController {
 		request.getSession().setAttribute(userSession.getUserId(), sessionListener);
 		if(YOrN.Y == YOrN.valueOf(policy.getSecuritySessionTimeoutYn())) {
 			// 세션 타임 아웃 시간을 초 단위로 변경해서 설정
-			request.getSession().setMaxInactiveInterval(Integer.valueOf(policy.getSecuritySessionTimeout()).intValue() * 60);
+			request.getSession().setMaxInactiveInterval(Integer.valueOf(policy.getSecuritySessionTimeout()) * 60);
 		}
 
 		// 패스워드 변경 기간이 오버 되었거나 , 6:임시 비밀번호(비밀번호 찾기, 관리자 설정에 의한 임시 비밀번호 발급 시)
@@ -168,7 +156,7 @@ public class SigninController {
 		}
 		
 		// 사인인 실패 횟수
-		if(userSession.getFailSigninCount().intValue() >= policy.getUserFailSigninCount()) {
+		if(userSession.getFailSigninCount() >= policy.getUserFailSigninCount()) {
 			signinForm.setFailSigninCount(userSession.getFailSigninCount());
 			return "usersession.failsignincount.invalid";
 		}

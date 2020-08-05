@@ -37,11 +37,11 @@ public class ConverterController {
 	
 	@Autowired
 	private ConverterService converterService;
-	
+
 	/**
 	 * converter job 목록
 	 * @param request
-	 * @param membership_id
+	 * @param converterJob
 	 * @param pageNo
 	 * @param model
 	 * @return
@@ -74,7 +74,7 @@ public class ConverterController {
 		converterJob.setOffset(pagination.getOffset());
 		converterJob.setLimit(pagination.getPageRows());
 		List<ConverterJob> converterJobList = new ArrayList<>();
-		if(totalCount > 0l) {
+		if(totalCount > 0L) {
 			converterJobList = converterService.getListConverterJob(converterJob);
 		}
 		
@@ -121,26 +121,27 @@ public class ConverterController {
 //		model.addAttribute("converterJobFileList", converterJobFileList);
 //		return "/converter/list-converter-job-file";
 //	}
-	
+
 	/**
 	 * 검색 조건
-	 * @param search
+	 * @param pageType
+	 * @param converterJob
 	 * @return
 	 */
 	private String getSearchParameters(PageType pageType, ConverterJob converterJob) {
-		StringBuffer buffer = new StringBuffer(converterJob.getParameters());
+		StringBuilder builder = new StringBuilder(converterJob.getParameters());
 		boolean isListPage = true;
 		if(pageType == PageType.MODIFY || pageType == PageType.DETAIL) {
 			isListPage = false;
 		}
 		
 //		if(!isListPage) {
-//			buffer.append("pageNo=" + request.getParameter("pageNo"));
-//			buffer.append("&");
-//			buffer.append("list_count=" + uploadData.getList_counter());
+//			builder.append("pageNo=" + request.getParameter("pageNo"));
+//			builder.append("&");
+//			builder.append("list_count=" + uploadData.getList_counter());
 //		}
 		
-		return buffer.toString();
+		return builder.toString();
 	}
 	
 	private String roleValidator(HttpServletRequest request, Integer userGroupId, String roleName) {

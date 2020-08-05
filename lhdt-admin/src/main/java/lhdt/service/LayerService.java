@@ -87,7 +87,7 @@ public interface LayerService {
      * shp파일 정보를 db정보를 기준으로 갱신
      * @param layerFileInfo
      * @param layer
-     * @return
+     * @throws Exception
      */
     void exportOgr2Ogr(LayerFileInfo layerFileInfo, Layer layer) throws Exception;
     

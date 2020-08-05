@@ -16,7 +16,7 @@ public interface DataLogMapper {
 
 	/**
 	 * 데이터 변경 요청 수
-	 * @param dataInfo
+	 * @param dataInfoLog
 	 * @return
 	 */
 	Long getDataInfoLogTotalCount(DataInfoLog dataInfoLog);

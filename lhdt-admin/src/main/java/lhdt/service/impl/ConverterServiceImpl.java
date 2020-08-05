@@ -264,7 +264,7 @@ public class ConverterServiceImpl implements ConverterService {
 		
 		Integer dataGroupId = uploadDataFile.getDataGroupId();
 		String dataKey = uploadDataFile.getFileRealName().substring(0, uploadDataFile.getFileRealName().lastIndexOf("."));
-		String dataName = null;
+		String dataName;
 		if(converterTargetCount == 1) {
 			dataName = uploadDataFile.getDataName();
 		} else {
@@ -301,7 +301,7 @@ public class ConverterServiceImpl implements ConverterService {
 			dataInfo.setLatitude(latitude);
 			dataInfo.setLongitude(longitude);
 			dataInfo.setAltitude(altitude);
-			if(longitude != null && longitude.longValue() >0l && latitude != null && latitude.longValue() > 0l) {
+			if(longitude != null && longitude.longValue() >0L && latitude != null && latitude.longValue() > 0L) {
 				dataInfo.setLocation("POINT(" + longitude + " " + latitude + ")");
 			}
 			dataInfo.setMetainfo(metainfo);
@@ -319,7 +319,7 @@ public class ConverterServiceImpl implements ConverterService {
 			dataInfo.setLatitude(latitude);
 			dataInfo.setLongitude(longitude);
 			dataInfo.setAltitude(altitude);
-			if(longitude != null && longitude.longValue() >0l && latitude != null && latitude.longValue() > 0l) {
+			if(longitude != null && longitude.longValue() >0L && latitude != null && latitude.longValue() > 0L) {
 				dataInfo.setLocation("POINT(" + longitude + " " + latitude + ")");
 			} else {
 				dataInfo.setLocation(null);
@@ -350,7 +350,7 @@ public class ConverterServiceImpl implements ConverterService {
 		}
 
 		if(LocationUdateType.AUTO == LocationUdateType.valueOf(dbDataGroup.getLocationUpdateType().toUpperCase())) {
-			if(dataInfo.getLongitude() != null && dataInfo.getLongitude().longValue() >0l && dataInfo.getLatitude() != null && dataInfo.getLatitude().longValue() > 0l) {
+			if(dataInfo.getLongitude() != null && dataInfo.getLongitude().longValue() >0L && dataInfo.getLatitude() != null && dataInfo.getLatitude().longValue() > 0L) {
 				dataGroup.setLocation("POINT(" + dataInfo.getLongitude() + " " + dataInfo.getLatitude() + ")");
 				dataGroup.setAltitude(dataInfo.getAltitude());
 			}

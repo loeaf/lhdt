@@ -49,7 +49,8 @@ public class WidgetServiceImpl implements WidgetService {
 	 */
 	@Transactional
 	public int updateWidget(List<Widget> widgetList) {
-		widgetList.stream().forEach(widget -> widgetMapper.updateWidget(widget));
+		// TODO 그냥 foreach
+		widgetList.forEach(widget -> widgetMapper.updateWidget(widget));
 		return widgetList.size();
 	}
 }

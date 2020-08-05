@@ -108,7 +108,7 @@ public class LayerGroupServiceImpl implements LayerGroupService {
 		Integer parentLayerGroupId = 0;
     	
     	LayerGroup parentLayerGroup = new LayerGroup();
-    	Integer depth = 0;
+    	int depth = 0;
     	if(layerGroup.getParent() > 0) {
     		parentLayerGroupId = layerGroup.getParent();
     		parentLayerGroup.setLayerGroupId(parentLayerGroupId);
@@ -135,7 +135,7 @@ public class LayerGroupServiceImpl implements LayerGroupService {
 
 	/**
 	 * 데이터 그룹 수정
-	 * @param dataGroup
+	 * @param layerGroup
 	 * @return
 	 */
     @Transactional

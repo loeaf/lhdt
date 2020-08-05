@@ -1,10 +1,9 @@
 package lhdt.controller.rest;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import lhdt.config.CacheConfig;
+import lhdt.domain.CacheName;
+import lhdt.domain.CacheParams;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,12 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import lombok.extern.slf4j.Slf4j;
-import lhdt.config.CacheConfig;
-import lhdt.domain.CacheName;
-import lhdt.domain.CacheParams;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 사용자 Cache 갱신
@@ -33,13 +29,12 @@ public class CacheRestController {
 
 	@Autowired
 	private CacheConfig cacheConfig;
-	
+
 	/**
 	 * HttpClient 로 Cache 요청이 왔을때 실행되는 메서드
 	 * @param request
-	 * @param policy
+	 * @param authData
 	 * @return
-	 * @throws JsonProcessingException 
 	 */
 	@PostMapping(value = "/reload")
 	public Map<String, Object> reload(HttpServletRequest request, @RequestBody String authData) {

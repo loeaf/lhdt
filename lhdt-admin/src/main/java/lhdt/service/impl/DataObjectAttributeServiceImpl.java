@@ -54,7 +54,7 @@ public class DataObjectAttributeServiceImpl implements DataObjectAttributeServic
 		// 파일 이력을 저장
 		dataObjectAttributeMapper.insertDataObjectAttributeFileInfo(dataObjectAttributeFileInfo);
 		
-		DataObjectAttributeFileParser dataObjectAttributeFileParser = null;
+		DataObjectAttributeFileParser dataObjectAttributeFileParser;
 		if(FileUtils.EXTENSION_JSON.equals(dataObjectAttributeFileInfo.getFileExt())) {
 			dataObjectAttributeFileParser = new DataObjectAttributeFileJsonParser();
 		} else {

@@ -37,15 +37,15 @@ import lhdt.utils.WebUtils;
 @RestController
 @RequestMapping("/issues")
 public class IssueRestController {
-	private static final long PAGE_ROWS = 5l;
-	private static final long PAGE_LIST_COUNT = 5l;
+	private static final long PAGE_ROWS = 5L;
+	private static final long PAGE_LIST_COUNT = 5L;
 	@Autowired
 	private IssueService issueService;
-	
+
 	/**
 	 * 이슈 정보
 	 * @param request
-	 * @param dataInfo
+	 * @param issueId
 	 * @return
 	 */
 	@GetMapping(value = "/{issueId:[0-9]+}")
@@ -65,11 +65,12 @@ public class IssueRestController {
 		result.put("message", message);
 		return result;
 	}
-	
+
 	/**
 	 * 이슈 등록
 	 * @param request
-	 * @param dataInfo
+	 * @param issue
+	 * @param errors
 	 * @return
 	 */
 	@PostMapping
@@ -101,11 +102,11 @@ public class IssueRestController {
 		result.put("message", message);
 		return result;
 	}
-	
+
 	/**
 	 * 이슈 목록 조회
 	 * @param request
-	 * @param Issue
+	 * @param issue
 	 * @param pageNo
 	 * @return
 	 */
@@ -136,7 +137,7 @@ public class IssueRestController {
 		issue.setOffset(pagination.getOffset());
 		issue.setLimit(pagination.getPageRows());
 		List<Issue> issueList = new ArrayList<>();
-		if(totalCount > 0l) {
+		if(totalCount > 0L) {
 			issueList = issueService.getListIssue(issue);
 		}
 
@@ -150,24 +151,23 @@ public class IssueRestController {
 		result.put("message", message);
 		return result;
 	}
-	
+
 	/**
 	 * 검색 조건
-	 * @param search
+	 * @param pageType
+	 * @param issue
 	 * @return
 	 */
 	private String getSearchParameters(PageType pageType, Issue issue) {
-		StringBuffer buffer = new StringBuffer(issue.getParameters());
+		StringBuilder builder = new StringBuilder(issue.getParameters());
 //		buffer.append("&");
 //		try {
 //			buffer.append("dataName=" + URLEncoder.encode(getDefaultValue(dataInfo.getDataName()), "UTF-8"));
 //		} catch(Exception e) {
 //			buffer.append("dataName=");
 //		}
-		
-		buffer.append("&");
-		buffer.append("location=");
-		buffer.append(issue.getLocation());
-		return buffer.toString();
+
+		builder.append("&location=").append(issue.getLocation());
+		return builder.toString();
 	}
 }
