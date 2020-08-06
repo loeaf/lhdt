@@ -1,35 +1,22 @@
 package lhdt.controller.rest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
+import lhdt.domain.*;
+import lhdt.service.DataGroupService;
+import lhdt.support.SQLInjectSupport;
+import lhdt.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import lombok.extern.slf4j.Slf4j;
-import lhdt.domain.DataGroup;
-import lhdt.domain.Key;
-import lhdt.domain.LocationUdateType;
-import lhdt.domain.PageType;
-import lhdt.domain.Pagination;
-import lhdt.domain.UserSession;
-import lhdt.service.DataGroupService;
-import lhdt.support.SQLInjectSupport;
-import lhdt.utils.DateUtils;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 사용자 데이터 그룹 관리
@@ -59,6 +46,7 @@ public class DataGroupRestController {
 	 * @param dataGroup
 	 * @return
 	 */
+	@GetMapping(value = "/all")
 	public Map<String, Object> allList(HttpServletRequest request, DataGroup dataGroup) {
 		dataGroup.setSearchWord(SQLInjectSupport.replaceSqlInection(dataGroup.getSearchWord()));
 		dataGroup.setOrderWord(SQLInjectSupport.replaceSqlInection(dataGroup.getOrderWord()));
