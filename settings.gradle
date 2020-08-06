@@ -13,6 +13,7 @@ include ':common'
 include ':lhdt-admin'
 include ':lhdt-user'
 include ':lhdt-converter'
+include ':lhdt-agent'
 include ':html'
 include ':doc'
 
