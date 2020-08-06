@@ -245,10 +245,10 @@ public class LayerRestController implements AuthorizationController {
 						layerFileInfo.setFileSize(String.valueOf(size));
 						layerFileInfo.setShapeEncoding(shapeEncoding);
 					} catch(IOException e) {
-						log.info("@@@@@@@@@@@@ IOException. message = {}", e.getMessage());
+						LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ IOException. message = {}", e.getMessage());
 						layerFileInfo.setErrorMessage(e.getMessage());
 					} catch(Exception e) {
-						log.info("@@@@@@@@@@@@ Exception. message = {}", e.getMessage());
+						LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ Exception. message = {}", e.getMessage());
 						layerFileInfo.setErrorMessage(e.getMessage());
 					}
 
@@ -306,7 +306,7 @@ public class LayerRestController implements AuthorizationController {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "db.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
-			log.info("@@ db.exception. message = {}", message);
+			LogMessageSupport.printMessage(e, "@@ db.exception. message = {}", message);
 		} catch(RuntimeException e) {
 			// ogr2ogr2 실행하다가 에러날경우 이미 들어간 레이어, 레이러 파일정보 삭제 
 			Integer layerId = (Integer) updateLayerMap.get("layerId");
@@ -318,7 +318,6 @@ public class LayerRestController implements AuthorizationController {
 			errorCode = "runtime.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
 			LogMessageSupport.printMessage(e, "@@ runtime.exception. message = {}", message);
-//			log.info("@@ runtime.exception. message = {}", message);
 		} catch(Exception e) {
 			// ogr2ogr2 실행하다가 에러날경우 이미 들어간 레이어, 레이러 파일정보 삭제 
 			Integer layerId = (Integer) updateLayerMap.get("layerId");
@@ -330,7 +329,6 @@ public class LayerRestController implements AuthorizationController {
 			errorCode = "unknown.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
 			LogMessageSupport.printMessage(e, "@@ exception. message = {}", message);
-//			log.info("@@ exception. message = {}", message);
 		}
 
 		result.put("statusCode", statusCode);
@@ -482,10 +480,10 @@ public class LayerRestController implements AuthorizationController {
                         layerFileInfo.setShapeEncoding(shapeEncoding);
 
                     } catch(IOException e) {
-						log.info("@@@@@@@@@@@@ IOException. message = {}", e.getMessage());
+						LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ IOException. message = {}", e.getMessage());
 						layerFileInfo.setErrorMessage(e.getMessage());
                     } catch(Exception e) {
-                    	log.info("@@@@@@@@@@@@ Exception. message = {}", e.getMessage());
+                    	LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ Exception. message = {}", e.getMessage());
                         layerFileInfo.setErrorMessage(e.getMessage());
                     }
 
@@ -576,7 +574,7 @@ public class LayerRestController implements AuthorizationController {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "db.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
-			log.info("@@ db.exception. message = {}", message);
+			LogMessageSupport.printMessage(e, "@@ db.exception. message = {}", message);
 		} catch(RuntimeException e) {
 			if(isRollback) {
                 // rollback 처리
@@ -586,7 +584,7 @@ public class LayerRestController implements AuthorizationController {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "runtime.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
-			log.info("@@ runtime.exception. message = {}", message);
+			LogMessageSupport.printMessage(e, "@@ runtime.exception. message = {}", message);
 		} catch(Exception e) {
 			if(isRollback) {
                 // rollback 처리
@@ -596,7 +594,7 @@ public class LayerRestController implements AuthorizationController {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "unknown.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
-			log.info("@@ exception. message = {}", message);
+			LogMessageSupport.printMessage(e, "@@ exception. message = {}", message);
         }
 
         result.put("statusCode", statusCode);
@@ -703,17 +701,17 @@ public class LayerRestController implements AuthorizationController {
                 FileCopyUtils.copy(in, out);
                 out.flush();
             } catch(IOException e) {
-            	log.info("@@ IOException. message = {}", e.getMessage());
+            	LogMessageSupport.printMessage(e, "@@ IOException. message = {}", e.getMessage());
             	throw new RuntimeException(e.getMessage());
             }
         } catch(DataAccessException e) {
-			log.info("@@ DataAccessException. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+        	LogMessageSupport.printMessage(e, "@@ DataAccessException. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
         } catch(RuntimeException e) {
-			log.info("@@ RuntimeException. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@ RuntimeException. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
         } catch(IOException e) {
-        	log.info("@@ FileNotFoundException. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@ FileNotFoundException. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
         } catch(Exception e) {
-			log.info("@@ Exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@ Exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		}
     }
 
@@ -836,7 +834,7 @@ public class LayerRestController implements AuthorizationController {
                         layerFileInfo.setShapeEncoding(shapeEncoding);
 
                     } catch(IOException e) {
-                    	log.info("@@ IOException. message = {}", e.getMessage());
+                    	LogMessageSupport.printMessage(e, "@@ IOException. message = {}", e.getMessage());
                     	layerFileInfo.setErrorMessage(e.getMessage());
                     	throw new RuntimeException(e.getMessage());
                     }
@@ -847,9 +845,9 @@ public class LayerRestController implements AuthorizationController {
                 }
             }
         } catch(RuntimeException ex) {
-        	log.info("@@ RuntimeException. message = {}", ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
+        	LogMessageSupport.printMessage(ex, "@@ RuntimeException. message = {}", ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
         } catch(Exception ex) {
-        	log.info("@@ RuntimeException. message = {}", ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
+        	LogMessageSupport.printMessage(ex, "@@ RuntimeException. message = {}", ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
         }
 
         log.info("##################### unzip layerFileInfoList = {}", layerFileInfoList.size());

@@ -224,7 +224,7 @@ public class CacheConfig {
             //ResponseEntity<APIResult> responseEntity = restTemplate.exchange(url, HttpMethod.POST, request, APIResult.class);
             log.info("----------------------- result = {}", result);
 		} catch (URISyntaxException e) {
-			log.info("데이터 converter 상태 변경 api 호출 실패 = {}", e.getMessage());
+			LogMessageSupport.printMessage(e, "데이터 converter 상태 변경 api 호출 실패 = {}", e.getMessage());
 		}
 	}
 }

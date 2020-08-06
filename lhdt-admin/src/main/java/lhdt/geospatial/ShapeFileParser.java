@@ -1,6 +1,7 @@
 package lhdt.geospatial;
 
 import lhdt.domain.ShapeFileField;
+import lhdt.support.LogMessageSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.geotools.data.shapefile.dbf.DbaseFileHeader;
 import org.geotools.data.shapefile.dbf.DbaseFileReader;
@@ -52,9 +53,9 @@ public class ShapeFileParser {
 
             reader.close();
         } catch (MalformedURLException e) {
-            log.info("MalformedURLException ============ {}", e.getMessage());
+            LogMessageSupport.printMessage(e, "MalformedURLException ============ {}", e.getMessage());
         } catch (IOException e) {
-            log.info("IOException ============== {} ", e.getMessage());
+            LogMessageSupport.printMessage(e, "IOException ============== {} ", e.getMessage());
         }
 
         return fieldValid;

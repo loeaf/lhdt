@@ -1,17 +1,12 @@
 package lhdt.support;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
-
+import lhdt.domain.LayerFileInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
-import lombok.extern.slf4j.Slf4j;
-import lhdt.domain.LayerFileInfo;
+import java.io.*;
+import java.util.List;
 
 /**
  * TODO 사용안함. 삭제 예정
@@ -51,15 +46,15 @@ public class ZipSupport {
         			}
         			zipArchiveOutputStream.closeArchiveEntry();
         		} catch(Exception e) {
-        			log.info("@@ db.exception. message = {}", e.getMessage());
+        			LogMessageSupport.printMessage(e, "@@ db.exception. message = {}", e.getMessage());
         			throw new RuntimeException(e.getMessage());
         		}
             }
         } catch(RuntimeException e) {
-        	log.info("@@ RuntimeException. message = {}", e.getMessage());
+        	LogMessageSupport.printMessage(e, "@@ RuntimeException. message = {}", e.getMessage());
         	throw e;
         } catch(IOException e) {
-        	log.info("@@ FileNotFoundException. message = {}", e.getMessage());
+        	LogMessageSupport.printMessage(e, "@@ FileNotFoundException. message = {}", e.getMessage());
         	throw e;
         }
 	}

@@ -1,15 +1,13 @@
 package lhdt.controller.rest;
 
-import java.net.URI;
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-
+import io.micrometer.core.instrument.util.StringUtils;
+import lhdt.config.PropertiesConfig;
 import lhdt.domain.*;
 import lhdt.service.*;
+import lhdt.support.LogMessageSupport;
 import lhdt.utils.LocaleUtils;
-import io.micrometer.core.instrument.util.StringUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import lombok.extern.slf4j.Slf4j;
-import lhdt.config.PropertiesConfig;
 import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -291,7 +290,7 @@ public class WidgetRestController {
 //			@SuppressWarnings("unchecked")
 //			List<Map<String, Object>> processCpuUsage = (List<Map<String, Object>>) response5.getBody().get("measurements");
 		} catch(Exception e) {
-			e.printStackTrace();
+			LogMessageSupport.printMessage(e);
 		}
 
 		int statusCode = HttpStatus.OK.value();

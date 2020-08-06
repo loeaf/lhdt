@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lhdt.controller.AuthorizationController;
 import lhdt.domain.*;
 import lhdt.service.*;
+import lhdt.support.LogMessageSupport;
 import lhdt.support.SQLInjectSupport;
 import lhdt.utils.DateUtils;
 import lhdt.utils.FormatUtils;
@@ -169,7 +170,7 @@ public class LayerController implements AuthorizationController {
             policyJson = objectMapper.writeValueAsString(policy);
             layerJson = objectMapper.writeValueAsString(layer);
         } catch (JsonProcessingException e) {
-            log.info("@@ JsonProcessingException. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+            LogMessageSupport.printMessage(e, "@@ JsonProcessingException. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
         }
 
         model.addAttribute("policyJson", policyJson);

@@ -1,21 +1,21 @@
 package lhdt.service.impl;
 
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.List;
-
+import lhdt.domain.FileType;
+import lhdt.domain.UploadData;
+import lhdt.domain.UploadDataFile;
+import lhdt.domain.UploadDataType;
+import lhdt.persistence.UploadDataMapper;
+import lhdt.service.UploadDataService;
+import lhdt.support.LogMessageSupport;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
-import lhdt.domain.UploadDataType;
-import lhdt.domain.FileType;
-import lhdt.domain.UploadData;
-import lhdt.domain.UploadDataFile;
-import lhdt.persistence.UploadDataMapper;
-import lhdt.service.UploadDataService;
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * @author Cheon JeongDae
@@ -195,11 +195,11 @@ public class UploadDataServiceImpl implements UploadDataService {
 				}
 			}
 		} catch(DataAccessException e) {
-			log.info("@@ DataAccessException. message = {}", e.getMessage());
+			LogMessageSupport.printMessage(e, "@@ DataAccessException. message = {}", e.getMessage());
 		} catch(RuntimeException e) {
-			log.info("@@ RuntimeException. message = {}", e.getMessage());
+			LogMessageSupport.printMessage(e, "@@ RuntimeException. message = {}", e.getMessage());
 		} catch(Exception e) {
-			log.info("@@ Exception. message = {}", e.getMessage());
+			LogMessageSupport.printMessage(e, "@@ Exception. message = {}", e.getMessage());
 		}
 		return result;
 	}

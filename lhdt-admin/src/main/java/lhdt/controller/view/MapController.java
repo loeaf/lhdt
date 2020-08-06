@@ -1,7 +1,14 @@
 package lhdt.controller.view;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.core.instrument.util.StringUtils;
+import lhdt.domain.*;
+import lhdt.service.DataService;
+import lhdt.service.GeoPolicyService;
+import lhdt.service.UserPolicyService;
+import lhdt.support.LogMessageSupport;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
@@ -10,19 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.micrometer.core.instrument.util.StringUtils;
-import lombok.extern.slf4j.Slf4j;
-import lhdt.domain.DataInfo;
-import lhdt.domain.GeoPolicy;
-import lhdt.domain.Key;
-import lhdt.domain.UserPolicy;
-import lhdt.domain.UserSession;
-import lhdt.service.DataService;
-import lhdt.service.GeoPolicyService;
-import lhdt.service.UserPolicyService;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 지도에서 위치 찾기, 보기 등을 위한 공통 클래스
@@ -63,7 +58,7 @@ public class MapController {
 		try {
 			dataInfoJson = objectMapper.writeValueAsString(dataInfo);
 		} catch(JsonProcessingException e) {
-			log.info("@@@@@@@@@@@@ jsonProcessing exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ jsonProcessing exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		}
 		
 		model.addAttribute("referrer", referrer);
@@ -109,13 +104,13 @@ public class MapController {
         	}
             model.addAttribute("geoPolicyJson", objectMapper.writeValueAsString(geoPolicy));
         } catch(JsonProcessingException e) {
-			log.info("@@@@@@@@@@@@ jsonProcessing exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+        	LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ jsonProcessing exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
         } catch(DataAccessException e) {
-        	log.info("@@@@@@@@@@@@ dataAccess exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ dataAccess exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		} catch(RuntimeException e) {
-			log.info("@@@@@@@@@@@@ runtime exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ runtime exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		} catch(Exception e) {
-			log.info("@@@@@@@@@@@@ exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		}
 
         model.addAttribute("readOnly", readOnly);

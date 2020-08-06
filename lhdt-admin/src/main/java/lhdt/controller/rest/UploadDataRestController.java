@@ -1,50 +1,29 @@
 package lhdt.controller.rest;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
+import lhdt.config.PropertiesConfig;
+import lhdt.domain.*;
+import lhdt.service.PolicyService;
+import lhdt.service.UploadDataService;
+import lhdt.support.LogMessageSupport;
+import lhdt.utils.DateUtils;
+import lhdt.utils.FileUtils;
+import lhdt.utils.FormatUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import lombok.extern.slf4j.Slf4j;
-import lhdt.config.PropertiesConfig;
-import lhdt.domain.UploadDataType;
-import lhdt.domain.FileType;
-import lhdt.domain.Key;
-import lhdt.domain.Policy;
-import lhdt.domain.UploadData;
-import lhdt.domain.UploadDataFile;
-import lhdt.domain.UploadDirectoryType;
-import lhdt.domain.UserSession;
-import lhdt.service.PolicyService;
-import lhdt.service.UploadDataService;
-import lhdt.utils.DateUtils;
-import lhdt.utils.FileUtils;
-import lhdt.utils.FormatUtils;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.io.*;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * 3D 데이터 파일 업로더
@@ -260,13 +239,13 @@ public class UploadDataRestController {
         			uploadDataFile.setConverterTarget(converterTarget);
         			uploadDataFile.setDepth(1);
 				} catch(IOException e) {
-					log.info("@@@@@@@@@@@@ io exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+					LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ io exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 					result.put("statusCode", HttpStatus.INTERNAL_SERVER_ERROR.value());
 					result.put("errorCode", "io.exception");
 					result.put("message", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		            return result;
 				} catch(Exception e) {
-					log.info("@@@@@@@@@@@@ file copy exception.");
+					LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ file copy exception.");
 					result.put("statusCode", HttpStatus.INTERNAL_SERVER_ERROR.value());
 					result.put("errorCode", "file.copy.exception");
 					result.put("message", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
@@ -535,10 +514,10 @@ public class UploadDataRestController {
                 		uploadDataFile.setFileSize(String.valueOf(size));
                 		
                 	} catch(IOException e) {
-                		log.info("@@@@@@@@@@@@ io exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+                		LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ io exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
                 		uploadDataFile.setErrorMessage(e.getMessage());
                     } catch(Exception e) {
-                    	log.info("@@@@@@@@@@@@ exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+                		LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
                     	uploadDataFile.setErrorMessage(e.getMessage());
                     }
                 }
@@ -548,9 +527,9 @@ public class UploadDataRestController {
             	uploadDataFileList.add(uploadDataFile);
             }
 		} catch(RuntimeException ex) {
-			log.info("@@@@@@@@@@@@ RuntimeException. message = {}", ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
+			LogMessageSupport.printMessage(ex, "@@@@@@@@@@@@ RuntimeException. message = {}", ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
 		} catch(IOException ex) {
-			log.info("@@@@@@@@@@@@ IOException. message = {}", ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
+			LogMessageSupport.printMessage(ex, "@@@@@@@@@@@@ IOException. message = {}", ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
 		}
 		
 		result.put("converterTargetCount", converterTargetCount);

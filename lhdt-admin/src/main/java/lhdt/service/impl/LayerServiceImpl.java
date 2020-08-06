@@ -12,6 +12,7 @@ import lhdt.persistence.LayerMapper;
 import lhdt.security.Crypt;
 import lhdt.service.GeoPolicyService;
 import lhdt.service.LayerService;
+import lhdt.support.LogMessageSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -106,11 +107,11 @@ public class LayerServiceImpl implements LayerService {
 			geoserverLayerJson = response.getBody().toString();
 		
     	} catch(RestClientException e) {
-    		log.info("@@@ RestClientException. message = {}", e.getMessage());
+            LogMessageSupport.printMessage(e, "@@@ RestClientException. message = {}", e.getMessage());
     	} catch(RuntimeException e) {
-    		log.info("@@@ RuntimeException. message = {}", e.getMessage());
+    	    LogMessageSupport.printMessage(e, "@@@ RuntimeException. message = {}", e.getMessage());
 		} catch(Exception e) {
-			log.info("@@@ Exception. message = {}", e.getMessage());
+    	    LogMessageSupport.printMessage(e, "@@@ Exception. message = {}", e.getMessage());
 		}
     	
     	return geoserverLayerJson;
@@ -555,7 +556,7 @@ public class LayerServiceImpl implements LayerService {
 			log.info("-------- layerKey = {}, statusCode = {}, body = {}", layerKey, response.getStatusCodeValue(),
 					response.getBody());
 		} catch (RestClientException e) {
-			log.info("-------- RestClientException message = {}", e.getMessage());
+		    LogMessageSupport.printMessage(e, "-------- RestClientException message = {}", e.getMessage());
 			String message = e.getMessage();
 			if (message.indexOf("404") >= 0) {
 				httpStatus = HttpStatus.NOT_FOUND;
@@ -563,7 +564,7 @@ public class LayerServiceImpl implements LayerService {
 				httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (Exception e) {
-			log.info("-------- exception message = {}", e.getMessage());
+		    LogMessageSupport.printMessage(e, "-------- exception message = {}", e.getMessage());
 			String message = e.getMessage();
 			if (message.indexOf("404") >= 0) {
 				httpStatus = HttpStatus.NOT_FOUND;
@@ -646,7 +647,7 @@ public class LayerServiceImpl implements LayerService {
             httpStatus = response.getStatusCode();
             log.info("-------- getLayerStyle styleName = {}, statusCode = {}, body = {}", layerKey, response.getStatusCodeValue(), response.getBody());
         } catch (RestClientException e) {
-			log.info("-------- RestClientException message = {}", e.getMessage());
+            LogMessageSupport.printMessage(e, "-------- RestClientException message = {}", e.getMessage());
 			String message = e.getMessage();
 			if (message.indexOf("404") >= 0) {
 				httpStatus = HttpStatus.NOT_FOUND;
@@ -654,7 +655,7 @@ public class LayerServiceImpl implements LayerService {
 				httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
         } catch(Exception e) {
-            log.info("-------- exception message = {}", e.getMessage());
+            LogMessageSupport.printMessage(e, "-------- exception message = {}", e.getMessage());
             String message = e.getMessage();
             if(message.indexOf("404") >= 0) {
                 httpStatus = HttpStatus.NOT_FOUND;
@@ -708,7 +709,7 @@ public class LayerServiceImpl implements LayerService {
 			log.info("-------- getLayerStyle geometry type = {}, statusCode = {}, body = {}", geometryType,
 					response.getStatusCodeValue(), response.getBody());
 		} catch (RestClientException e) {
-			log.info("-------- RestClientException message = {}", e.getMessage());
+		    LogMessageSupport.printMessage(e, "-------- RestClientException message = {}", e.getMessage());
 			String message = e.getMessage();
 			if (message.indexOf("404") >= 0) {
 				httpStatus = HttpStatus.NOT_FOUND;
@@ -718,7 +719,7 @@ public class LayerServiceImpl implements LayerService {
 				layerStyleFileData = null;
 			}
 		} catch (Exception e) {
-			log.info("-------- exception message = {}", e.getMessage());
+		    LogMessageSupport.printMessage(e, "-------- exception message = {}", e.getMessage());
 			String message = e.getMessage();
 			if (message.indexOf("404") >= 0) {
 				httpStatus = HttpStatus.NOT_FOUND;
@@ -775,7 +776,7 @@ public class LayerServiceImpl implements LayerService {
 			log.info("-------- getLayerStyle styleName = {}, statusCode = {}, body = {}", layer.getLayerKey(),
 					response.getStatusCodeValue(), response.getBody());
 		} catch (RestClientException e) {
-			log.info("-------- RestClientException message = {}", e.getMessage());
+		    LogMessageSupport.printMessage(e, "-------- RestClientException message = {}", e.getMessage());
 			String message = e.getMessage();
 			if (message.indexOf("404") >= 0) {
 				httpStatus = HttpStatus.NOT_FOUND;
@@ -785,7 +786,7 @@ public class LayerServiceImpl implements LayerService {
 				layerStyleFileData = null;
 			}
 		} catch (Exception e) {
-			log.info("-------- exception message = {}", e.getMessage());
+		    LogMessageSupport.printMessage(e, "-------- exception message = {}", e.getMessage());
 			String message = e.getMessage();
 			if (message.indexOf("404") >= 0) {
 				httpStatus = HttpStatus.NOT_FOUND;
@@ -870,10 +871,10 @@ public class LayerServiceImpl implements LayerService {
 			log.info("-------- geoserver layer delete. layerKey = {}, statusCode = {}, body = {}", layerKey,
 					response.getStatusCodeValue(), response.getBody());
 		} catch (RestClientException e) {
-			log.info("-------- RestClientException message = {}", e.getMessage());
+		    LogMessageSupport.printMessage(e, "-------- RestClientException message = {}", e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		} catch (Exception e) {
-			log.info("-------- exception message = {}", e.getMessage());
+		    LogMessageSupport.printMessage(e, "-------- exception message = {}", e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 
@@ -903,10 +904,10 @@ public class LayerServiceImpl implements LayerService {
 			ResponseEntity<?> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, String.class);
 			httpStatus = response.getStatusCode();
 		} catch (RestClientException e) {
-			log.info("-------- RestClientException message = {}", e.getMessage());
+		    LogMessageSupport.printMessage(e, "-------- RestClientException message = {}", e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		} catch (Exception e) {
-			log.info("-------- exception message = {}", e.getMessage());
+		    LogMessageSupport.printMessage(e, "-------- exception message = {}", e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 	}

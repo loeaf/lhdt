@@ -1,13 +1,5 @@
 package lhdt.service.impl;
 
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import lombok.extern.slf4j.Slf4j;
 import lhdt.domain.DataAttribute;
 import lhdt.domain.DataAttributeFileInfo;
 import lhdt.domain.DataInfo;
@@ -16,7 +8,15 @@ import lhdt.parser.impl.DataAttributeFileJsonParser;
 import lhdt.persistence.DataAttributeMapper;
 import lhdt.service.DataAttributeService;
 import lhdt.service.DataService;
+import lhdt.support.LogMessageSupport;
 import lhdt.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 /**
  * 데이터 속성 관리
@@ -80,13 +80,13 @@ public class DataAttributeServiceImpl implements DataAttributeService {
 				updateSuccessCount++;
 			}
 		} catch(DataAccessException e) {
-			log.info("@@@@@@@@@@@@ dataAccess exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ dataAccess exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 			insertErrorCount++;
 		} catch(RuntimeException e) {
-			log.info("@@@@@@@@@@@@ runtime exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ runtime exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 			insertErrorCount++;
 		} catch(Exception e) {
-			log.info("@@@@@@@@@@@@ exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 			insertErrorCount++;
 		}
 		

@@ -1,9 +1,16 @@
 package lhdt.controller.view;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lhdt.config.CacheConfig;
+import lhdt.controller.AuthorizationController;
+import lhdt.domain.*;
+import lhdt.service.MenuService;
+import lhdt.service.PolicyService;
+import lhdt.service.RoleService;
+import lhdt.service.UserGroupService;
+import lhdt.support.LogMessageSupport;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,27 +19,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.slf4j.Slf4j;
-import lhdt.config.CacheConfig;
-import lhdt.controller.AuthorizationController;
-import lhdt.domain.CacheName;
-import lhdt.domain.CacheParams;
-import lhdt.domain.CacheType;
-import lhdt.domain.Menu;
-import lhdt.domain.MenuTarget;
-import lhdt.domain.MenuType;
-import lhdt.domain.Policy;
-import lhdt.domain.Role;
-import lhdt.domain.UserGroup;
-import lhdt.domain.UserGroupMenu;
-import lhdt.domain.UserGroupRole;
-import lhdt.service.MenuService;
-import lhdt.service.PolicyService;
-import lhdt.service.RoleService;
-import lhdt.service.UserGroupService;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -171,11 +159,11 @@ public class UserGroupController implements AuthorizationController {
 			List<UserGroupMenu> userGroupMenuList = userGroupService.getListUserGroupMenu(userGroupMenu);
 			userGroupMenuJson = objectMapper.writeValueAsString(userGroupMenuList);
 		} catch(JsonProcessingException e) {
-			log.info("@@@@@@@@@@@@ jsonProcessing exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ jsonProcessing exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		} catch(RuntimeException e) {
-			log.info("@@@@@@@@@@@@ runtime exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ runtime exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		} catch(Exception e) {
-			log.info("@@@@@@@@@@@@ exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		}
 
 		model.addAttribute("userGroup", userGroup);
@@ -213,11 +201,11 @@ public class UserGroupController implements AuthorizationController {
 			List<UserGroupRole> userGroupRoleList = userGroupService.getListUserGroupRole(userGroupRole);
 			userGroupRoleJson = objectMapper.writeValueAsString(userGroupRoleList);
 		} catch(JsonProcessingException e) {
-			log.info("@@@@@@@@@@@@ jsonProcessing exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ jsonProcessing exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		} catch(RuntimeException e) {
-			log.info("@@@@@@@@@@@@ runtime exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ runtime exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		} catch(Exception e) {
-			log.info("@@@@@@@@@@@@ exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		}
 
 		model.addAttribute("userGroup", userGroup);

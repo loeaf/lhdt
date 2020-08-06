@@ -3,7 +3,7 @@ package lhdt.support;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * profile에 따른 logMessage 출력
+ * profile 에 따른 logMessage 출력
  * @author PSH
  *
  */

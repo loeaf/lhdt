@@ -1,31 +1,22 @@
 package lhdt.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import lombok.extern.slf4j.Slf4j;
-import lhdt.domain.DataFileInfo;
-import lhdt.domain.DataFileParseLog;
-import lhdt.domain.DataGroup;
-import lhdt.domain.DataInfo;
-import lhdt.domain.DataInfoLog;
-import lhdt.domain.DataInfoSimple;
-import lhdt.domain.DataStatus;
-import lhdt.domain.MethodType;
-import lhdt.domain.ServerTarget;
-import lhdt.domain.SharingType;
+import lhdt.domain.*;
 import lhdt.parser.DataFileParser;
 import lhdt.parser.impl.DataFileJsonParser;
 import lhdt.persistence.DataMapper;
 import lhdt.service.DataGroupService;
 import lhdt.service.DataLogService;
 import lhdt.service.DataService;
+import lhdt.support.LogMessageSupport;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Data
@@ -223,19 +214,19 @@ public class DataServiceImpl implements DataService {
 					updateSuccessCount++;
 				}
 			} catch(DataAccessException e) {
-				log.info("@@@@@@@@@@@@ dataAccess exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+				LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ dataAccess exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 				dataFileParseLog.setIdentifierValue(dataFileInfo.getUserId());
 				dataFileParseLog.setErrorCode(e.getMessage());
 				dataMapper.insertDataFileParseLog(dataFileParseLog);
 				insertErrorCount++;
 			} catch(RuntimeException e) {
-				log.info("@@@@@@@@@@@@ runtime exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+				LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ runtime exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 				dataFileParseLog.setIdentifierValue(dataFileInfo.getUserId());
 				dataFileParseLog.setErrorCode(e.getMessage());
 				dataMapper.insertDataFileParseLog(dataFileParseLog);
 				insertErrorCount++;
 			} catch(Exception e) {
-				log.info("@@@@@@@@@@@@ exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+				LogMessageSupport.printMessage(e, "@@@@@@@@@@@@ exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 				dataFileParseLog.setIdentifierValue(dataFileInfo.getUserId());
 				dataFileParseLog.setErrorCode(e.getMessage());
 				dataMapper.insertDataFileParseLog(dataFileParseLog);
