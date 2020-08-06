@@ -28,7 +28,7 @@ public class LocaleInterceptor extends HandlerInterceptorAdapter {
 			lang = myLocale.getLanguage();
 		}
 
-		String accessibility;
+		String accessibility = "ko-KR";
 		if("ko".equals(lang)) {
 			accessibility = "ko-KR";
 		} else if("en".equals(lang)) {
