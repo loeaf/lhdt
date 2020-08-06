@@ -1,10 +1,13 @@
 package lhdt.api;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import lhdt.domain.DataAttribute;
+import lhdt.domain.DataInfo;
+import lhdt.domain.DataObjectAttribute;
+import lhdt.service.DataAttributeService;
+import lhdt.service.DataObjectAttributeService;
+import lhdt.service.DataService;
+import lhdt.support.LogMessageSupport;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -13,13 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
-import lhdt.domain.DataAttribute;
-import lhdt.domain.DataInfo;
-import lhdt.domain.DataObjectAttribute;
-import lhdt.service.DataAttributeService;
-import lhdt.service.DataObjectAttributeService;
-import lhdt.service.DataService;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Data API
@@ -65,14 +64,17 @@ public class DataAPIController implements APIController {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "db.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+			LogMessageSupport.printMessage(e, "@@ db.exception. message = {}", message);
 		} catch(RuntimeException e) {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "runtime.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+			LogMessageSupport.printMessage(e, "@@ runtime.exception. message = {}", message);
 		} catch(Exception e) {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "unknown.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+			LogMessageSupport.printMessage(e, "@@ exception. message = {}", message);
 		}
 		
 		result.put("statusCode", statusCode);
@@ -105,14 +107,17 @@ public class DataAPIController implements APIController {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "db.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+			LogMessageSupport.printMessage(e, "@@ db.exception. message = {}", message);
 		} catch(RuntimeException e) {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "runtime.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+			LogMessageSupport.printMessage(e, "@@ runtime.exception. message = {}", message);
 		} catch(Exception e) {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "unknown.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+			LogMessageSupport.printMessage(e, "@@ exception. message = {}", message);
 		}
 		
 		result.put("statusCode", statusCode);
@@ -145,14 +150,17 @@ public class DataAPIController implements APIController {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "db.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+			LogMessageSupport.printMessage(e, "@@ db.exception. message = {}", message);
 		} catch(RuntimeException e) {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "runtime.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+			LogMessageSupport.printMessage(e, "@@ runtime.exception. message = {}", message);
 		} catch(Exception e) {
 			statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			errorCode = "unknown.exception";
 			message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+			LogMessageSupport.printMessage(e, "@@ exception. message = {}", message);
 		}
 		
 		result.put("statusCode", statusCode);

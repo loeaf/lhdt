@@ -1,23 +1,18 @@
 package lhdt.controller.view;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lhdt.domain.*;
+import lhdt.service.DataService;
+import lhdt.support.LogMessageSupport;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.slf4j.Slf4j;
-import lhdt.domain.CacheManager;
-import lhdt.domain.DataInfo;
-import lhdt.domain.GeoPolicy;
-import lhdt.domain.Key;
-import lhdt.domain.UserSession;
-import lhdt.service.DataService;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 지도에서 위치 찾기, 보기 등을 위한 공통 클래스
@@ -56,7 +51,7 @@ public class MapController {
 		try {
 			dataInfoJson = objectMapper.writeValueAsString(dataInfo);
 		} catch(JsonProcessingException e) {
-			log.info("@@ objectMapper exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+            LogMessageSupport.printMessage(e, "@@ objectMapper exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		}
 		
 		model.addAttribute("referrer", referrer);
@@ -95,7 +90,7 @@ public class MapController {
         try {
             model.addAttribute("geoPolicyJson", objectMapper.writeValueAsString(geoPolicy));
         } catch(JsonProcessingException e) {
-			log.info("@@ objectMapper exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+            LogMessageSupport.printMessage(e, "@@ objectMapper exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 		}
 //        
 //        model.addAttribute("baseLayers", userPolicy.getBaseLayers());
