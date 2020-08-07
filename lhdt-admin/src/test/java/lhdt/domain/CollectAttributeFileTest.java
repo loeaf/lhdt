@@ -11,8 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class CollectAttributeFileTest {
 
-	String inputDirectory = "D:\\data\\lx";
-	String outDirectory = "D:\\data\\mago3d\\smart-tiling-attribute";
+	String inputDirectory = "C:\\data\\lx";
+	String outDirectory = "C:\\data\\mago3d\\smart-tiling-attribute";
 	
 	@Test
 	void test() throws Exception {

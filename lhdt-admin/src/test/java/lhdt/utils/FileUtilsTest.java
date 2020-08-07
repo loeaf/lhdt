@@ -9,7 +9,7 @@ class FileUtilsTest {
 
 	@Test
 	void test() {
-//		String dataServicePath = "D:\\data\\mago3d\\f4d\\";
+//		String dataServicePath = "C:\\data\\mago3d\\f4d\\";
 //		String dataGroupPath = "gt1000/test";
 //		String[] sub1 = dataGroupPath.split("/");
 //		
