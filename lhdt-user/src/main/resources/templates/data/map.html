@@ -50,7 +50,18 @@
 				</div>
 				<div th:replace="~{/data/map-data :: #dataInfoContent}"></div>
 				<div th:replace="~{/data/map-data-group :: #dataGroupInfoContent}"></div>
+			<div style="padding-left:20px;">
+				<ol>
+					<li><a href="#" class="ds-flyto">1. flyto(테스트 위치로 이동)</a></li>
+					<li><a href="#" class="ds-points2">2. draw 2 points(사용자가 두점 선택했다치고...)</a></li>
+					<li><a href="#" class="ds-points3">3. 3점 계산&표시</a></li>
+					<li><a href="#" class="ds-movetop1">4-1. move to 원경</a></li>
+					<li><a href="#" class="ds-movetop2">4-2. move to 중경</a></li>
+					<li><a href="#" class="ds-movetop3">4-3. move to 근경</a></li>
+				</ol>				
+			</div>	
 			</div>
+
 			<!-- E: 데이터 -->
 
 			<div th:replace="~{/spatial/spatial :: #spatialContent}"></div>
@@ -126,6 +137,7 @@
 <script type="text/javascript" th:src="@{/externlib/tuidatepicker-4.0.3/tui-date-picker.min.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/mago3d.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/pp-0.9-es6.js(cacheVersion=${contentCacheVersion})}" defer></script>
+<script type="text/javascript" th:src="@{/js/ppmap-0.9-es6.js(cacheVersion=${contentCacheVersion})}" defer></script>
 <script type="text/javascript" th:src="@{/js/mago3d_lx.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
@@ -144,6 +156,204 @@
 <script type="text/javascript" th:src="@{/js/{lang}/issue-controller.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/map-data.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/map-data-group.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+
+<script type="text/javascript">
+class PageObj{
+	
+	/**
+	* 생성자
+	*/
+	constructor(){
+		//
+		this._p13=null;
+		this._p23=null;
+		this._p33=null;
+	}
+	
+	set viewer(value){
+		ppmap.viewer = value;
+	}
+	get viewer(){
+		return ppmap.viewer;
+	}
+	
+	get p1(){
+		return {'lon':127.2827, 'lat':36.4780};
+	}
+	
+	get p2(){
+		return {'lon':127.2925, 'lat':36.4824};
+	}
+	
+	set p13(value){
+		this._p13 = value;
+	}
+	get p13(){
+		return this._p13;
+	}
+	set p23(value){
+		this._p23 = value;
+	}
+	get p23(){
+		return this._p23;
+	}
+	set p33(value){
+		this._p33 = value;
+	}
+	get p33(){
+		return this._p33;
+	}
+	
+	
+	
+	
+	/**
+	* 지도 방향? 초기화
+	*/
+	resetRotate(){
+		ppmap.viewer.scene.camera.flyTo({
+			destination: ppmap.viewer.scene.camera.positionWC,
+			duration: 1
+		});
+		/*
+		this._viewer.scene.camera.flyTo({
+            destination: camera.positionWC,
+            duration : 0
+        });
+		*/
+	}
+	
+	/**
+	*
+	*/
+	flyTo(lon, lat, alt){
+		let ctsn = ppmap.toCartesian3(lon, lat, alt);
+		ppmap.flyTo(ctsn);
+	}
+	
+	
+	
+	/**
+	* @param worldPosition Catesian3
+	*/
+	createPoint(lon, lat){
+		let entity = ppmap.viewer.entities.add({
+			position : Cesium.Cartesian3.fromDegrees(lon, lat, 10),
+			point : {
+				color : Cesium.Color.RED,
+				pixelSize: 10,
+				disableDepthTestDistance: Number.POSITIVE_INFINITY,
+				heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+			}
+		}) ;
+	}
+	
+	
+	drawLine(p1, p2){
+		let entity = ppmap.viewer.entities.add({
+			name:'',
+			polyline:{
+				positions: Cesium.Cartesian3.fromDegreesArray([p1.lon,p1.lat, p2.lon,p2.lat]),
+				width: 5,
+				material: Cesium.Color.YELLOW,
+				clampToGround: true				
+			}
+		})
+	}
+}
+
+//
+let pageObj = new PageObj();
+
+
+//fly to
+document.getElementsByClassName('ds-flyto')[0]
+	.addEventListener('click', function(){
+		//세종시청
+		gotoFly(127.2891, 36.4800, 10);
+	});
+	
+//draw 2 points
+document.getElementsByClassName('ds-points2')[0]
+	.addEventListener('click', function(){
+		//시작점
+		pageObj.createPoint(pageObj.p1.lon, pageObj.p1.lat);
+		//끝점
+		pageObj.createPoint(pageObj.p2.lon, pageObj.p2.lat);
+		//선
+		pageObj.drawLine(pageObj.p1, pageObj.p2);
+		
+		
+	});
+	
+//
+document.getElementsByClassName('ds-points3')[0]
+	.addEventListener('click', function(){
+		//
+		let diffx = (pageObj.p2.lon - pageObj.p1.lon) / 4;
+		let diffy = (pageObj.p2.lat - pageObj.p1.lat) / 4;
+		//점1
+		let p13 = {'lon' : pageObj.p1.lon + diffx, 'lat':pageObj.p1.lat + diffy};
+		pageObj.p13 = p13;
+		//
+		pageObj.createPoint(p13.lon, p13.lat);
+		//점2
+		let p23 = {'lon' : pageObj.p1.lon + diffx*2, 'lat':pageObj.p1.lat + diffy*2};
+		pageObj.p23 = p23;
+		//
+		pageObj.createPoint(p23.lon, p23.lat);
+		//점3
+		let p33 = {'lon' : pageObj.p1.lon + diffx*3, 'lat':pageObj.p1.lat + diffy*3};
+		pageObj.p33 = p33;
+		//
+		pageObj.createPoint(p33.lon, p33.lat);
+		
+	});
+	
+//
+document.getElementsByClassName('ds-movetop1')[0]
+	.addEventListener('click', function(){
+		let heading = ppmap.getHeading(pageObj.p1, pageObj.p2);
+		
+		//
+		const lon = pageObj.p13.lon;
+		const lat = pageObj.p13.lat;
+		const xyz = {lon, lat, 'alt':5.0};
+		const hpr = new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(heading), Cesium.Math.toRadians(0), Cesium.Math.toRadians(0));
+		//
+		ppmap.flyTo(xyz, hpr);
+	});
+//
+document.getElementsByClassName('ds-movetop2')[0]
+	.addEventListener('click', function(){
+		let heading = ppmap.getHeading(pageObj.p1, pageObj.p2);
+		
+		//
+		const lon = pageObj.p23.lon;
+		const lat = pageObj.p23.lat;
+		const xyz = {lon, lat, 'alt':5.0};
+		const hpr = new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(heading), Cesium.Math.toRadians(0), Cesium.Math.toRadians(0));
+		//
+		ppmap.flyTo(xyz, hpr);
+	});
+//
+document.getElementsByClassName('ds-movetop3')[0]
+	.addEventListener('click', function(){
+		let heading = ppmap.getHeading(pageObj.p1, pageObj.p2);
+		
+		//
+		const lon = pageObj.p33.lon;
+		const lat = pageObj.p33.lat;
+		const xyz = {lon, lat, 'alt':5.0};
+		const hpr = new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(heading), Cesium.Math.toRadians(0), Cesium.Math.toRadians(0));
+		//
+		ppmap.flyTo(xyz, hpr);
+	});
+	
+	
+</script>
+
+
 <script type="text/javascript">
 
 	var MAGO3D_INSTANCE;
@@ -189,6 +399,9 @@
 		var viewer = magoInstance.getViewer();
 		var magoManager = magoInstance.getMagoManager();
 		var f4dController = magoInstance.getF4dController();
+		
+		//gravity
+		pageObj.viewer = viewer;
 
 		// TODO : 세슘 MAP 선택 UI 제거,엔진에서 처리로 변경 예정.
 		if(viewer.baseLayerPicker) viewer.baseLayerPicker.destroy();
