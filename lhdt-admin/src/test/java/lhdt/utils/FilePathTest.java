@@ -17,7 +17,7 @@ class FilePathTest {
 		String dataGroupPath = "basic/";
 		
 		String[] directors = dataGroupPath.split("/");
-		String fullName = "C:\\data\\mago3d\\f4d\\";
+		String fullName = "D:\\data\\mago3d\\f4d\\";
 		
 		boolean result = true;
 		for(String directoryName : directors) {
