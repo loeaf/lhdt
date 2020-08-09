@@ -5,52 +5,51 @@ package lhdt.anals.hello.service;
 
 import java.util.List;
 
-import lhdt.anals.common.AnalsService;
-import lhdt.anals.hello.domain.Hello;
+import lhdt.anals.hello.domain.SubType0;
 
 /**
  * 안녕
  * @author gravity@daumsoft.com
  *
  */
-public interface HelloService extends AnalsService {
+public interface HelloService {
 
 	/**
 	 * 1건 조회
 	 * @param helloId
 	 * @return
 	 */
-	Hello findById(Long helloId);
+	SubType0 findById(Long helloId);
 	
 	/**
 	 * 등록
 	 * @param vo
 	 * @return
 	 */
-	Hello regist(Hello vo);
+	SubType0 regist(SubType0 vo);
 
 	/**
 	 * 전체 목록 조회
 	 * @return
 	 */
-	List<Hello> findAll();
+	List<SubType0> findAll();
 
 	/**
 	 * @param hello
 	 */
-	void updt(Hello hello);
+	void updt(SubType0 hello);
 
 	/**
 	 * 전체 검색 건수
 	 * @param hello
 	 * @return
 	 */
-	int findTotcnt(Hello hello);
+	int findTotcnt(SubType0 hello);
 	
 	/**
 	 * 페이징
 	 * @param hello
 	 * @return
 	 */
-	List<Hello> findByPage(Hello hello);
+	List<SubType0> findByPage(SubType0 hello);
 }

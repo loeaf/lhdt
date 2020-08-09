@@ -6,7 +6,7 @@ package lhdt.anals.hello.persistence;
 import java.util.List;
 
 import lhdt.anals.config.AnalsConnMapper;
-import lhdt.anals.hello.domain.Hello;
+import lhdt.anals.hello.domain.SubType0;
 
 /**
  * 데이터 조회전용 mybatis mapper
@@ -21,20 +21,20 @@ public interface HelloMapper {
 	 * @param helloId
 	 * @return
 	 */
-	Hello findById(Long helloId);
+	SubType0 findById(Long helloId);
 
 	/**
 	 * 전체 목록
 	 * @return
 	 */
-	List<Hello> findAll();
+	List<SubType0> findAll();
 	
 	/**
 	 * 전체 건수
 	 * @param hello
 	 * @return
 	 */
-	Integer findTotcnt(Hello hello);
+	Integer findTotcnt(SubType0 hello);
 	
 	
 	/**
@@ -42,5 +42,5 @@ public interface HelloMapper {
 	 * @param hello
 	 * @return
 	 */
-	List<Hello> findByPage(Hello hello);
+	List<SubType0> findByPage(SubType0 hello);
 }

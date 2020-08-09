@@ -5,7 +5,7 @@
 <mapper namespace="lhdt.anals.hello.persistence.HelloMapper">
 
 	<!--  1건 조회 -->
-	<select id="findById" resultType="lhdt.anals.hello.domain.Hello">
+	<select id="findById" resultType="lhdt.anals.hello.domain.SubType0">
 		SELECT	h.hello_id AS helloId
 			,h.hello_name AS helloName
 			,h.cn
@@ -16,7 +16,7 @@
 	
 	
 	<!-- 전체 목록 조회 -->
-	<select id="findAll" resultType="lhdt.anals.hello.domain.Hello">
+	<select id="findAll" resultType="lhdt.anals.hello.domain.SubType0">
 		SELECT	h.hello_id AS helloId
 			,h.hello_name AS helloName
 			,h.cn
@@ -43,7 +43,7 @@
 	
 	
 	<!-- 페이징 -->
-	<select id="findByPage" resultType="lhdt.anals.hello.domain.Hello">
+	<select id="findByPage" resultType="lhdt.anals.hello.domain.SubType0">
 		SELECT t.*
 		FROM (
 			SELECT	h.hello_id AS helloId

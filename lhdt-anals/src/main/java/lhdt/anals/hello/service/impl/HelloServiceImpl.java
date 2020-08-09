@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lhdt.anals.common.AnalsServiceImpl;
-import lhdt.anals.hello.domain.Hello;
+import lhdt.anals.hello.domain.SubType0;
 import lhdt.anals.hello.persistence.HelloMapper;
 import lhdt.anals.hello.persistence.HelloRepository;
 import lhdt.anals.hello.service.HelloService;
@@ -37,38 +37,38 @@ public class HelloServiceImpl extends AnalsServiceImpl implements HelloService {
 	
 	
 	@Override
-	public Hello findById(Long helloId) {
+	public SubType0 findById(Long helloId) {
 		// 
 		return mapper.findById(helloId);
 	}
 
 
 	@Override
-	public Hello regist(Hello vo) {
+	public SubType0 regist(SubType0 vo) {
 		return jpaRepo.save(vo);
 	}
 
 
 	@Override
-	public List<Hello> findAll() {
+	public List<SubType0> findAll() {
 		return mapper.findAll();
 	}
 
 
 	@Override
-	public void updt(Hello hello) {
+	public void updt(SubType0 hello) {
 		jpaRepo.save(hello);
 	}
 
 
 	@Override
-	public int findTotcnt(Hello hello) {
+	public int findTotcnt(SubType0 hello) {
 		return mapper.findTotcnt(hello);
 	}
 
 
 	@Override
-	public List<Hello> findByPage(Hello hello) {
+	public List<SubType0> findByPage(SubType0 hello) {
 		return mapper.findByPage(hello);
 	}
 
